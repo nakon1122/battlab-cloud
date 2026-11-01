@@ -1,24 +1,24 @@
 {
-  "updated": "2026-11-01T05:24:26+07:00",
-  "notes": "อัปเดตผ่าน cloud ได้แล้ว (OTA) · ตั้งค่าผ่านบลูทูธ · ชื่อบอร์ดไม่ซ้ำ BATTLAB-XXXX · จอ CYD: นาฬิกา, โหมดตัวเลขใหญ่, กราฟ 10 นาที",
+  "updated": "2026-11-01T10:05:04+07:00",
+  "notes": "ตั้งค่าพารามิเตอร์ BMS ของ ANT (47 ค่า, เขียนแบบทดลอง+ตรวจกลับ) และ JBD/Xiaoxiang (22 ค่า) ได้แล้ว ทั้งบนจอ เว็บ และบลูทูธ",
   "boards": {
     "s3": {
-      "version": "2.4.0",
-      "url": "fw/2.4.0/BATTLAB_S3_APP_UPDATE.bin",
-      "size": 1333472,
-      "sha256": "438b8d4fd6b583a281716bceed0e58b681573aa7633e5c923d6497b865f05e6d"
+      "version": "2.5.0",
+      "url": "fw/2.5.0/BATTLAB_S3_APP_UPDATE.bin",
+      "size": 1341872,
+      "sha256": "ec613b7d2b3b853209c3165ec90d379c77c616798c594339342acfd3e71c2e5e"
     },
     "cyd35": {
-      "version": "2.4.0",
-      "url": "fw/2.4.0/BATTLAB_CYD35_APP_UPDATE.bin",
-      "size": 1685792,
-      "sha256": "35b9e5d3cadbb94e629302a59a2061b1830ff341436c1d797d1168b9bf37f2d8"
+      "version": "2.5.0",
+      "url": "fw/2.5.0/BATTLAB_CYD35_APP_UPDATE.bin",
+      "size": 1697840,
+      "sha256": "0cdbf5ff9085a26cdc06478940b5030100505ef3832c0b83af67f8ae0f2b24bd"
     },
     "cloudscreen": {
-      "version": "2.4.0",
-      "url": "fw/2.4.0/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
-      "size": 1316336,
-      "sha256": "b5edb82469095683041bac39576834788a80955f5b13303587f8585835acd514"
+      "version": "2.5.0",
+      "url": "fw/2.5.0/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
+      "size": 1321168,
+      "sha256": "080535f36bc19f768f6926eded572b84a7da0ed2eb054237924ccc4759024765"
     }
   }
 }
