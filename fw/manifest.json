@@ -1,52 +1,75 @@
 {
-  "updated": "2026-11-02T23:16:40+07:00",
-  "notes": "ชื่อ Wi-Fi/บลูทูธตาม MAC ชิป (BATTLAB-XXXXXX) · ตั้งค่าครั้งแรกผ่าน USB จากคอมพิวเตอร์",
+  "updated": "2026-11-02T23:46:14+07:00",
+  "notes": "พลังงานวันนี้นับบนบอร์ด · ยอดรวมเป็นกรุ๊ป (จอ Cloud Screen หน้า ALL, หน้าเว็บ S3, จอ CYD) · รายการบลูทูธ/Wi-Fi สูงสุด 30",
   "boards": {
     "s3": {
-      "version": "2.8.1",
-      "url": "fw/2.8.1/BATTLAB_S3_APP_UPDATE.bin",
-      "size": 1408000,
-      "sha256": "dca2f2abdbf2e4599c028b4d415047162645f8d844ade036fdca166f874d10ef",
+      "version": "2.8.2",
+      "url": "fw/2.8.2/BATTLAB_S3_APP_UPDATE.bin",
+      "size": 1422160,
+      "sha256": "0ff5180bfd19dc1691fba7f54047f008bb2c191a607ced042b45d99b47d6c668",
       "install": {
-        "url": "fw/2.8.1/BATTLAB_S3_BLEFIX_INSTALL.bin",
-        "size": 1473536,
-        "sha256": "debb66bffde13c726404be0c874d112da723c9dfdee21a37d8fc06ec8690fc6c"
+        "url": "fw/2.8.2/BATTLAB_S3_BLEFIX_INSTALL.bin",
+        "size": 1487696,
+        "sha256": "14463384fca5db33bb3169a2f393d38b91054342e00d528d331af4bdee435b05"
       },
-      "webtools": "fw/2.8.1/webtools-s3.json",
+      "webtools": "fw/2.8.2/webtools-s3.json",
       "title": "ESP32-S3 (BMS board)"
     },
     "cyd35": {
-      "version": "2.8.1",
-      "url": "fw/2.8.1/BATTLAB_CYD35_APP_UPDATE.bin",
-      "size": 1723520,
-      "sha256": "42f81c7a69dd2183abf4292aa6ac6205fb679f67bc4d3cc022535c6bdaa6fcd1",
+      "version": "2.8.2",
+      "url": "fw/2.8.2/BATTLAB_CYD35_APP_UPDATE.bin",
+      "size": 1737040,
+      "sha256": "cb2f88224c4261176c08d0160be09873d6d65fec0ee29456fc435c45c99d8ed5",
       "install": {
-        "url": "fw/2.8.1/BATTLAB_CYD35_INSTALL.bin",
-        "size": 1789056,
-        "sha256": "e6672717e5ece1ce4406b3c8feffa4d0a24066f1122b93f4e23cab6c026ea49f"
+        "url": "fw/2.8.2/BATTLAB_CYD35_INSTALL.bin",
+        "size": 1802576,
+        "sha256": "6b31d6db7a98e1277b8616d72fecbe3d66d54faa3573ea2469a08535776fd83b"
       },
-      "webtools": "fw/2.8.1/webtools-cyd35.json",
+      "webtools": "fw/2.8.2/webtools-cyd35.json",
       "title": "CYD 3.5\" (BMS screen)"
     },
     "cloudscreen": {
-      "version": "2.8.1",
-      "url": "fw/2.8.1/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
-      "size": 1354288,
-      "sha256": "e6cc0cbf7cfb88df5e59d18f23acfea2bb750c41a917b61311fb1ca5fb486e1f",
+      "version": "2.8.2",
+      "url": "fw/2.8.2/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
+      "size": 1358112,
+      "sha256": "aad330db37319c6d6de9c6303523f33a7b5fddcb46001d7694363cc2ffc3176b",
       "install": {
-        "url": "fw/2.8.1/BATTLAB_CLOUDSCREEN_INSTALL.bin",
-        "size": 1419824,
-        "sha256": "60ed0678f62530076a04a4c3bc4ef500716f4fe1673fabc7bf575e5798b3a139"
+        "url": "fw/2.8.2/BATTLAB_CLOUDSCREEN_INSTALL.bin",
+        "size": 1423648,
+        "sha256": "ed1cb38624a1dceb98e908cd318b96726d662c940cc618d3830674c3db2bae09"
       },
-      "webtools": "fw/2.8.1/webtools-cloudscreen.json",
+      "webtools": "fw/2.8.2/webtools-cloudscreen.json",
       "title": "Cloud Screen (CYD 3.5\")"
     }
   },
   "zip": {
-    "url": "fw/2.8.1/BATTLAB_v2.8.1_READY_TO_FLASH.zip",
-    "size": 22767946
+    "url": "fw/2.8.2/BATTLAB_v2.8.2_READY_TO_FLASH.zip",
+    "size": 23578789
   },
   "history": [
+    {
+      "version": "2.8.2",
+      "date": "2026-11-02",
+      "notes": "พลังงานวันนี้นับบนบอร์ด · ยอดรวมเป็นกรุ๊ป (จอ Cloud Screen หน้า ALL, หน้าเว็บ S3, จอ CYD) · รายการบลูทูธ/Wi-Fi สูงสุด 30",
+      "zip": {
+        "url": "fw/2.8.2/BATTLAB_v2.8.2_READY_TO_FLASH.zip",
+        "size": 23578789
+      },
+      "boards": {
+        "s3": {
+          "app": "fw/2.8.2/BATTLAB_S3_APP_UPDATE.bin",
+          "install": "fw/2.8.2/BATTLAB_S3_BLEFIX_INSTALL.bin"
+        },
+        "cyd35": {
+          "app": "fw/2.8.2/BATTLAB_CYD35_APP_UPDATE.bin",
+          "install": "fw/2.8.2/BATTLAB_CYD35_INSTALL.bin"
+        },
+        "cloudscreen": {
+          "app": "fw/2.8.2/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
+          "install": "fw/2.8.2/BATTLAB_CLOUDSCREEN_INSTALL.bin"
+        }
+      }
+    },
     {
       "version": "2.8.1",
       "date": "2026-11-02",
@@ -90,26 +113,6 @@
         "cloudscreen": {
           "app": "fw/2.8.0/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
           "install": "fw/2.8.0/BATTLAB_CLOUDSCREEN_INSTALL.bin"
-        }
-      }
-    },
-    {
-      "version": "2.7.0",
-      "date": "2026-11-02",
-      "notes": "แบต JK หลายลูกบนสาย RS485 เส้นเดียว (ฟังลูกหลัก DIP 0 หรือบอร์ดถามเอง)",
-      "zip": null,
-      "boards": {
-        "s3": {
-          "app": "fw/2.7.0/BATTLAB_S3_APP_UPDATE.bin",
-          "install": null
-        },
-        "cyd35": {
-          "app": "fw/2.7.0/BATTLAB_CYD35_APP_UPDATE.bin",
-          "install": null
-        },
-        "cloudscreen": {
-          "app": "fw/2.7.0/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
-          "install": null
         }
       }
     }
