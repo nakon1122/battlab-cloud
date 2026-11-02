@@ -1,24 +1,24 @@
 {
-  "updated": "2026-11-01T15:12:52+07:00",
-  "notes": "แก้: ค้นหา Wi-Fi ไม่เจอ ขณะบอร์ดกำลังพยายามต่อ Wi-Fi เดิมที่ไม่อยู่ใกล้",
+  "updated": "2026-11-02T17:53:58+07:00",
+  "notes": "รองรับ JK BMS ผ่านสาย RS485 บน ESP32-S3",
   "boards": {
     "s3": {
-      "version": "2.5.1",
-      "url": "fw/2.5.1/BATTLAB_S3_APP_UPDATE.bin",
-      "size": 1342048,
-      "sha256": "3baa55543efc8c6d05125d8a1e524f44f28f4ed461807019bc0a550912ad9fd3"
+      "version": "2.6.0",
+      "url": "fw/2.6.0/BATTLAB_S3_APP_UPDATE.bin",
+      "size": 1368272,
+      "sha256": "41ba00d92cebcf344eaac13c1c06caa2fb226818811da60615983a734107a8ce"
     },
     "cyd35": {
-      "version": "2.5.1",
-      "url": "fw/2.5.1/BATTLAB_CYD35_APP_UPDATE.bin",
-      "size": 1698048,
-      "sha256": "8d13af0951d08722e21aaf4a15f326164c19921b1460ac9c605020c6ebe58a22"
+      "version": "2.6.0",
+      "url": "fw/2.6.0/BATTLAB_CYD35_APP_UPDATE.bin",
+      "size": 1698160,
+      "sha256": "95c257acd941f458d262c4ab4205187f4145e59919754439cba1a424c73f66d9"
     },
     "cloudscreen": {
-      "version": "2.5.1",
-      "url": "fw/2.5.1/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
+      "version": "2.6.0",
+      "url": "fw/2.6.0/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
       "size": 1321392,
-      "sha256": "52fc6a80251940d9bcb7ae8b3e60b1265c7335ed203b06d1b2eff974c18a2ebc"
+      "sha256": "391121cbee8092a996ae04a4a9650550882cb6065534ecac3596c2037b1dc16b"
     }
   }
 }
