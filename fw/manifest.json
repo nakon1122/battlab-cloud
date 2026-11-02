@@ -1,24 +1,94 @@
 {
-  "updated": "2026-11-02T19:07:12+07:00",
-  "notes": "แบต JK หลายลูกบนสาย RS485 เส้นเดียว (ฟังลูกหลัก DIP 0 หรือบอร์ดถามเอง)",
+  "updated": "2026-11-02T22:49:07+07:00",
+  "notes": "บอร์ดเดียว RS485 + บลูทูธ ตั้งค่าได้ทุกลูก · DALY · โหมด EV · แอนิเมชัน · อัปเดตผ่านบลูทูธ",
   "boards": {
     "s3": {
-      "version": "2.7.0",
-      "url": "fw/2.7.0/BATTLAB_S3_APP_UPDATE.bin",
-      "size": 1375248,
-      "sha256": "49fa0d7a30951c992f2fe28842f252fbaad649eb7c617fc82f85ef7349d9f120"
+      "version": "2.8.0",
+      "url": "fw/2.8.0/BATTLAB_S3_APP_UPDATE.bin",
+      "size": 1400848,
+      "sha256": "95bd1385a34e2ab9a9dff5128c820d54ba3df954df5fba645f193631b416a44a",
+      "install": {
+        "url": "fw/2.8.0/BATTLAB_S3_BLEFIX_INSTALL.bin",
+        "size": 1466384,
+        "sha256": "169ddbfab898681a8c6e2215bdd5548a13efa04b25322fa4b9144d3c4a8cd708"
+      },
+      "webtools": "fw/2.8.0/webtools-s3.json",
+      "title": "ESP32-S3 (BMS board)"
     },
     "cyd35": {
-      "version": "2.7.0",
-      "url": "fw/2.7.0/BATTLAB_CYD35_APP_UPDATE.bin",
-      "size": 1698848,
-      "sha256": "3600feefce0af0cf96479066ab9f3efce9a38f4356d8666d52282f5897a08d3b"
+      "version": "2.8.0",
+      "url": "fw/2.8.0/BATTLAB_CYD35_APP_UPDATE.bin",
+      "size": 1716112,
+      "sha256": "45905c466d52a10e47bb1d6e1ac703149a0b0db16d4c5b5510b00635f0b419ae",
+      "install": {
+        "url": "fw/2.8.0/BATTLAB_CYD35_INSTALL.bin",
+        "size": 1781648,
+        "sha256": "ec28dd54e53b94e6a6d5584e74d557908e5e4e3aa2d6f033ebd0dca23938cd5d"
+      },
+      "webtools": "fw/2.8.0/webtools-cyd35.json",
+      "title": "CYD 3.5\" (BMS screen)"
     },
     "cloudscreen": {
-      "version": "2.7.0",
-      "url": "fw/2.7.0/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
-      "size": 1325200,
-      "sha256": "38eb4164db17583a99ff8689df09d36e3484fa39fb2b1e3986614ae8ff69c334"
+      "version": "2.8.0",
+      "url": "fw/2.8.0/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
+      "size": 1345808,
+      "sha256": "e542f84b693a6280cb3e91ac7fc8fd904af17638d02bb55fbef73e08e04193f6",
+      "install": {
+        "url": "fw/2.8.0/BATTLAB_CLOUDSCREEN_INSTALL.bin",
+        "size": 1411344,
+        "sha256": "3443df4d41e92edba3c78c202f7e44f7d78d87cc236614825ab42b4de522001b"
+      },
+      "webtools": "fw/2.8.0/webtools-cloudscreen.json",
+      "title": "Cloud Screen (CYD 3.5\")"
     }
-  }
+  },
+  "zip": {
+    "url": "fw/2.8.0/BATTLAB_v2.8.0_READY_TO_FLASH.zip",
+    "size": 22182261
+  },
+  "history": [
+    {
+      "version": "2.8.0",
+      "date": "2026-11-02",
+      "notes": "บอร์ดเดียว RS485 + บลูทูธ ตั้งค่าได้ทุกลูก · DALY · โหมด EV · แอนิเมชัน · อัปเดตผ่านบลูทูธ",
+      "zip": {
+        "url": "fw/2.8.0/BATTLAB_v2.8.0_READY_TO_FLASH.zip",
+        "size": 22182261
+      },
+      "boards": {
+        "s3": {
+          "app": "fw/2.8.0/BATTLAB_S3_APP_UPDATE.bin",
+          "install": "fw/2.8.0/BATTLAB_S3_BLEFIX_INSTALL.bin"
+        },
+        "cyd35": {
+          "app": "fw/2.8.0/BATTLAB_CYD35_APP_UPDATE.bin",
+          "install": "fw/2.8.0/BATTLAB_CYD35_INSTALL.bin"
+        },
+        "cloudscreen": {
+          "app": "fw/2.8.0/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
+          "install": "fw/2.8.0/BATTLAB_CLOUDSCREEN_INSTALL.bin"
+        }
+      }
+    },
+    {
+      "version": "2.7.0",
+      "date": "2026-11-02",
+      "notes": "แบต JK หลายลูกบนสาย RS485 เส้นเดียว (ฟังลูกหลัก DIP 0 หรือบอร์ดถามเอง)",
+      "zip": null,
+      "boards": {
+        "s3": {
+          "app": "fw/2.7.0/BATTLAB_S3_APP_UPDATE.bin",
+          "install": null
+        },
+        "cyd35": {
+          "app": "fw/2.7.0/BATTLAB_CYD35_APP_UPDATE.bin",
+          "install": null
+        },
+        "cloudscreen": {
+          "app": "fw/2.7.0/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
+          "install": null
+        }
+      }
+    }
+  ]
 }
