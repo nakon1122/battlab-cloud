@@ -1,17 +1,17 @@
 {
-  "name": "BATTLAB CYD 3.5\" (BMS screen)",
-  "version": "2.8.4",
+  "name": "BATTLAB ESP32-S3 (BMS board)",
+  "version": "2.8.7",
   "new_install_prompt_erase": true,
   "builds": [
     {
-      "chipFamily": "ESP32",
+      "chipFamily": "ESP32-S3",
       "parts": [
         {
-          "path": "CYD_BOOTLOADER.bin",
-          "offset": 4096
+          "path": "S3_BOOTLOADER.bin",
+          "offset": 0
         },
         {
-          "path": "CYD_PARTITIONS.bin",
+          "path": "S3_PARTITIONS.bin",
           "offset": 32768
         },
         {
@@ -19,7 +19,7 @@
           "offset": 57344
         },
         {
-          "path": "BATTLAB_CYD35_APP_UPDATE.bin",
+          "path": "BATTLAB_S3_APP_UPDATE.bin",
           "offset": 65536
         }
       ]
