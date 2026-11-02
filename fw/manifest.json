@@ -1,52 +1,75 @@
 {
-  "updated": "2026-11-03T02:28:17+07:00",
-  "notes": "JK โมดูลใหม่ ZX-D30: ขอข้อมูลเซลล์ทุก 2 วินาที · ไม่ยุ่งช่องอัปเดตของโมดูล · ข้อมูลตรวจสอบละเอียดขึ้น",
+  "updated": "2026-11-03T04:04:19+07:00",
+  "notes": "JK รุ่นใหม่: ถามแบบ JK อย่างเดียว ไม่ส่งคำสั่งทดลองใส่ BMS, เปิดรับเฉพาะ FFE1",
   "boards": {
     "s3": {
-      "version": "2.8.4",
-      "url": "fw/2.8.4/BATTLAB_S3_APP_UPDATE.bin",
-      "size": 1438976,
-      "sha256": "b3f86ad6e85d906e328a3367ea4228f29169001748b114decc86d653bb080718",
+      "version": "2.8.5",
+      "url": "fw/2.8.5/BATTLAB_S3_APP_UPDATE.bin",
+      "size": 1440816,
+      "sha256": "381ce34b974cd6a4089a1b59706958275e17d42b23a75b4c00cd19c47849a446",
       "install": {
-        "url": "fw/2.8.4/BATTLAB_S3_BLEFIX_INSTALL.bin",
-        "size": 1504512,
-        "sha256": "00f9cfc470e2a8a6874ea26ff1b61563f85e56f537992f54d98bf127fc41c23f"
+        "url": "fw/2.8.5/BATTLAB_S3_BLEFIX_INSTALL.bin",
+        "size": 1506352,
+        "sha256": "f38c1417e87af5f11caa40c879508246159608caa6614e971e8e95a4603476a4"
       },
-      "webtools": "fw/2.8.4/webtools-s3.json",
+      "webtools": "fw/2.8.5/webtools-s3.json",
       "title": "ESP32-S3 (BMS board)"
     },
     "cyd35": {
-      "version": "2.8.4",
-      "url": "fw/2.8.4/BATTLAB_CYD35_APP_UPDATE.bin",
-      "size": 1753824,
-      "sha256": "b7d78a2de59a38cb1a93e6a41b810579eb9e4ac174c6fb0c31a0ca4c0e20fa2d",
+      "version": "2.8.5",
+      "url": "fw/2.8.5/BATTLAB_CYD35_APP_UPDATE.bin",
+      "size": 1756176,
+      "sha256": "d82670d29437953b371169d8909e019d301a8e4eaf2a79b869623724e4bc4ffc",
       "install": {
-        "url": "fw/2.8.4/BATTLAB_CYD35_INSTALL.bin",
-        "size": 1819360,
-        "sha256": "348f8e066a9a9116b89d765392819a7709e82e4dfb5703328f32ec3e456e0ec9"
+        "url": "fw/2.8.5/BATTLAB_CYD35_INSTALL.bin",
+        "size": 1821712,
+        "sha256": "28cae817fb031fcb6175f23e63f40569600ff9defcfb401798daf7cc5ce1404d"
       },
-      "webtools": "fw/2.8.4/webtools-cyd35.json",
+      "webtools": "fw/2.8.5/webtools-cyd35.json",
       "title": "CYD 3.5\" (BMS screen)"
     },
     "cloudscreen": {
-      "version": "2.8.4",
-      "url": "fw/2.8.4/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
+      "version": "2.8.5",
+      "url": "fw/2.8.5/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
       "size": 1358112,
-      "sha256": "e7884dd76b1998b600f206962256eb1f8a8f7d5dc4e08ea673db4261adee6c88",
+      "sha256": "3101d615f7d6fd6e8b172a214e0c57542042905aab378385ff600ef39a22a376",
       "install": {
-        "url": "fw/2.8.4/BATTLAB_CLOUDSCREEN_INSTALL.bin",
+        "url": "fw/2.8.5/BATTLAB_CLOUDSCREEN_INSTALL.bin",
         "size": 1423648,
-        "sha256": "b0532cdb0a9583e1fc153f1518cd148986c21da605d4e040804821557bc22ad7"
+        "sha256": "717aabbc038060ff5195fda26b72ed6071e787377299cce281b83207730edf45"
       },
-      "webtools": "fw/2.8.4/webtools-cloudscreen.json",
+      "webtools": "fw/2.8.5/webtools-cloudscreen.json",
       "title": "Cloud Screen (CYD 3.5\")"
     }
   },
   "zip": {
-    "url": "fw/2.8.4/BATTLAB_v2.8.4_READY_TO_FLASH.zip",
-    "size": 23616456
+    "url": "fw/2.8.5/BATTLAB_v2.8.5_READY_TO_FLASH.zip",
+    "size": 23623389
   },
   "history": [
+    {
+      "version": "2.8.5",
+      "date": "2026-11-03",
+      "notes": "JK รุ่นใหม่: ถามแบบ JK อย่างเดียว ไม่ส่งคำสั่งทดลองใส่ BMS, เปิดรับเฉพาะ FFE1",
+      "zip": {
+        "url": "fw/2.8.5/BATTLAB_v2.8.5_READY_TO_FLASH.zip",
+        "size": 23623389
+      },
+      "boards": {
+        "s3": {
+          "app": "fw/2.8.5/BATTLAB_S3_APP_UPDATE.bin",
+          "install": "fw/2.8.5/BATTLAB_S3_BLEFIX_INSTALL.bin"
+        },
+        "cyd35": {
+          "app": "fw/2.8.5/BATTLAB_CYD35_APP_UPDATE.bin",
+          "install": "fw/2.8.5/BATTLAB_CYD35_INSTALL.bin"
+        },
+        "cloudscreen": {
+          "app": "fw/2.8.5/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
+          "install": "fw/2.8.5/BATTLAB_CLOUDSCREEN_INSTALL.bin"
+        }
+      }
+    },
     {
       "version": "2.8.4",
       "date": "2026-11-03",
@@ -90,29 +113,6 @@
         "cloudscreen": {
           "app": "fw/2.8.3/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
           "install": "fw/2.8.3/BATTLAB_CLOUDSCREEN_INSTALL.bin"
-        }
-      }
-    },
-    {
-      "version": "2.8.2",
-      "date": "2026-11-02",
-      "notes": "พลังงานวันนี้นับบนบอร์ด · ยอดรวมเป็นกรุ๊ป (จอ Cloud Screen หน้า ALL, หน้าเว็บ S3, จอ CYD) · รายการบลูทูธ/Wi-Fi สูงสุด 30",
-      "zip": {
-        "url": "fw/2.8.2/BATTLAB_v2.8.2_READY_TO_FLASH.zip",
-        "size": 23578789
-      },
-      "boards": {
-        "s3": {
-          "app": "fw/2.8.2/BATTLAB_S3_APP_UPDATE.bin",
-          "install": "fw/2.8.2/BATTLAB_S3_BLEFIX_INSTALL.bin"
-        },
-        "cyd35": {
-          "app": "fw/2.8.2/BATTLAB_CYD35_APP_UPDATE.bin",
-          "install": "fw/2.8.2/BATTLAB_CYD35_INSTALL.bin"
-        },
-        "cloudscreen": {
-          "app": "fw/2.8.2/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
-          "install": "fw/2.8.2/BATTLAB_CLOUDSCREEN_INSTALL.bin"
         }
       }
     }
