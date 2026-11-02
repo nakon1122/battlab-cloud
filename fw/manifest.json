@@ -1,52 +1,75 @@
 {
-  "updated": "2026-11-02T22:49:07+07:00",
-  "notes": "บอร์ดเดียว RS485 + บลูทูธ ตั้งค่าได้ทุกลูก · DALY · โหมด EV · แอนิเมชัน · อัปเดตผ่านบลูทูธ",
+  "updated": "2026-11-02T23:16:40+07:00",
+  "notes": "ชื่อ Wi-Fi/บลูทูธตาม MAC ชิป (BATTLAB-XXXXXX) · ตั้งค่าครั้งแรกผ่าน USB จากคอมพิวเตอร์",
   "boards": {
     "s3": {
-      "version": "2.8.0",
-      "url": "fw/2.8.0/BATTLAB_S3_APP_UPDATE.bin",
-      "size": 1400848,
-      "sha256": "95bd1385a34e2ab9a9dff5128c820d54ba3df954df5fba645f193631b416a44a",
+      "version": "2.8.1",
+      "url": "fw/2.8.1/BATTLAB_S3_APP_UPDATE.bin",
+      "size": 1408000,
+      "sha256": "dca2f2abdbf2e4599c028b4d415047162645f8d844ade036fdca166f874d10ef",
       "install": {
-        "url": "fw/2.8.0/BATTLAB_S3_BLEFIX_INSTALL.bin",
-        "size": 1466384,
-        "sha256": "169ddbfab898681a8c6e2215bdd5548a13efa04b25322fa4b9144d3c4a8cd708"
+        "url": "fw/2.8.1/BATTLAB_S3_BLEFIX_INSTALL.bin",
+        "size": 1473536,
+        "sha256": "debb66bffde13c726404be0c874d112da723c9dfdee21a37d8fc06ec8690fc6c"
       },
-      "webtools": "fw/2.8.0/webtools-s3.json",
+      "webtools": "fw/2.8.1/webtools-s3.json",
       "title": "ESP32-S3 (BMS board)"
     },
     "cyd35": {
-      "version": "2.8.0",
-      "url": "fw/2.8.0/BATTLAB_CYD35_APP_UPDATE.bin",
-      "size": 1716112,
-      "sha256": "45905c466d52a10e47bb1d6e1ac703149a0b0db16d4c5b5510b00635f0b419ae",
+      "version": "2.8.1",
+      "url": "fw/2.8.1/BATTLAB_CYD35_APP_UPDATE.bin",
+      "size": 1723520,
+      "sha256": "42f81c7a69dd2183abf4292aa6ac6205fb679f67bc4d3cc022535c6bdaa6fcd1",
       "install": {
-        "url": "fw/2.8.0/BATTLAB_CYD35_INSTALL.bin",
-        "size": 1781648,
-        "sha256": "ec28dd54e53b94e6a6d5584e74d557908e5e4e3aa2d6f033ebd0dca23938cd5d"
+        "url": "fw/2.8.1/BATTLAB_CYD35_INSTALL.bin",
+        "size": 1789056,
+        "sha256": "e6672717e5ece1ce4406b3c8feffa4d0a24066f1122b93f4e23cab6c026ea49f"
       },
-      "webtools": "fw/2.8.0/webtools-cyd35.json",
+      "webtools": "fw/2.8.1/webtools-cyd35.json",
       "title": "CYD 3.5\" (BMS screen)"
     },
     "cloudscreen": {
-      "version": "2.8.0",
-      "url": "fw/2.8.0/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
-      "size": 1345808,
-      "sha256": "e542f84b693a6280cb3e91ac7fc8fd904af17638d02bb55fbef73e08e04193f6",
+      "version": "2.8.1",
+      "url": "fw/2.8.1/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
+      "size": 1354288,
+      "sha256": "e6cc0cbf7cfb88df5e59d18f23acfea2bb750c41a917b61311fb1ca5fb486e1f",
       "install": {
-        "url": "fw/2.8.0/BATTLAB_CLOUDSCREEN_INSTALL.bin",
-        "size": 1411344,
-        "sha256": "3443df4d41e92edba3c78c202f7e44f7d78d87cc236614825ab42b4de522001b"
+        "url": "fw/2.8.1/BATTLAB_CLOUDSCREEN_INSTALL.bin",
+        "size": 1419824,
+        "sha256": "60ed0678f62530076a04a4c3bc4ef500716f4fe1673fabc7bf575e5798b3a139"
       },
-      "webtools": "fw/2.8.0/webtools-cloudscreen.json",
+      "webtools": "fw/2.8.1/webtools-cloudscreen.json",
       "title": "Cloud Screen (CYD 3.5\")"
     }
   },
   "zip": {
-    "url": "fw/2.8.0/BATTLAB_v2.8.0_READY_TO_FLASH.zip",
-    "size": 22182261
+    "url": "fw/2.8.1/BATTLAB_v2.8.1_READY_TO_FLASH.zip",
+    "size": 22767946
   },
   "history": [
+    {
+      "version": "2.8.1",
+      "date": "2026-11-02",
+      "notes": "ชื่อ Wi-Fi/บลูทูธตาม MAC ชิป (BATTLAB-XXXXXX) · ตั้งค่าครั้งแรกผ่าน USB จากคอมพิวเตอร์",
+      "zip": {
+        "url": "fw/2.8.1/BATTLAB_v2.8.1_READY_TO_FLASH.zip",
+        "size": 22767946
+      },
+      "boards": {
+        "s3": {
+          "app": "fw/2.8.1/BATTLAB_S3_APP_UPDATE.bin",
+          "install": "fw/2.8.1/BATTLAB_S3_BLEFIX_INSTALL.bin"
+        },
+        "cyd35": {
+          "app": "fw/2.8.1/BATTLAB_CYD35_APP_UPDATE.bin",
+          "install": "fw/2.8.1/BATTLAB_CYD35_INSTALL.bin"
+        },
+        "cloudscreen": {
+          "app": "fw/2.8.1/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
+          "install": "fw/2.8.1/BATTLAB_CLOUDSCREEN_INSTALL.bin"
+        }
+      }
+    },
     {
       "version": "2.8.0",
       "date": "2026-11-02",
