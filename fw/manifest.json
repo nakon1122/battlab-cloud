@@ -1,24 +1,24 @@
 {
-  "updated": "2026-11-02T17:53:58+07:00",
-  "notes": "รองรับ JK BMS ผ่านสาย RS485 บน ESP32-S3",
+  "updated": "2026-11-02T19:07:12+07:00",
+  "notes": "แบต JK หลายลูกบนสาย RS485 เส้นเดียว (ฟังลูกหลัก DIP 0 หรือบอร์ดถามเอง)",
   "boards": {
     "s3": {
-      "version": "2.6.0",
-      "url": "fw/2.6.0/BATTLAB_S3_APP_UPDATE.bin",
-      "size": 1368272,
-      "sha256": "41ba00d92cebcf344eaac13c1c06caa2fb226818811da60615983a734107a8ce"
+      "version": "2.7.0",
+      "url": "fw/2.7.0/BATTLAB_S3_APP_UPDATE.bin",
+      "size": 1375248,
+      "sha256": "49fa0d7a30951c992f2fe28842f252fbaad649eb7c617fc82f85ef7349d9f120"
     },
     "cyd35": {
-      "version": "2.6.0",
-      "url": "fw/2.6.0/BATTLAB_CYD35_APP_UPDATE.bin",
-      "size": 1698160,
-      "sha256": "95c257acd941f458d262c4ab4205187f4145e59919754439cba1a424c73f66d9"
+      "version": "2.7.0",
+      "url": "fw/2.7.0/BATTLAB_CYD35_APP_UPDATE.bin",
+      "size": 1698848,
+      "sha256": "3600feefce0af0cf96479066ab9f3efce9a38f4356d8666d52282f5897a08d3b"
     },
     "cloudscreen": {
-      "version": "2.6.0",
-      "url": "fw/2.6.0/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
-      "size": 1321392,
-      "sha256": "391121cbee8092a996ae04a4a9650550882cb6065534ecac3596c2037b1dc16b"
+      "version": "2.7.0",
+      "url": "fw/2.7.0/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
+      "size": 1325200,
+      "sha256": "38eb4164db17583a99ff8689df09d36e3484fa39fb2b1e3986614ae8ff69c334"
     }
   }
 }
