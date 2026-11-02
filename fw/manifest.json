@@ -1,52 +1,75 @@
 {
-  "updated": "2026-11-03T01:39:22+07:00",
-  "notes": "เชื่อม JK โมดูลบลูทูธใหม่ (ZX-D30) · ข้อมูลตรวจสอบบลูทูธขึ้น cloud · หน้าเว็บในบอร์ดแบบใหม่ เลือกหน้าตา 3 แบบ",
+  "updated": "2026-11-03T02:28:17+07:00",
+  "notes": "JK โมดูลใหม่ ZX-D30: ขอข้อมูลเซลล์ทุก 2 วินาที · ไม่ยุ่งช่องอัปเดตของโมดูล · ข้อมูลตรวจสอบละเอียดขึ้น",
   "boards": {
     "s3": {
-      "version": "2.8.3",
-      "url": "fw/2.8.3/BATTLAB_S3_APP_UPDATE.bin",
-      "size": 1438480,
-      "sha256": "3cbf4976f0c01308222eac9a9c913c6f6f3f2b018e5150807de921c85db96052",
+      "version": "2.8.4",
+      "url": "fw/2.8.4/BATTLAB_S3_APP_UPDATE.bin",
+      "size": 1438976,
+      "sha256": "b3f86ad6e85d906e328a3367ea4228f29169001748b114decc86d653bb080718",
       "install": {
-        "url": "fw/2.8.3/BATTLAB_S3_BLEFIX_INSTALL.bin",
-        "size": 1504016,
-        "sha256": "92fd201c4fcb80f96fa407ee9177878c107ffb75a3b33a6ab2d1dfbbbb1bc544"
+        "url": "fw/2.8.4/BATTLAB_S3_BLEFIX_INSTALL.bin",
+        "size": 1504512,
+        "sha256": "00f9cfc470e2a8a6874ea26ff1b61563f85e56f537992f54d98bf127fc41c23f"
       },
-      "webtools": "fw/2.8.3/webtools-s3.json",
+      "webtools": "fw/2.8.4/webtools-s3.json",
       "title": "ESP32-S3 (BMS board)"
     },
     "cyd35": {
-      "version": "2.8.3",
-      "url": "fw/2.8.3/BATTLAB_CYD35_APP_UPDATE.bin",
-      "size": 1753248,
-      "sha256": "f471546f2fbd87aec4349ac39f2b68f49ea55d30f7dd40adb44b7c5279032985",
+      "version": "2.8.4",
+      "url": "fw/2.8.4/BATTLAB_CYD35_APP_UPDATE.bin",
+      "size": 1753824,
+      "sha256": "b7d78a2de59a38cb1a93e6a41b810579eb9e4ac174c6fb0c31a0ca4c0e20fa2d",
       "install": {
-        "url": "fw/2.8.3/BATTLAB_CYD35_INSTALL.bin",
-        "size": 1818784,
-        "sha256": "0ed2eb00fe1fb1b8b63bf15b0bf7f4eb5f35500ecc632f140b56257f3b6d4e01"
+        "url": "fw/2.8.4/BATTLAB_CYD35_INSTALL.bin",
+        "size": 1819360,
+        "sha256": "348f8e066a9a9116b89d765392819a7709e82e4dfb5703328f32ec3e456e0ec9"
       },
-      "webtools": "fw/2.8.3/webtools-cyd35.json",
+      "webtools": "fw/2.8.4/webtools-cyd35.json",
       "title": "CYD 3.5\" (BMS screen)"
     },
     "cloudscreen": {
-      "version": "2.8.3",
-      "url": "fw/2.8.3/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
+      "version": "2.8.4",
+      "url": "fw/2.8.4/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
       "size": 1358112,
-      "sha256": "9b87a3e897019d7ac9564008586a7443549f9deb0eb1d5b5bbc5c29c2e3530f5",
+      "sha256": "e7884dd76b1998b600f206962256eb1f8a8f7d5dc4e08ea673db4261adee6c88",
       "install": {
-        "url": "fw/2.8.3/BATTLAB_CLOUDSCREEN_INSTALL.bin",
+        "url": "fw/2.8.4/BATTLAB_CLOUDSCREEN_INSTALL.bin",
         "size": 1423648,
-        "sha256": "5d844aa6866ba3b45c9e1dd0b750eb01391bb981776de509cfc4902416cb32b6"
+        "sha256": "b0532cdb0a9583e1fc153f1518cd148986c21da605d4e040804821557bc22ad7"
       },
-      "webtools": "fw/2.8.3/webtools-cloudscreen.json",
+      "webtools": "fw/2.8.4/webtools-cloudscreen.json",
       "title": "Cloud Screen (CYD 3.5\")"
     }
   },
   "zip": {
-    "url": "fw/2.8.3/BATTLAB_v2.8.3_READY_TO_FLASH.zip",
-    "size": 23616340
+    "url": "fw/2.8.4/BATTLAB_v2.8.4_READY_TO_FLASH.zip",
+    "size": 23616456
   },
   "history": [
+    {
+      "version": "2.8.4",
+      "date": "2026-11-03",
+      "notes": "JK โมดูลใหม่ ZX-D30: ขอข้อมูลเซลล์ทุก 2 วินาที · ไม่ยุ่งช่องอัปเดตของโมดูล · ข้อมูลตรวจสอบละเอียดขึ้น",
+      "zip": {
+        "url": "fw/2.8.4/BATTLAB_v2.8.4_READY_TO_FLASH.zip",
+        "size": 23616456
+      },
+      "boards": {
+        "s3": {
+          "app": "fw/2.8.4/BATTLAB_S3_APP_UPDATE.bin",
+          "install": "fw/2.8.4/BATTLAB_S3_BLEFIX_INSTALL.bin"
+        },
+        "cyd35": {
+          "app": "fw/2.8.4/BATTLAB_CYD35_APP_UPDATE.bin",
+          "install": "fw/2.8.4/BATTLAB_CYD35_INSTALL.bin"
+        },
+        "cloudscreen": {
+          "app": "fw/2.8.4/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
+          "install": "fw/2.8.4/BATTLAB_CLOUDSCREEN_INSTALL.bin"
+        }
+      }
+    },
     {
       "version": "2.8.3",
       "date": "2026-11-03",
@@ -90,29 +113,6 @@
         "cloudscreen": {
           "app": "fw/2.8.2/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
           "install": "fw/2.8.2/BATTLAB_CLOUDSCREEN_INSTALL.bin"
-        }
-      }
-    },
-    {
-      "version": "2.8.1",
-      "date": "2026-11-02",
-      "notes": "ชื่อ Wi-Fi/บลูทูธตาม MAC ชิป (BATTLAB-XXXXXX) · ตั้งค่าครั้งแรกผ่าน USB จากคอมพิวเตอร์",
-      "zip": {
-        "url": "fw/2.8.1/BATTLAB_v2.8.1_READY_TO_FLASH.zip",
-        "size": 22767946
-      },
-      "boards": {
-        "s3": {
-          "app": "fw/2.8.1/BATTLAB_S3_APP_UPDATE.bin",
-          "install": "fw/2.8.1/BATTLAB_S3_BLEFIX_INSTALL.bin"
-        },
-        "cyd35": {
-          "app": "fw/2.8.1/BATTLAB_CYD35_APP_UPDATE.bin",
-          "install": "fw/2.8.1/BATTLAB_CYD35_INSTALL.bin"
-        },
-        "cloudscreen": {
-          "app": "fw/2.8.1/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
-          "install": "fw/2.8.1/BATTLAB_CLOUDSCREEN_INSTALL.bin"
         }
       }
     }
