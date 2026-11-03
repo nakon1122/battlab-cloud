@@ -1,31 +1,31 @@
 {
-  "updated": "2026-11-04T02:53:24+07:00",
-  "notes": "2.8.9: RS485 ไม่ทำให้บอร์ดหลุด (แก้ตัวอ่านเฟรม, โหมดปลอดภัย, watchdog) + ข้อมูลวินิจฉัย RS485 บนเว็บ",
+  "updated": "2026-11-04T04:24:23+07:00",
+  "notes": "2.9.0: ล้างเวลาทำงาน BMS ผ่าน RS485 (เฉพาะ super admin)",
   "boards": {
     "s3": {
-      "version": "2.8.9",
-      "url": "fw/2.8.9/BATTLAB_S3_APP_UPDATE.bin",
-      "size": 1464608,
-      "sha256": "134d718199bd17dba8914177253cd9fb452e16aec9bf0a96b4d0d1e6a3b0540d",
+      "version": "2.9.0",
+      "url": "fw/2.9.0/BATTLAB_S3_APP_UPDATE.bin",
+      "size": 1465712,
+      "sha256": "019d09b60ffaf838f632c5b045b8ba32cddbd3e9593552d0f655ec15e8309874",
       "install": {
-        "url": "fw/2.8.9/BATTLAB_S3_BLEFIX_INSTALL.bin",
-        "size": 1530144,
-        "sha256": "76c96d5635711fa10bc7a8211a1f37f2297ac4ff144b3f6571740c528447e420"
+        "url": "fw/2.9.0/BATTLAB_S3_BLEFIX_INSTALL.bin",
+        "size": 1531248,
+        "sha256": "ba21019614ad736372627b05733c8f038bb42f3e610ac955cab4ac59812303ae"
       },
-      "webtools": "fw/2.8.9/webtools-s3.json",
+      "webtools": "fw/2.9.0/webtools-s3.json",
       "title": "ESP32-S3 (BMS board)"
     },
     "cyd35": {
-      "version": "2.8.9",
-      "url": "fw/2.8.9/BATTLAB_CYD35_APP_UPDATE.bin",
-      "size": 1783104,
-      "sha256": "395cc4342d194e37b16210f273907e81c4a3625809a84b376e223e159b6b5e2e",
+      "version": "2.9.0",
+      "url": "fw/2.9.0/BATTLAB_CYD35_APP_UPDATE.bin",
+      "size": 1783264,
+      "sha256": "ec765dc52bbf5d260dffbc5254e208cf5c42e02492ba63da8113a8f09d7e0c54",
       "install": {
-        "url": "fw/2.8.9/BATTLAB_CYD35_INSTALL.bin",
-        "size": 1848640,
-        "sha256": "203561610fee4b81f468b0af6c22c6230cf48ef33d5dfac805f5b219adeaa5c3"
+        "url": "fw/2.9.0/BATTLAB_CYD35_INSTALL.bin",
+        "size": 1848800,
+        "sha256": "39921c8a90c138b7558bffe5b6784992a5be5f3586317371b28c202cdee814f7"
       },
-      "webtools": "fw/2.8.9/webtools-cyd35.json",
+      "webtools": "fw/2.9.0/webtools-cyd35.json",
       "title": "CYD 3.5\" (BMS screen)"
     },
     "cloudscreen": {
@@ -43,10 +43,33 @@
     }
   },
   "zip": {
-    "url": "fw/2.8.9/BATTLAB_v2.8.9_READY_TO_FLASH.zip",
-    "size": 17003055
+    "url": "fw/2.9.0/BATTLAB_v2.9.0_READY_TO_FLASH.zip",
+    "size": 17006215
   },
   "history": [
+    {
+      "version": "2.9.0",
+      "date": "2026-11-04",
+      "notes": "2.9.0: ล้างเวลาทำงาน BMS ผ่าน RS485 (เฉพาะ super admin)",
+      "zip": {
+        "url": "fw/2.9.0/BATTLAB_v2.9.0_READY_TO_FLASH.zip",
+        "size": 17006215
+      },
+      "boards": {
+        "s3": {
+          "app": "fw/2.9.0/BATTLAB_S3_APP_UPDATE.bin",
+          "install": "fw/2.9.0/BATTLAB_S3_BLEFIX_INSTALL.bin"
+        },
+        "cyd35": {
+          "app": "fw/2.9.0/BATTLAB_CYD35_APP_UPDATE.bin",
+          "install": "fw/2.9.0/BATTLAB_CYD35_INSTALL.bin"
+        },
+        "cloudscreen": {
+          "app": "fw/2.8.8/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
+          "install": "fw/2.8.8/BATTLAB_CLOUDSCREEN_INSTALL.bin"
+        }
+      }
+    },
     {
       "version": "2.8.9",
       "date": "2026-11-04",
@@ -136,29 +159,6 @@
         "cloudscreen": {
           "app": "fw/2.8.6/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
           "install": "fw/2.8.6/BATTLAB_CLOUDSCREEN_INSTALL.bin"
-        }
-      }
-    },
-    {
-      "version": "2.8.5",
-      "date": "2026-11-03",
-      "notes": "JK รุ่นใหม่: ถามแบบ JK อย่างเดียว ไม่ส่งคำสั่งทดลองใส่ BMS, เปิดรับเฉพาะ FFE1",
-      "zip": {
-        "url": "fw/2.8.5/BATTLAB_v2.8.5_READY_TO_FLASH.zip",
-        "size": 23623389
-      },
-      "boards": {
-        "s3": {
-          "app": "fw/2.8.5/BATTLAB_S3_APP_UPDATE.bin",
-          "install": "fw/2.8.5/BATTLAB_S3_BLEFIX_INSTALL.bin"
-        },
-        "cyd35": {
-          "app": "fw/2.8.5/BATTLAB_CYD35_APP_UPDATE.bin",
-          "install": "fw/2.8.5/BATTLAB_CYD35_INSTALL.bin"
-        },
-        "cloudscreen": {
-          "app": "fw/2.8.5/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
-          "install": "fw/2.8.5/BATTLAB_CLOUDSCREEN_INSTALL.bin"
         }
       }
     }
