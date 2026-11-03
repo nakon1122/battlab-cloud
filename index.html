@@ -102,6 +102,8 @@ main{max-width:1000px;margin:0 auto;padding:14px 16px 90px}
 .kv b,.invline b,.dcard .big,#fleet b{border-radius:5px;transition:background .3s,color .3s,box-shadow .3s}
 .flU{background:rgba(64,200,120,.26)!important;color:#b8ffd8!important;box-shadow:0 0 0 3px rgba(64,200,120,.26)}
 .flD{background:rgba(232,160,64,.26)!important;color:#ffd9a3!important;box-shadow:0 0 0 3px rgba(232,160,64,.26)}
+.admTiles{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.admTiles div{background:rgba(255,255,255,.04);border-radius:14px;padding:10px 12px}.admTiles span{display:block;font-size:12px;color:var(--muted)}.admTiles b{display:block;font-size:20px;margin-top:2px}.admTiles small{display:block;font-size:11px;color:var(--muted);margin-top:2px}
+@media(max-width:560px){.admTiles{grid-template-columns:repeat(2,1fr)}}.admRow{cursor:pointer}.admRow:hover{background:rgba(255,255,255,.03)}.admPre{font-size:11px;max-height:320px;overflow:auto;background:rgba(0,0,0,.25);padding:10px;border-radius:10px;white-space:pre-wrap;word-break:break-all}
 .srcb{background:var(--line)!important;color:var(--muted)!important;font-weight:600}.srcb.dg{background:color-mix(in srgb,var(--good) 22%,transparent)!important;color:var(--good)!important}
 .rlU,.rlD{display:inline-block}.rlU{animation:rlU .5s cubic-bezier(.3,1.3,.5,1)}.rlD{animation:rlD .5s cubic-bezier(.3,1.3,.5,1)}
 @keyframes rlU{from{transform:translateY(.7em);opacity:0}to{transform:none;opacity:1}}@keyframes rlD{from{transform:translateY(-.7em);opacity:0}to{transform:none;opacity:1}}
@@ -526,6 +528,7 @@ table th,table td{padding:10px 12px}
 <!-- device -->
 <section id="vFw" class="hide"></section>
 <section id="vGrp" class="hide"></section>
+<section id="vAdmin" class="hide"></section>
 <section id="vDev" class="hide">
  <div class="row" style="margin-bottom:4px"><div><div class="big" id="dName">—</div><div class="small muted" id="dSub">—</div></div></div>
  <div class="dtabs"><div class="chips" id="dTabs">
@@ -545,6 +548,7 @@ table th,table td{padding:10px 12px}
 </section>
 </main>
 <div class="modal hide" id="mSet"><div class="card" id="mSetBody"></div></div>
+<div class="modal hide" id="mAdm"><div class="card" id="mAdmBody"></div></div>
 <div class="modal hide" id="mPick"><div class="card" id="mPickBody"></div></div>
 <div class="toast hide" id="toast"></div>
 <script>
@@ -590,7 +594,7 @@ let demo=false,devs=[],latest={},cur=null,tab='ov',pollT=null,listT=null,rt=null
 const ROUTE=()=>location.hash.replace(/^#\/?/,'').split('/');
 function go(h){if(share&&!/^s\//.test(h))h='s/'+share.token+(h?'/'+h:'');if(location.hash!=='#'+h)location.hash=h;else route()}
 window.addEventListener('hashchange',route);
-function show(v){['vLogin','vList','vDev','vFw','vGrp'].forEach(x=>$(x).classList.toggle('hide',x!==v));$('btnBack').classList.toggle('hide',v!=='vDev'&&v!=='vFw'&&v!=='vGrp');$('btnSet').classList.toggle('hide',v==='vLogin');updInstall();$('btnLogin').classList.toggle('hide',!demo);$('demoBadge').classList.toggle('hide',!demo)}
+function show(v){['vLogin','vList','vDev','vFw','vGrp','vAdmin'].forEach(x=>$(x).classList.toggle('hide',x!==v));$('btnBack').classList.toggle('hide',v!=='vDev'&&v!=='vFw'&&v!=='vGrp'&&v!=='vAdmin');if(v!=='vAdmin'&&$('mAdm'))$('mAdm').classList.add('hide');$('btnSet').classList.toggle('hide',v==='vLogin');updInstall();$('btnLogin').classList.toggle('hide',!demo);$('demoBadge').classList.toggle('hide',!demo)}
 $('btnBack').onclick=()=>go('');$('btnFw').onclick=()=>go('fw/install');$('btnFwL').onclick=()=>go('fw/guide');$('logo').onclick=()=>{if(demo||devs.length)go('')};$('logo').onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();$('logo').click()}};
 $('btnLogin').onclick=()=>{demo=false;devs=[];stopAll();show('vLogin');history.replaceState(null,'',location.pathname)};
 
@@ -712,7 +716,7 @@ $('btnDemo').onclick=()=>{demo=true;devs=[demoDev()];go('d/'+DEMO_ID+'/ov')};
 sb.auth.onAuthStateChange(async(e,s)=>{
  if(e==='PASSWORD_RECOVERY'){const np=prompt('ตั้งรหัสผ่านใหม่ (อย่างน้อย 8 ตัว)');if(np&&np.length>=8){const {error}=await sb.auth.updateUser({password:np});toast(error?thErr(error):'เปลี่ยนรหัสผ่านแล้ว')}afterLogin()}
  else if(e==='SIGNED_OUT'&&!demo){stopAll();show('vLogin')}});
-async function afterLogin(){demo=false;const {data}=await sb.auth.getUser();const up=data&&data.user&&data.user.user_metadata&&data.user.user_metadata.prefs;if(up){P={...PREF_DEF,...up};ls.set('bl_prefs',P);applyTheme()}await loadDevices();if(ls.get('bl_claim',null)){history.replaceState(null,'','#');if(await claimPending())return}route()}
+async function afterLogin(){demo=false;adminProbe();const {data}=await sb.auth.getUser();const up=data&&data.user&&data.user.user_metadata&&data.user.user_metadata.prefs;if(up){P={...PREF_DEF,...up};ls.set('bl_prefs',P);applyTheme()}await loadDevices();if(ls.get('bl_claim',null)){history.replaceState(null,'','#');if(await claimPending())return}route()}
 async function boot(){updInstall();if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});const {data}=await sb.auth.getSession();if(data.session)afterLogin();else if(ROUTE()[0]==='fw'||ROUTE()[0]==='claim'||ROUTE()[0]==='claimv'||ROUTE()[0]==='s')route();else if(ROUTE()[1]===DEMO_ID){demo=true;devs=[demoDev()];route()}else show('vLogin')}
 
 // ---------- routing
@@ -728,6 +732,7 @@ async function route(){let [a,id,t]=ROUTE();
  if(!demo&&!(id===BLE_ID&&ble)){const {data}=await sb.auth.getSession();if(!data.session){show('vLogin');return}}
  if(a==='d'&&id){const dev=devs.find(d=>d.id===id);if(!dev){go('');return}openDev(dev,t||'ov');return}
  if(a==='g'&&id){stopAll();openGroup(decodeURIComponent(id));return}
+ if(a==='admin'){stopAll();openAdmin(id||'ov',t);return}
  stopAll();showList()}
 
 // ---------- read-only share links (no account needed)
@@ -1437,19 +1442,84 @@ async function openSettings(){let em='';if(!demo){const {data}=await sb.auth.get
  $('mSetBody').innerHTML='<div class="row"><div class="big">ตั้งค่า</div><button class="ghost icon nf" id="mClose">✕</button></div>'+
  '<label>ธีม</label>'+seg('theme',[['auto','ตามเครื่อง'],['dark','มืด'],['light','สว่าง']])+
  '<label>สีหลัก</label><div class="sw">'+Object.entries(ACCENTS).map(([k,c])=>'<span class="'+(P.accent===k?'on':'')+'" data-a="'+k+'" style="background:'+c+'"></span>').join('')+'</div>'+
- '<label>หน่วยอุณหภูมิ</label>'+seg('tempUnit',[['C','°C'],['F','°F']])+
+ (ADMIN?'<button id="mAdmin" style="width:100%;margin:2px 0 14px">🛡 หลังบ้าน (Super admin)</button>':'')+'<label>หน่วยอุณหภูมิ</label>'+seg('tempUnit',[['C','°C'],['F','°F']])+
  '<label>อัปเดตค่าทุก</label>'+seg('refresh',[[3,'3 วิ'],[5,'5 วิ'],[10,'10 วิ'],[30,'30 วิ']])+
  '<label>ตัวเลขตอนข้อมูลอัปเดต</label>'+seg('upd',[['A','A · นิ่ง'],['B','B · ไฮไลต์'],['C','C · หมุน']])+
  '<div class="card" style="background:var(--card2);margin:6px 0 14px"><b>ติดตั้งเป็นแอป</b><div class="small muted">Android/Chrome: เมนู ⋮ → ติดตั้งแอป · iPhone/Safari: ปุ่มแชร์ → เพิ่มไปยังหน้าจอโฮม</div></div>'+
  (demo?'<button id="mLogin">เข้าสู่ระบบ / สมัคร</button>':'<div class="small muted">บัญชี: <b style="color:var(--text)">'+esc(em)+'</b></div><div class="row wrap" style="margin-top:10px"><button class="soft" id="mPw">เปลี่ยนรหัสผ่าน</button><button class="danger" id="mOut">ออกจากระบบ</button></div>');
  $('mSet').classList.remove('hide');
  $('mClose').onclick=()=>$('mSet').classList.add('hide');
+ {const ab=$('mAdmin');if(ab)ab.onclick=()=>{$('mSet').classList.add('hide');go('admin')}}
  $('mSetBody').querySelectorAll('[data-k]').forEach(c=>c.onclick=()=>{const k=c.dataset.k;P[k]=k==='refresh'?+c.dataset.v:c.dataset.v;savePrefs();if(cur&&k==='refresh'){clearInterval(pollT);pollT=setInterval(refresh,P.refresh*1000)}openSettings()});
  $('mSetBody').querySelectorAll('[data-a]').forEach(c=>c.onclick=()=>{P.accent=c.dataset.a;savePrefs();openSettings()});
  if(demo)$('mLogin').onclick=()=>{$('mSet').classList.add('hide');$('btnLogin').click()};
  else{$('mPw').onclick=async()=>{const np=prompt('รหัสผ่านใหม่ (อย่างน้อย 8 ตัว)');if(!np)return;if(np.length<8){toast('สั้นเกินไป');return}const {error}=await sb.auth.updateUser({password:np});toast(error?thErr(error):'เปลี่ยนรหัสผ่านแล้ว')};
   $('mOut').onclick=async()=>{$('mSet').classList.add('hide');stopAll();await sb.auth.signOut();history.replaceState(null,'',location.pathname);show('vLogin')}}}
 
+// ---------- back office (super admin): every customer, board and screen; all reads/writes go through admin_* RPCs
+let ADMIN=false,adm={tab:'ov',owner:null,q:'',cache:{}};
+async function adminProbe(){if(demo||share){ADMIN=false;return}try{const {data}=await sb.rpc('is_admin');ADMIN=data===true}catch(e){ADMIN=false}}
+const admRpc=async(fn,args)=>{const {data,error}=await sb.rpc(fn,args||{});if(error)throw new Error(error.message.includes('admin only')?'บัญชีนี้ไม่ใช่แอดมิน':error.message);return data};
+const admOn=ts=>ts&&Date.now()-new Date(ts)<180000;
+const admT=ts=>ts?new Date(ts).toLocaleString('th-TH',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}):'—';
+async function openAdmin(tab,arg){if(!ADMIN){await adminProbe();if(!ADMIN){toast('หน้านี้สำหรับแอดมินเท่านั้น');go('');return}}
+ adm.tab=tab||'ov';if(adm.tab==='dev')adm.owner=arg||null;show('vAdmin');admPaint(true)}
+async function admPaint(load){const v=$('vAdmin'),T=[['ov','ภาพรวม'],['users','ลูกค้า'],['dev','อุปกรณ์'],['scr','จอ Cloud Screen'],['log','บันทึก']];
+ v.innerHTML='<div class="card admHead"><div class="row wrap"><div><div class="big">🛡 หลังบ้าน BattLab</div><div class="small muted">Super admin · เห็นข้อมูลลูกค้าทุกบัญชี · ทุกการแก้ไขถูกบันทึก</div></div><button class="ghost" id="admRe">↻ โหลดใหม่</button></div>'+
+  '<div class="chips" style="margin-top:10px;flex-wrap:wrap;overflow:visible">'+T.map(([k,n])=>'<span class="chip'+(adm.tab===k?' on':'')+'" data-at="'+k+'">'+n+'</span>').join('')+'</div></div><div id="admBody"><div class="card"><i class="sk"></i><i class="sk" style="width:70%"></i></div></div>';
+ v.querySelectorAll('[data-at]').forEach(c=>c.onclick=()=>go('admin/'+c.dataset.at));$('admRe').onclick=()=>admPaint(true);
+ try{const b=$('admBody');
+  if(adm.tab==='ov'){const [o,us]=await Promise.all([admRpc('admin_overview'),admRpc('admin_users')]);b.innerHTML=admOv(o,us)}
+  else if(adm.tab==='users'){const us=await admRpc('admin_users');adm.cache.users=us;b.innerHTML=admUsers(us)}
+  else if(adm.tab==='dev'){const ds=await admRpc('admin_devices',{p_owner:adm.owner});adm.cache.devs=ds;b.innerHTML=admDevs(ds)}
+  else if(adm.tab==='scr'){const vs=await admRpc('admin_viewers');b.innerHTML=admScr(vs)}
+  else{const L=await admRpc('admin_log_list',{p_limit:200});b.innerHTML=admLog(L)}
+  admBind()}catch(e){$('admBody').innerHTML='<div class="card"><b>โหลดไม่สำเร็จ</b><div class="small muted">'+esc(e.message)+'</div></div>'}}
+function admOv(o,us){const t=(n,v,s)=>'<div><span>'+n+'</span><b>'+v+'</b>'+(s?'<small>'+s+'</small>':'')+'</div>';
+ return '<div class="card"><h3>ภาพรวมระบบ</h3><div class="admTiles">'+t('ลูกค้า',o.users,'เข้าใช้ใน 7 วัน '+o.users_7d)+t('บอร์ดออนไลน์',o.boards_online+' / '+o.boards,o.boards_unpaired?'ยังไม่จับคู่ '+o.boards_unpaired:'')+t('อินเวอร์เตอร์',o.inverters,'บัญชี LuxPower '+o.lux_accounts)+t('จอ Cloud Screen',o.screens_online+' / '+o.screens,'ออนไลน์ / ทั้งหมด')+
+  t('คำสั่ง 24 ชม.',o.cmds_24h)+t('บันทึกกราฟ 24 ชม.',o.readings_24h)+t('ลิงก์แชร์',o.shares)+t('ฐานข้อมูล',o.db_mb+' MB','จาก 500 MB (Free)')+'</div>'+
+  '<div class="small muted" style="margin-top:12px">เฟิร์มแวร์บอร์ด</div><div class="chips" style="flex-wrap:wrap;overflow:visible;margin-top:6px">'+Object.entries(o.fw||{}).sort().map(([k,n])=>'<span class="chip">'+esc(k)+' · '+n+'</span>').join('')+'</div></div>'+
+  '<div class="card"><h3>ลูกค้าล่าสุด</h3>'+us.slice().sort((a,b)=>new Date(b.created)-new Date(a.created)).slice(0,5).map(admUserRow).join('')+'<button class="soft" data-go="admin/users" style="width:100%;margin-top:8px">ดูลูกค้าทั้งหมด ('+us.length+')</button></div>'+
+  '<div class="card"><h3>สิทธิ์แอดมิน</h3><div class="small muted">Super = ทำได้ทุกอย่าง · Support = ดูและแก้ไขข้อมูลลูกค้า แต่ให้สิทธิ์คนอื่นไม่ได้</div><div class="th3" style="margin-top:8px"><label>อีเมลบัญชี<input id="admRoleEmail" type="email" placeholder="name@example.com"></label><label>สิทธิ์<select id="admRole"><option value="support">Support</option><option value="super">Super admin</option><option value="">ถอนสิทธิ์</option></select></label></div><button class="soft" id="admRoleSave">บันทึกสิทธิ์</button></div>'}
+function admUserRow(u){return '<div class="devrow admRow" data-owner="'+esc(u.id)+'"><div class="l"><b>'+esc(u.email||'—')+(u.admin?' <span class="abadge" style="background:var(--s1)">แอดมิน</span>':'')+(u.confirmed?'':' <span class="abadge" style="background:var(--warn)">ยังไม่ยืนยันอีเมล</span>')+'</b><span class="tiny muted">สมัคร '+admT(u.created)+' · เข้าล่าสุด '+admT(u.last_login)+(u.last_data?' · ข้อมูลล่าสุด '+ago(u.last_data):'')+'</span></div><div class="nf tiny" style="text-align:right">🔋 '+u.boards+(u.inverters?' · ☀️ '+u.inverters:'')+(u.screens?' · 🖥 '+u.screens:'')+'<br><span style="color:'+(u.online?'var(--good)':'var(--muted)')+'">ออนไลน์ '+u.online+'</span>'+(u.lux?' · Lux '+esc(u.lux):'')+'</div></div>'}
+function admUsers(us){return '<div class="card"><h3>ลูกค้าทั้งหมด · '+us.length+' บัญชี</h3><input id="admQ" placeholder="ค้นหาอีเมล" value="'+esc(adm.q)+'" style="margin-bottom:6px"><div id="admList">'+us.filter(u=>!adm.q||String(u.email).toLowerCase().includes(adm.q.toLowerCase())).map(admUserRow).join('')+'</div><div class="tiny muted" style="margin-top:8px">แตะลูกค้าเพื่อดูอุปกรณ์ทั้งหมดของบัญชีนั้น</div></div>'}
+function admDevRow(d){const on=admOn(d.ts),inv=d.kind==='inverter';
+ return '<div class="devrow admRow" data-dev="'+esc(d.id)+'"><div class="l"><b>'+esc(d.icon||(inv?'☀️':'🔋'))+' '+esc(d.name)+'</b><span class="tiny muted"><span class="dot '+(on?'on':'off')+'"></span> '+(on?'ออนไลน์':d.ts?'ออฟไลน์ · '+ago(d.ts):'ยังไม่เคยส่งข้อมูล')+' · '+esc(d.email||'ยังไม่จับคู่')+(inv?' · '+(d.src==='dongle'?'ดองเกิล':'คลาวด์'):' · '+esc(d.board||'?')+' '+esc(d.fw||''))+(d.group?' · '+esc(d.group):'')+'</span></div><div class="nf tiny" style="text-align:right">'+(num(d.soc)?'<b style="font-size:15px">'+Math.round(d.soc)+'%</b><br>':'')+(num(d.v)?(+d.v).toFixed(1)+' V':'')+(num(d.p)?' · '+Math.round(d.p)+' W':'')+'</div></div>'}
+const admDevList=ds=>{const q=adm.q.toLowerCase();return ds.filter(d=>!q||[d.name,d.email,d.pair,d.ext,d.fw,d.group].some(x=>String(x||'').toLowerCase().includes(q))).map(admDevRow).join('')};
+function admDevs(ds){const ow=adm.owner&&ds[0]?ds[0].email:null;
+ return '<div class="card"><div class="row wrap"><h3 style="margin:0">อุปกรณ์'+(adm.owner?' ของ '+esc(ow||'ลูกค้านี้'):'ทั้งหมด')+' · '+ds.length+'</h3>'+(adm.owner?'<button class="ghost" data-go="admin/dev">แสดงทุกบัญชี</button>':'')+'</div>'+
+  '<input id="admQ" placeholder="ค้นหา ชื่อ / อีเมล / รหัสจับคู่ / เฟิร์มแวร์" value="'+esc(adm.q)+'" style="margin:8px 0 6px"><div class="tiny muted">ออนไลน์ '+ds.filter(d=>admOn(d.ts)).length+' · ยังไม่จับคู่ '+ds.filter(d=>!d.owner).length+'</div><div id="admList">'+admDevList(ds)+'</div></div>'}
+function admScr(vs){return '<div class="card"><h3>จอ Cloud Screen · '+vs.length+'</h3>'+vs.map(v=>'<div class="devrow"><div class="l"><b>🖥️ '+esc(v.name)+'</b><span class="tiny muted"><span class="dot '+(admOn(v.last_seen)?'on':'off')+'"></span> '+(v.last_seen?ago(v.last_seen):'ยังไม่เคยต่อ')+' · '+esc(v.email||'ยังไม่จับคู่')+' · '+esc(v.pair)+' · '+esc(v.fw||'')+(v.mb!=null?' · วันนี้ '+(+v.mb).toFixed(1)+' MB':'')+'</span><div class="chips" style="margin-top:6px;flex-wrap:wrap;overflow:visible">'+[[0,'ปกติ'],[1,'🍃 ประหยัด'],[2,'🍃 มาก']].map(([k,n])=>'<span class="chip'+((v.eco??1)===k?' on':'')+'" data-seco="'+esc(v.id)+'" data-e="'+k+'">'+n+'</span>').join('')+'</div></div><button class="ghost" data-sren="'+esc(v.id)+'" data-n="'+esc(v.name)+'">เปลี่ยนชื่อ</button>'+(v.owner?'<button class="danger" data-srel="'+esc(v.id)+'">ปลดจากบัญชี</button>':'')+'</div>').join('')+'</div>'}
+function admLog(L){const A={update_device:'แก้ไขอุปกรณ์',transfer_device:'ย้ายเจ้าของ',release_device:'ปลดจากบัญชี',command:'ส่งคำสั่ง',update_screen:'แก้ไขจอ',release_screen:'ปลดจอ',set_role:'ตั้งสิทธิ์'};
+ return '<div class="card"><h3>บันทึกการทำงานของแอดมิน</h3>'+(L.length?L.map(g=>'<div class="devrow"><div class="l"><b>'+esc(A[g.action]||g.action)+'</b><span class="tiny muted">'+admT(g.at)+' · '+esc(g.by||'')+' · '+esc(String(g.target||'').slice(0,8))+'</span><div class="tiny muted" style="word-break:break-all">'+esc(JSON.stringify(g.detail||{}).slice(0,220))+'</div></div></div>').join(''):'<div class="small muted">ยังไม่มีบันทึก</div>')+'</div>'}
+function admBindRows(){const v=$('vAdmin');v.querySelectorAll('[data-owner]').forEach(r=>r.onclick=()=>go('admin/dev/'+r.dataset.owner));v.querySelectorAll('[data-dev]').forEach(r=>r.onclick=()=>admDevice(r.dataset.dev))}
+function admBind(){const v=$('vAdmin');
+ v.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
+ admBindRows();
+ const q=$('admQ');if(q)q.oninput=()=>{adm.q=q.value;const L=$('admList');if(adm.tab==='users')L.innerHTML=adm.cache.users.filter(u=>!adm.q||String(u.email).toLowerCase().includes(adm.q.toLowerCase())).map(admUserRow).join('');else L.innerHTML=admDevList(adm.cache.devs);admBindRows()};
+ const rs=$('admRoleSave');if(rs)rs.onclick=async()=>{const em=$('admRoleEmail').value.trim(),r=$('admRole').value;if(!em){toast('ใส่อีเมล');return}if(!confirm((r?'ให้สิทธิ์ '+(r==='super'?'Super admin':'Support')+' กับ ':'ถอนสิทธิ์แอดมินของ ')+em+' ?'))return;try{await admRpc('admin_set_role',{p_email:em,p_role:r||null});toast('บันทึกแล้ว');admPaint(true)}catch(e){toast(e.message)}};
+ v.querySelectorAll('[data-seco]').forEach(c=>c.onclick=async()=>{try{await admRpc('admin_set_viewer',{p_id:c.dataset.seco,p_name:null,p_eco:+c.dataset.e,p_release:false});admPaint(true)}catch(e){toast(e.message)}});
+ v.querySelectorAll('[data-sren]').forEach(b=>b.onclick=async()=>{const n=prompt('ชื่อจอ',b.dataset.n);if(!n)return;try{await admRpc('admin_set_viewer',{p_id:b.dataset.sren,p_name:n.slice(0,40),p_eco:null,p_release:false});admPaint(true)}catch(e){toast(e.message)}});
+ v.querySelectorAll('[data-srel]').forEach(b=>b.onclick=async()=>{if(!confirm('ปลดจอนี้ออกจากบัญชีลูกค้า? จอจะกลับไปแสดงรหัสจับคู่'))return;try{await admRpc('admin_set_viewer',{p_id:b.dataset.srel,p_name:null,p_eco:null,p_release:true});admPaint(true)}catch(e){toast(e.message)}})}
+// one device: details, edit, move/release, commands
+async function admDevice(id){const m=$('mAdm'),body=$('mAdmBody');m.classList.remove('hide');body.innerHTML='<i class="sk"></i><i class="sk" style="width:60%"></i>';
+ let d;try{d=await admRpc('admin_device',{p_id:id})}catch(e){body.innerHTML='<b>'+esc(e.message)+'</b>';return}
+ const x=d.data||{},c=x.cfg||{},s=d.settings||{},on=admOn(d.ts),board=d.kind!=='inverter',up=board?fwUpdate(x):null;
+ const kv=(k,v)=>v==null||v===''?'':'<div><span>'+k+'</span><b>'+v+'</b></div>';
+ body.innerHTML='<div class="row"><div><div class="big">'+esc(s.icon||'🔋')+' '+esc(d.name)+'</div><div class="small muted"><span class="dot '+(on?'on':'off')+'"></span> '+(on?'ออนไลน์':d.ts?'ออฟไลน์ · '+ago(d.ts):'ยังไม่เคยส่งข้อมูล')+'</div></div><button class="ghost icon nf" id="admX">✕</button></div>'+
+  '<div class="info" style="margin:10px 0">'+kv('เจ้าของ',esc(d.email||'ยังไม่จับคู่'))+kv('ชนิด',esc(d.kind)+(c.board?' · '+esc(c.board):''))+kv('รหัสจับคู่',esc(d.pair))+kv('Ext ID',esc(d.ext||''))+kv('เฟิร์มแวร์',esc(x.fw||'—')+(up?' <span class="abadge upd">มี '+esc(up.version)+'</span>':''))+kv('สถานะ BMS',esc(x.state||'')+(x.bms?' · '+esc(x.bms):''))+
+   kv('SOC',num(x.soc)?Math.round(x.soc)+'%':null)+kv('แรงดัน / กระแส',num(x.v)?(+x.v).toFixed(2)+' V · '+(num(x.i)?(+x.i).toFixed(1):'--')+' A':null)+kv('กำลังไฟ',num(x.p)?Math.round(x.p)+' W':null)+kv('Wi-Fi',c.ssid?esc(c.ssid)+' · '+esc(c.ip||'')+(c.wrssi?' · '+c.wrssi+' dBm':''):null)+
+   kv('สร้างเมื่อ',admT(d.created))+kv('ข้อมูลล่าสุด',admT(d.ts))+kv('บันทึกกราฟ 24 ชม.',d.readings_24h)+'</div>'+
+  '<h3>แก้ไขข้อมูล</h3><div class="th3"><label>ชื่อ<input id="admName" maxlength="60" value="'+esc(d.name)+'"></label><label>กรุ๊ป<input id="admGroup" maxlength="40" value="'+esc(s.group||'')+'"></label><label>ไอคอน<input id="admIcon" maxlength="4" value="'+esc(s.icon||'')+'"></label></div><button id="admSave">บันทึกการแก้ไข</button>'+
+  '<h3 style="margin-top:16px">เจ้าของ</h3><div class="th3"><label>ย้ายไปบัญชี (อีเมล)<input id="admTo" type="email" placeholder="customer@example.com"></label></div><div class="row wrap"><button class="soft" id="admMove">ย้ายเจ้าของ</button>'+(d.owner?'<button class="danger" id="admRel">ปลดจากบัญชี</button>':'')+'</div>'+
+  (board?'<h3 style="margin-top:16px">สั่งงานบอร์ด</h3><div class="row wrap"><button class="soft" data-ac="ping">ทดสอบ (ping)</button><button class="soft" data-ac="bms_read">อ่านค่า BMS</button><button class="soft" data-ac="bms_auto">เชื่อม BMS อัตโนมัติ</button><button class="danger" data-ac="restart">รีสตาร์ท</button>'+(up?'<button data-ac="ota">⬆ อัปเดตเป็น '+esc(up.version)+'</button>':'')+'</div>':'')+
+  '<h3 style="margin-top:16px">คำสั่งล่าสุด</h3>'+(d.cmds.length?d.cmds.slice(0,8).map(k=>'<div class="devrow"><div class="l"><b>'+esc(CMD_TH[k.cmd]||k.cmd)+'</b><span class="tiny muted">'+admT(k.at)+' · '+esc(k.status)+(k.result?' · '+esc(String(k.result).slice(0,80)):'')+'</span></div></div>').join(''):'<div class="small muted">ยังไม่มี</div>')+
+  '<details style="margin-top:12px"><summary class="small muted" style="cursor:pointer">ข้อมูลดิบล่าสุด (JSON)</summary><pre class="admPre">'+esc(JSON.stringify(x,null,1)).slice(0,20000)+'</pre></details>';
+ const B=(i,f)=>{const e=$(i);if(e)e.onclick=f};B('admX',()=>m.classList.add('hide'));
+ B('admSave',async()=>{const ns={...s,group:$('admGroup').value.trim()||undefined,icon:$('admIcon').value.trim()||s.icon};if(!ns.group)delete ns.group;try{await admRpc('admin_update_device',{p_id:id,p_name:$('admName').value,p_settings:ns});toast('บันทึกแล้ว');admDevice(id);admPaint(true)}catch(e){toast(e.message)}});
+ B('admMove',async()=>{const em=$('admTo').value.trim();if(!em){toast('ใส่อีเมลบัญชีปลายทาง');return}if(!confirm('ย้าย "'+d.name+'" ไปบัญชี '+em+'?\nลิงก์แชร์ของอุปกรณ์นี้จะถูกยกเลิก'))return;try{await admRpc('admin_set_owner',{p_id:id,p_email:em});toast('ย้ายแล้ว');admDevice(id);admPaint(true)}catch(e){toast(e.message)}});
+ B('admRel',async()=>{if(!confirm('ปลด "'+d.name+'" ออกจากบัญชี '+(d.email||'')+'?\nลูกค้าจะไม่เห็นอุปกรณ์นี้ และต้องจับคู่ใหม่ด้วยรหัส '+d.pair))return;try{await admRpc('admin_set_owner',{p_id:id,p_email:null});toast('ปลดแล้ว');admDevice(id);admPaint(true)}catch(e){toast(e.message)}});
+ body.querySelectorAll('[data-ac]').forEach(b=>b.onclick=async()=>{const k=b.dataset.ac;if(k==='restart'&&!confirm('รีสตาร์ทบอร์ดของลูกค้า?'))return;if(k==='ota'&&!confirm('อัปเดตบอร์ดของลูกค้าเป็น '+up.version+'?'))return;try{await admRpc('admin_send_command',{p_device:id,p_cmd:k,p_args:k==='ota'?{url:FW_BASE+up.url}:{}});toast('ส่งคำสั่งแล้ว · บอร์ดจะทำในรอบถัดไป');setTimeout(()=>admDevice(id),4000)}catch(e){toast(e.message)}})}
 boot();
 </script></body></html>
 
