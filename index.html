@@ -562,6 +562,7 @@ const num=x=>typeof x==='number'&&isFinite(x);
 const fmt=(x,d)=>num(x)?x.toFixed(d):'--';
 const ls={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 function toast(t){const e=$('toast');e.textContent=t;e.classList.remove('hide');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.add('hide'),3500)}
+function fmtDur(s){s=Math.max(0,Math.floor(+s));const d=Math.floor(s/86400),h=Math.floor(s%86400/3600),m=Math.floor(s%3600/60);return d?d+' วัน '+h+' ชม.':h?h+' ชม. '+m+' นาที':m+' นาที';}
 function ago(ts){const s=(Date.now()-new Date(ts))/1000;return s<10?'เมื่อสักครู่':s<60?Math.round(s)+' วินาทีที่แล้ว':s<3600?Math.round(s/60)+' นาทีที่แล้ว':s<86400?Math.round(s/3600)+' ชม.ที่แล้ว':Math.round(s/86400)+' วันที่แล้ว'}
 function hm(h){if(!num(h)||h<0||h>999)return '--';const m=Math.round(h*60);return m<60?m+' นาที':Math.floor(m/60)+' ชม. '+(m%60)+' นาที'}
 function dur(s){if(!num(s))return '--';const d=Math.floor(s/86400),h=Math.floor(s%86400/3600),m=Math.floor(s%3600/60);return d?d+' วัน '+h+' ชม.':h?h+' ชม. '+m+' นาที':m+' นาที'}
@@ -1161,7 +1162,7 @@ function fwCardHtml(d,c){const b=MAN&&MAN.boards&&MAN.boards[boardOf(d)],up=fwUp
 const LED_MODES=['รุ้ง (Rainbow)','สีเดียว','หายใจ (Breathe)','ตามสถานะแบต'];
 const LED_PAL=[['#FF0000','แดง'],['#FF5000','ส้ม'],['#FFBE00','เหลือง'],['#00FF28','เขียว'],['#00DCFF','ฟ้า'],['#0032FF','น้ำเงิน'],['#AA00FF','ม่วง'],['#FFFFFF','ขาว']];
 const JKP=[['Cell OVP','แรงดันเซลล์สูงสุด (OVP)','V',.01,2.8,4.3,3],['OVP recovery','คืนค่าจาก OVP','V',.01,2.7,4.25,3],['Cell UVP','แรงดันเซลล์ต่ำสุด (UVP)','V',.01,2.0,3.4,3],['UVP recovery','คืนค่าจาก UVP','V',.01,2.1,3.6,3],['Power off','แรงดันตัดระบบ','V',.01,2.0,3.3,3],['Balance start','เริ่มบาลานซ์ที่','V',.01,2.8,4.2,3],['Balance trigger','บาลานซ์เมื่อต่างกัน','V',.001,.003,.1,3],['Max balance I','กระแสบาลานซ์สูงสุด','A',.1,.3,4,1],['Max charge I','กระแสชาร์จสูงสุด','A',1,1,300,0],['Max discharge I','กระแสจ่ายสูงสุด','A',1,1,400,0],['Charge OTP','อุณหภูมิสูงสุดขณะชาร์จ','°C',1,30,70,0],['Discharge OTP','อุณหภูมิสูงสุดขณะจ่าย','°C',1,30,80,0],['Charge UTP','อุณหภูมิต่ำสุดขณะชาร์จ','°C',1,-30,15,0],['MOS OTP','อุณหภูมิ MOS สูงสุด','°C',1,50,100,0],['Capacity','ความจุแบต','Ah',1,1,2000,0]];
-const CMD_TH={jk_codes:'กู้รหัส JK',link:'ช่องทางเชื่อม BMS',ota:'อัปเดตเฟิร์มแวร์',forget_wifi:'ลืม Wi-Fi บ้าน',led:'ไฟ RGB',bms_scan:'ค้นหา BMS',bms_connect:'เชื่อม BMS',bms_auto:'เชื่อม BMS อัตโนมัติ',bms_disconnect:'ตัดการเชื่อม BMS',bms_param:'ตั้งพารามิเตอร์',bms_switch:'สวิตช์ MOS',bms_read:'อ่านค่าจาก BMS',wifi_ap:'ฮอตสปอต BATTLAB',radio_max:'กำลังส่งวิทยุ',home_wifi:'เปลี่ยน Wi-Fi บ้าน',wifi_scan:'ค้นหา Wi-Fi',display:'ตั้งค่าหน้าจอ',restart:'รีสตาร์ทบอร์ด',ping:'ทดสอบการเชื่อมต่อ',lux_set:'ตั้งค่าดองเกิล LuxPower',lux_scan:'ค้นหาดองเกิล LuxPower'};
+const CMD_TH={jk_codes:'กู้รหัส JK',link:'ช่องทางเชื่อม BMS',ota:'อัปเดตเฟิร์มแวร์',forget_wifi:'ลืม Wi-Fi บ้าน',led:'ไฟ RGB',bms_scan:'ค้นหา BMS',bms_connect:'เชื่อม BMS',bms_auto:'เชื่อม BMS อัตโนมัติ',bms_disconnect:'ตัดการเชื่อม BMS',bms_param:'ตั้งพารามิเตอร์',bms_switch:'สวิตช์ MOS',bms_read:'อ่านค่าจาก BMS',wifi_ap:'ฮอตสปอต BATTLAB',radio_max:'กำลังส่งวิทยุ',home_wifi:'เปลี่ยน Wi-Fi บ้าน',wifi_scan:'ค้นหา Wi-Fi',display:'ตั้งค่าหน้าจอ',restart:'รีสตาร์ทบอร์ด',bms_runtime_reset:'ล้างเวลาทำงาน BMS',ping:'ทดสอบการเชื่อมต่อ',lux_set:'ตั้งค่าดองเกิล LuxPower',lux_scan:'ค้นหาดองเกิล LuxPower'};
 const ST_TH={pending:'รอบอร์ด',sent:'บอร์ดรับแล้ว',done:'สำเร็จ',error:'ไม่สำเร็จ',expired:'หมดเวลา'};
 let cmds=[],cmdT=null,touchAt=0,ctlKey='',DS=null;
 function ctlTouch(force){if(!cur||cur.demo||cur.ble)return;if(force||Date.now()-touchAt>60000){touchAt=Date.now();sb.rpc('remote_touch',{p_device:cur.id}).then(()=>{},()=>{})}}
@@ -1243,7 +1244,7 @@ function renderCtl(){const k0=ctlKey;renderCtl0();if(ctlKey!==k0){restoreTyped()
 function renderCtl0(){if(pick)setTimeout(renderPicker,0);const l=latest[cur.id],d=l&&l.data||{},c=d.cfg,x=derive(l,dset(cur));
  const PK=packsOf(d);let pkS=null;if(PK){if(packSel==null||!PK.some(p=>p.a===packSel))packSel=PK[0].a;pkS=PK.find(p=>p.a===packSel)}
  const BT=c&&c.bt||{},BTM=pkS?BT[pkS.a]:null,RO=!!PK&&d.busm===1&&!BTM,J=pkS?pkS.jk:d.jk,PA=pkS?{a:pkS.a}:{};
- const key=JSON.stringify([c&&{...c,wrssi:0},J,PK&&PK.map(p=>p.bt),pkS&&[pkS.a,pkS.chg,pkS.dsg],PK&&PK.map(p=>p.a),d.busm,d.pa,d.devs,d.wscan,d.chg,d.dsg,x.online,P.tempUnit,d.fw,!!MAN,d.rd,d.rst,d.state]);const ae=document.activeElement;
+ const key=JSON.stringify([c&&{...c,wrssi:0},J,PK&&PK.map(p=>p.bt),pkS&&[pkS.a,pkS.chg,pkS.dsg],PK&&PK.map(p=>p.a),d.busm,d.pa,d.devs,d.wscan,d.chg,d.dsg,x.online,P.tempUnit,d.fw,!!MAN,d.rd,d.rst,d.state,d.rt,ADMIN]);const ae=document.activeElement;
  if(key===ctlKey&&$('cmdLog'))return;if(ae&&$('tab_ctl').contains(ae)&&/INPUT|SELECT/.test(ae.tagName)&&$('cmdLog'))return;ctlKey=key;
  if(!l||!c){$('tab_ctl').innerHTML='<div class="card empty"><div class="e">🛰️</div><b>'+(!l?'บอร์ดยังไม่เคยส่งข้อมูลขึ้น cloud':'ต้องอัปเดตเฟิร์มแวร์เป็น 2.1.0 ขึ้นไปก่อน')+'</b><div class="small muted">'+(!l?'ตั้ง Wi-Fi บ้านบนบอร์ดก่อน':'เฟิร์มแวร์ตอนนี้: '+esc(d.fw||'--')+' · ใช้ไฟล์ UPDATE_*.bat เพื่ออัปเดตโดยไม่ลบการตั้งค่า')+'</div></div><div class="card"><h3>คำสั่งล่าสุด</h3><div id="cmdLog"></div></div>';renderCmdLog();return}
  const off=!x.online,fam=c.fam||0,famN=['ยังไม่รู้จัก','JK','ANT','JBD','DALY'][fam]||'?',isCyd=c.board==='cyd35';
@@ -1263,6 +1264,11 @@ function renderCtl0(){if(pick)setTimeout(renderPicker,0);const l=latest[cur.id],
  else if(fam===4)h+='<div class="small muted" style="margin-top:8px">DALY: อ่านค่าได้ครบ และเปิด/ปิด MOS ชาร์จ/จ่ายไฟได้ · การตั้งพารามิเตอร์ป้องกันของ DALY จะเพิ่มในเวอร์ชันถัดไป · ถ้าบลูทูธ DALY ไม่ขึ้น ให้ลบอุปกรณ์ในแอป DALY ที่เปิดโหมด Wi-Fi/Cloud ไว้</div>';
  else h+='<div class="small muted" style="margin-top:8px">'+(fam?'กำลังอ่านค่าจาก BMS… (กด "อ่านค่าใหม่" ถ้านานเกิน 15 วินาที · บอร์ดต้องเป็นเฟิร์มแวร์ 2.5.0 ขึ้นไปสำหรับ ANT/JBD)':'เชื่อม BMS ก่อน')+'</div>';
  h+='</div>';
+ if(ADMIN){const rt=num(d.rt)?d.rt:null,onR=c.link==='rs485';
+  h+='<div class="card" style="border-color:var(--warn)"><div class="row"><h3 style="margin:0">🧪 ล้างเวลาทำงาน BMS</h3><span class="abadge" style="background:var(--s1)">super admin</span></div>'+
+   '<div class="small muted" style="margin:6px 0">'+(rt!=null?'เวลาทำงานที่ BMS รายงานตอนนี้: <b style="color:var(--text)">'+fmtDur(rt)+'</b>':'ยังไม่มีค่า · ต้องเป็นเฟิร์มแวร์ 2.9.0+ และต่อ BMS ผ่าน RS485')+'</div>'+
+   '<button class="danger" id="rtReset" '+(onR?'':'disabled title="ใช้ได้เฉพาะเมื่อเชื่อม BMS ผ่าน RS485"')+'>ล้างเวลาทำงานเป็นศูนย์</button>'+
+   '<div class="tiny muted" style="margin-top:6px">เขียนทับรีจิสเตอร์เวลาของ BMS โดยตรง (ทดลอง) · ไม่กระทบค่าป้องกันอื่น · ถ้า BMS ไม่ยอมเขียน ให้กดปุ่ม RST บนบอร์ดอะแดปเตอร์แทน · เมนูนี้เห็นเฉพาะ super admin</div></div>';}
  h+=btCardHtml(c,d,PK);
  // BMS connection
  const devs=Array.isArray(d.devs)?d.devs:[];
@@ -1310,6 +1316,7 @@ function renderCtl0(){if(pick)setTimeout(renderPicker,0);const l=latest[cur.id],
  bind('cDsg',()=>{const t=!on('cDsg');if(!t&&!confirm('ปิด MOS จ่ายไฟ? ไฟที่ออกไปยังโหลดจะดับทันที'))return;sendCmd('bms_switch',{which:1,on:t,...PA})});
  bind('cBal',()=>{const t=bal==null?confirm('เปิดบาลานซ์? (กด ยกเลิก = ปิด)'):!on('cBal');sendCmd('bms_switch',{which:2,on:t,...PA})});
  bind('cRead',()=>sendCmd('bms_read'));
+ bind('rtReset',()=>{if(!confirm('ล้างเวลาทำงานของ BMS ให้เป็นศูนย์?\n\nเป็นการเขียนทับรีจิสเตอร์เวลาของ BMS โดยตรง (ฟังก์ชันทดลอง) · อ่านค่ากลับมาดูได้ว่าสำเร็จไหม'))return;sendCmd('bms_runtime_reset',pkS?{a:pkS.a}:{})});
  $('tab_ctl').querySelectorAll('[data-q]').forEach(b=>b.onclick=()=>{const i=+b.dataset.q,p=BMS_PARAMS[fam][i],v=parseFloat($('qv'+i).value),old=d.pa.v[i];if(!num(v)||v<p[5]||v>p[6]){toast('ค่าต้องอยู่ระหว่าง '+p[5]+'–'+p[6]+' '+p[3]);return}if(!confirm(p[2]+'\n'+(+old).toFixed(p[7])+' → '+v.toFixed(p[7])+' '+p[3]+(fam===2?'\n\n(ANT: โหมดทดลอง ระบบจะอ่านกลับมาตรวจ)':'')+'\n\nตรวจให้แน่ใจว่าเหมาะกับเซลล์ของคุณ'))return;sendCmd('bms_param',{index:i,value:v})});
  $('tab_ctl').querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{const i=+b.dataset.p,p=JKP[i],v=parseFloat($('pv'+i).value),old=J.v[i];if(!num(v)||v<p[4]||v>p[5]){toast('ค่าต้องอยู่ระหว่าง '+p[4]+'–'+p[5]+' '+p[2]);return}if(!confirm(p[1]+'\n'+(num(old)?old.toFixed(p[6]):'?')+' → '+v.toFixed(p[6])+' '+p[2]+'\n\nตรวจให้แน่ใจว่าเหมาะกับเซลล์ของคุณ'))return;sendCmd('bms_param',{index:i,value:v,...PA})});
  $('tab_ctl').querySelectorAll('[data-sp]').forEach(e=>e.onclick=()=>{packSel=+e.dataset.sp;ctlKey='';renderCtl()});
