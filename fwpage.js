@@ -301,7 +301,7 @@ function fwDlHtml() {
       (f.install ? '<div class="fw"><div class="l"><b>ติดตั้งใหม่ (merged)</b><span>เขียนที่ 0x0 · ล้างค่าเดิม</span></div><a href="' + esc(FW_BASE + f.install) + '" download>.bin</a></div>' : '') +
       '<div class="fw"><div class="l"><b>อัปเดต (app)</b><span>เก็บค่าเดิม · เขียนที่ 0x10000</span></div><a href="' + esc(FW_BASE + f.app) + '" download>.bin</a></div></div>';
   });
-  return h + '<div class="tiny muted" style="margin:4px 4px 10px">เก็บไว้ 3 เวอร์ชันล่าสุด · ไฟล์เก่ากว่านั้นดูได้ใน GitHub</div>';
+  return h + '<div class="tiny muted" style="margin:4px 4px 10px">เก็บไว้ 5 เวอร์ชันล่าสุด · ไฟล์เก่ากว่านั้นดูได้ใน GitHub</div>';
 }
 document.addEventListener('click', e => { const c = e.target.closest('[data-dv]'); if (c) { FWB.dlv = c.dataset.dv; renderFw(); } });
 // ------------------------------------------------------------------- guide

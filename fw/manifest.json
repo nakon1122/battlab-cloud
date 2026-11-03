@@ -115,6 +115,52 @@
           "install": "fw/2.8.6/BATTLAB_CLOUDSCREEN_INSTALL.bin"
         }
       }
+    },
+    {
+      "version": "2.8.5",
+      "date": "2026-11-03",
+      "notes": "JK รุ่นใหม่: ถามแบบ JK อย่างเดียว ไม่ส่งคำสั่งทดลองใส่ BMS, เปิดรับเฉพาะ FFE1",
+      "zip": {
+        "url": "fw/2.8.5/BATTLAB_v2.8.5_READY_TO_FLASH.zip",
+        "size": 23623389
+      },
+      "boards": {
+        "s3": {
+          "app": "fw/2.8.5/BATTLAB_S3_APP_UPDATE.bin",
+          "install": "fw/2.8.5/BATTLAB_S3_BLEFIX_INSTALL.bin"
+        },
+        "cyd35": {
+          "app": "fw/2.8.5/BATTLAB_CYD35_APP_UPDATE.bin",
+          "install": "fw/2.8.5/BATTLAB_CYD35_INSTALL.bin"
+        },
+        "cloudscreen": {
+          "app": "fw/2.8.5/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
+          "install": "fw/2.8.5/BATTLAB_CLOUDSCREEN_INSTALL.bin"
+        }
+      }
+    },
+    {
+      "version": "2.8.4",
+      "date": "2026-11-03",
+      "notes": "JK โมดูลใหม่ ZX-D30: ขอข้อมูลเซลล์ทุก 2 วินาที · ไม่ยุ่งช่องอัปเดตของโมดูล · ข้อมูลตรวจสอบละเอียดขึ้น",
+      "zip": {
+        "url": "fw/2.8.4/BATTLAB_v2.8.4_READY_TO_FLASH.zip",
+        "size": 23616456
+      },
+      "boards": {
+        "s3": {
+          "app": "fw/2.8.4/BATTLAB_S3_APP_UPDATE.bin",
+          "install": "fw/2.8.4/BATTLAB_S3_BLEFIX_INSTALL.bin"
+        },
+        "cyd35": {
+          "app": "fw/2.8.4/BATTLAB_CYD35_APP_UPDATE.bin",
+          "install": "fw/2.8.4/BATTLAB_CYD35_INSTALL.bin"
+        },
+        "cloudscreen": {
+          "app": "fw/2.8.4/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
+          "install": "fw/2.8.4/BATTLAB_CLOUDSCREEN_INSTALL.bin"
+        }
+      }
     }
   ]
 }
