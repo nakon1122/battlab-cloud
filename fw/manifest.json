@@ -1,6 +1,6 @@
 {
-  "updated": "2026-11-03T12:56:24+07:00",
-  "notes": "2.8.8: อ่านอินเวอร์เตอร์ LuxPower ตรงจากดองเกิล WiFi ในบ้าน (ทุก 10 วินาที) · ตั้งค่า/ค้นหาดองเกิลได้จากหน้าเว็บบอร์ดและเว็บ Cloud · จอ CYD มีแท็บ INV",
+  "updated": "2026-11-03T13:45:46+07:00",
+  "notes": "2.8.8: อ่านอินเวอร์เตอร์ LuxPower ตรงจากดองเกิล · จอ Cloud Screen มีปุ่มประหยัดเน็ต (NORMAL / ECO / ECO MAX)",
   "boards": {
     "s3": {
       "version": "2.8.8",
@@ -29,31 +29,31 @@
       "title": "CYD 3.5\" (BMS screen)"
     },
     "cloudscreen": {
-      "version": "2.8.7",
-      "url": "fw/2.8.7/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
-      "size": 1358112,
-      "sha256": "08a50ee003348fc3ee46fb8c5e0500d1e01134b76b1b3ed6a852f840623f4fb6",
+      "version": "2.8.8",
+      "url": "fw/2.8.8/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
+      "size": 1360224,
+      "sha256": "168a0114163504da8030ea42e9366b2035297940259685692d71416899b8b538",
       "install": {
-        "url": "fw/2.8.7/BATTLAB_CLOUDSCREEN_INSTALL.bin",
-        "size": 1423648,
-        "sha256": "d0dd94a21ea3a567c2787cd5a2ac9ceae3aae208b03472b8f0a00d298913f595"
+        "url": "fw/2.8.8/BATTLAB_CLOUDSCREEN_INSTALL.bin",
+        "size": 1425760,
+        "sha256": "8881c23d849f906220d66c13470a49ebc2af78555fad5d8222f46f1994346359"
       },
-      "webtools": "fw/2.8.7/webtools-cloudscreen.json",
+      "webtools": "fw/2.8.8/webtools-cloudscreen.json",
       "title": "Cloud Screen (CYD 3.5\")"
     }
   },
   "zip": {
     "url": "fw/2.8.8/BATTLAB_v2.8.8_READY_TO_FLASH.zip",
-    "size": 16668555
+    "size": 16930103
   },
   "history": [
     {
       "version": "2.8.8",
       "date": "2026-11-03",
-      "notes": "2.8.8: อ่านอินเวอร์เตอร์ LuxPower ตรงจากดองเกิล WiFi ในบ้าน (ทุก 10 วินาที) · ตั้งค่า/ค้นหาดองเกิลได้จากหน้าเว็บบอร์ดและเว็บ Cloud · จอ CYD มีแท็บ INV",
+      "notes": "2.8.8: อ่านอินเวอร์เตอร์ LuxPower ตรงจากดองเกิล · จอ Cloud Screen มีปุ่มประหยัดเน็ต (NORMAL / ECO / ECO MAX)",
       "zip": {
         "url": "fw/2.8.8/BATTLAB_v2.8.8_READY_TO_FLASH.zip",
-        "size": 16668555
+        "size": 16930103
       },
       "boards": {
         "s3": {
@@ -65,8 +65,8 @@
           "install": "fw/2.8.8/BATTLAB_CYD35_INSTALL.bin"
         },
         "cloudscreen": {
-          "app": "fw/2.8.7/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
-          "install": "fw/2.8.7/BATTLAB_CLOUDSCREEN_INSTALL.bin"
+          "app": "fw/2.8.8/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
+          "install": "fw/2.8.8/BATTLAB_CLOUDSCREEN_INSTALL.bin"
         }
       }
     },
