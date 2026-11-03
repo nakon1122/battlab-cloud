@@ -1,31 +1,31 @@
 {
-  "updated": "2026-11-03T04:38:59+07:00",
-  "notes": "แก้ความจุคงเหลือ / เวลาใช้ได้อีก / เวลาชาร์จเต็ม / SOC เฉลี่ยแบงก์ให้ถูกต้อง",
+  "updated": "2026-11-03T12:56:24+07:00",
+  "notes": "2.8.8: อ่านอินเวอร์เตอร์ LuxPower ตรงจากดองเกิล WiFi ในบ้าน (ทุก 10 วินาที) · ตั้งค่า/ค้นหาดองเกิลได้จากหน้าเว็บบอร์ดและเว็บ Cloud · จอ CYD มีแท็บ INV",
   "boards": {
     "s3": {
-      "version": "2.8.7",
-      "url": "fw/2.8.7/BATTLAB_S3_APP_UPDATE.bin",
-      "size": 1445904,
-      "sha256": "3e294b751f392950aff97d05cabf112f0bb82eefa534ab981b14ec82469b977f",
+      "version": "2.8.8",
+      "url": "fw/2.8.8/BATTLAB_S3_APP_UPDATE.bin",
+      "size": 1463776,
+      "sha256": "90cde1b4081e19b7edd7516d3623b893cf40e959efbe90f6bd8384240388a105",
       "install": {
-        "url": "fw/2.8.7/BATTLAB_S3_BLEFIX_INSTALL.bin",
-        "size": 1511440,
-        "sha256": "26dcaf0cec12f37e156f869d600b5cbe9f10b1aafb962ca6fcc4ec55cf9c2ff5"
+        "url": "fw/2.8.8/BATTLAB_S3_BLEFIX_INSTALL.bin",
+        "size": 1529312,
+        "sha256": "aadab4070c23ac6aa2f41c8431e4e866b4d006fd7c36498f19d283159211db66"
       },
-      "webtools": "fw/2.8.7/webtools-s3.json",
+      "webtools": "fw/2.8.8/webtools-s3.json",
       "title": "ESP32-S3 (BMS board)"
     },
     "cyd35": {
-      "version": "2.8.7",
-      "url": "fw/2.8.7/BATTLAB_CYD35_APP_UPDATE.bin",
-      "size": 1759312,
-      "sha256": "b9939ec50db49466efa5119416f741a71eae00194f9606391a265a0c276f1b13",
+      "version": "2.8.8",
+      "url": "fw/2.8.8/BATTLAB_CYD35_APP_UPDATE.bin",
+      "size": 1780832,
+      "sha256": "5486af6bfe3c024fd920d2df7b0824e5e0c893f07976e9c4f95adb0f75f960d4",
       "install": {
-        "url": "fw/2.8.7/BATTLAB_CYD35_INSTALL.bin",
-        "size": 1824848,
-        "sha256": "e7d89163c77145f007d207bc9d173282560d202a0e3727c93b417c07b33839ca"
+        "url": "fw/2.8.8/BATTLAB_CYD35_INSTALL.bin",
+        "size": 1846368,
+        "sha256": "c71b754a32441dc30abfc4b513547fd1219ad409590a26e7f7961323e8a918e7"
       },
-      "webtools": "fw/2.8.7/webtools-cyd35.json",
+      "webtools": "fw/2.8.8/webtools-cyd35.json",
       "title": "CYD 3.5\" (BMS screen)"
     },
     "cloudscreen": {
@@ -43,10 +43,33 @@
     }
   },
   "zip": {
-    "url": "fw/2.8.7/BATTLAB_v2.8.7_READY_TO_FLASH.zip",
-    "size": 23636533
+    "url": "fw/2.8.8/BATTLAB_v2.8.8_READY_TO_FLASH.zip",
+    "size": 16668555
   },
   "history": [
+    {
+      "version": "2.8.8",
+      "date": "2026-11-03",
+      "notes": "2.8.8: อ่านอินเวอร์เตอร์ LuxPower ตรงจากดองเกิล WiFi ในบ้าน (ทุก 10 วินาที) · ตั้งค่า/ค้นหาดองเกิลได้จากหน้าเว็บบอร์ดและเว็บ Cloud · จอ CYD มีแท็บ INV",
+      "zip": {
+        "url": "fw/2.8.8/BATTLAB_v2.8.8_READY_TO_FLASH.zip",
+        "size": 16668555
+      },
+      "boards": {
+        "s3": {
+          "app": "fw/2.8.8/BATTLAB_S3_APP_UPDATE.bin",
+          "install": "fw/2.8.8/BATTLAB_S3_BLEFIX_INSTALL.bin"
+        },
+        "cyd35": {
+          "app": "fw/2.8.8/BATTLAB_CYD35_APP_UPDATE.bin",
+          "install": "fw/2.8.8/BATTLAB_CYD35_INSTALL.bin"
+        },
+        "cloudscreen": {
+          "app": "fw/2.8.7/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
+          "install": "fw/2.8.7/BATTLAB_CLOUDSCREEN_INSTALL.bin"
+        }
+      }
+    },
     {
       "version": "2.8.7",
       "date": "2026-11-03",
@@ -90,29 +113,6 @@
         "cloudscreen": {
           "app": "fw/2.8.6/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
           "install": "fw/2.8.6/BATTLAB_CLOUDSCREEN_INSTALL.bin"
-        }
-      }
-    },
-    {
-      "version": "2.8.5",
-      "date": "2026-11-03",
-      "notes": "JK รุ่นใหม่: ถามแบบ JK อย่างเดียว ไม่ส่งคำสั่งทดลองใส่ BMS, เปิดรับเฉพาะ FFE1",
-      "zip": {
-        "url": "fw/2.8.5/BATTLAB_v2.8.5_READY_TO_FLASH.zip",
-        "size": 23623389
-      },
-      "boards": {
-        "s3": {
-          "app": "fw/2.8.5/BATTLAB_S3_APP_UPDATE.bin",
-          "install": "fw/2.8.5/BATTLAB_S3_BLEFIX_INSTALL.bin"
-        },
-        "cyd35": {
-          "app": "fw/2.8.5/BATTLAB_CYD35_APP_UPDATE.bin",
-          "install": "fw/2.8.5/BATTLAB_CYD35_INSTALL.bin"
-        },
-        "cloudscreen": {
-          "app": "fw/2.8.5/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
-          "install": "fw/2.8.5/BATTLAB_CLOUDSCREEN_INSTALL.bin"
         }
       }
     }
