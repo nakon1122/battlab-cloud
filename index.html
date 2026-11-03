@@ -98,6 +98,15 @@ main{max-width:1000px;margin:0 auto;padding:14px 16px 90px}
 @media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 .socbar{height:8px;border-radius:4px;background:var(--line);overflow:hidden;margin-top:10px}.socbar i{display:block;height:100%;border-radius:4px;background:var(--good)}
 .kv{display:flex;gap:16px;margin-top:8px;font-size:13px;color:var(--muted)}.kv b{color:var(--text);font-size:15px}
+.socbar i{transition:width 1.2s cubic-bezier(.3,.8,.3,1),background .4s}
+.kv b,.invline b,.dcard .big,#fleet b{border-radius:5px;transition:background .3s,color .3s,box-shadow .3s}
+.flU{background:rgba(64,200,120,.26)!important;color:#b8ffd8!important;box-shadow:0 0 0 3px rgba(64,200,120,.26)}
+.flD{background:rgba(232,160,64,.26)!important;color:#ffd9a3!important;box-shadow:0 0 0 3px rgba(232,160,64,.26)}
+.rlU,.rlD{display:inline-block}.rlU{animation:rlU .5s cubic-bezier(.3,1.3,.5,1)}.rlD{animation:rlD .5s cubic-bezier(.3,1.3,.5,1)}
+@keyframes rlU{from{transform:translateY(.7em);opacity:0}to{transform:none;opacity:1}}@keyframes rlD{from{transform:translateY(-.7em);opacity:0}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.rlU,.rlD{animation:none}}
+.dot.on.ping{animation:dotPing .8s ease-out}@keyframes dotPing{0%{box-shadow:0 0 0 0 rgba(64,200,120,.75)}100%{box-shadow:0 0 0 8px rgba(64,200,120,0)}}
+@media (prefers-reduced-motion:reduce){.flU,.flD{box-shadow:none}.dot.on.ping{animation:none}}
 .abadge{display:inline-block;background:var(--bad);color:#fff;border-radius:10px;font-size:12px;font-weight:700;padding:1px 8px;margin-left:6px}
 /* hero */
 .hero{display:grid;grid-template-columns:190px 1fr;gap:18px;align-items:center}
@@ -442,7 +451,7 @@ function dur(s){if(!num(s))return '--';const d=Math.floor(s/86400),h=Math.floor(
 
 // ---------- preferences (per user: saved in the account + this browser)
 const ACCENTS={teal:'#36c4a8',blue:'#4f8ff0',violet:'#8b7cf0',orange:'#f08a3c',pink:'#ec6fa5',lime:'#8fcf3c'};
-const PREF_DEF={theme:'auto',accent:'teal',tempUnit:'C',refresh:5,notify:false,metrics:['soc','v','i','p','t','d'],range:24};
+const PREF_DEF={theme:'auto',accent:'teal',tempUnit:'C',refresh:5,upd:'B',notify:false,metrics:['soc','v','i','p','t','d'],range:24};
 let P={...PREF_DEF,...ls.get('bl_prefs',{})};
 const dark=()=>P.theme==='dark'||(P.theme==='auto'&&matchMedia('(prefers-color-scheme: dark)').matches);
 function applyTheme(){const d=dark();document.documentElement.dataset.theme=d?'dark':'light';document.documentElement.style.setProperty('--accent',ACCENTS[P.accent]||ACCENTS.teal);document.querySelector('meta[name=theme-color]').content=d?'#0b1117':'#eef2f5'}
@@ -726,12 +735,29 @@ function dragEnd(){window.removeEventListener('pointermove',dragMove);if(!drag)r
  if(d.isG){let keys=[...document.querySelectorAll('#devList .grp')].map(e=>e.dataset.g).filter(k=>k!==d.id);const t=d.tgt.dataset.g;let i=keys.indexOf(t);if(!d.before)i++;keys.splice(i,0,d.id);P.gOrder=keys}
  else{let ids=[...document.querySelectorAll('#devList .dcard')].map(e=>e.dataset.id).filter(x=>x!==DEMO_ID&&x!==d.id);const t=d.tgt.dataset.id;let i=ids.indexOf(t);if(!d.before)i++;ids.splice(i,0,d.id);const rest=(P.dOrder||[]).filter(x=>!ids.includes(x)&&x!==d.id);P.dOrder=[...ids,...rest]}
  saveOrder();renderList()}
+// patch a container in place instead of replacing innerHTML: unchanged nodes stay, so icon animations keep running;
+// numbers that changed glow briefly (green up / orange down) and the card's live dot pings
+function morph(el,html){const t=document.createElement('template');t.innerHTML=html;const first=!el.firstChild;morphKids(el,t.content,first?null:new Set());return el}
+function morphKids(o,n,ch){const on=[...o.childNodes],nn=[...n.childNodes];
+ for(let i=0;i<nn.length;i++){const a=on[i],b=nn[i];
+  if(!a){o.appendChild(b);continue}
+  if(a.nodeType!==b.nodeType||a.nodeName!==b.nodeName||(a.nodeType===1&&(a.getAttribute('data-id')!==b.getAttribute('data-id')||a.getAttribute('data-g')!==b.getAttribute('data-g')))){o.replaceChild(b,a);continue}
+  if(a.nodeType===3){if(a.nodeValue!==b.nodeValue){const ov=a.nodeValue;a.nodeValue=b.nodeValue;if(ch)flashNum(a.parentNode,ov,b.nodeValue)}continue}
+  if(a.nodeType!==1)continue;
+  for(const at of [...a.attributes])if(!b.hasAttribute(at.name))a.removeAttribute(at.name);
+  for(const at of [...b.attributes])if(a.getAttribute(at.name)!==at.value)a.setAttribute(at.name,at.value);
+  morphKids(a,b,ch)}
+ for(let i=on.length-1;i>=nn.length;i--)on[i].remove()}
+function flashNum(e,ov,nv){const M=P.upd||'B';if(M==='A')return;const x=parseFloat(String(ov).replace(/[^\d.\-−]/g,'').replace('−','-')),y=parseFloat(String(nv).replace(/[^\d.\-−]/g,'').replace('−','-'));
+ if(!e||!isFinite(x)||!isFinite(y)||x===y)return;const tg=e.closest('b,.big');if(!tg)return;const c=M==='C'?(y>x?'rlU':'rlD'):(y>x?'flU':'flD');
+ tg.classList.remove('flU','flD','rlU','rlD');void tg.offsetWidth;tg.classList.add(c);clearTimeout(tg._fl);tg._fl=setTimeout(()=>tg.classList.remove(c),900);
+ if(M==='C')return;const dc=tg.closest('.dcard');const d=dc&&dc.querySelector('.dot.on');if(d&&!d._pg){d._pg=1;d.classList.remove('ping');void d.offsetWidth;d.classList.add('ping');setTimeout(()=>{d._pg=0;d.classList.remove('ping')},800)}}
 function renderList(){
  const on=devs.filter(d=>statusOf(latest[d.id])[0]!=='off').length;let pw=0,socs=[];const invOf=d=>d.kind==='inverter'||!!((latest[d.id]||{}).data||{}).inv,anyBoard=devs.some(d=>!invOf(d));
  devs.forEach(d=>{const l=latest[d.id];if(anyBoard&&invOf(d))return;if(l&&statusOf(l)[0]==='on'){if(num(l.data.p))pw+=l.data.p;if(num(l.data.soc))socs.push(l.data.soc)}});
  {const lc=$('luxCard');if(lc){lc.classList.toggle('hide',!!share||demo);if(!lc.dataset.w){lc.dataset.w=1;luxLoad();lc.addEventListener('toggle',()=>{if(lc.open)luxLoad()})}}}
  {const sa=$('shareAll');if(sa){sa.classList.toggle('hide',!!share||demo||!devs.length);if(!sa.dataset.w){sa.dataset.w=1;sa.addEventListener('toggle',()=>{if(sa.open)shareCard($('shareAllBox'),{all:true})})}}}
- $('fleet').innerHTML='<div class="row wrap"><div><div class="big">'+(share?'แบตเตอรี่ที่แชร์ให้ดู':'อุปกรณ์ของฉัน')+(share||demo||devs.length<2?'':' <button class="ghost sortbtn'+(sortMode?' on':'')+'" id="btnSort">'+(sortMode?'✓ เสร็จ':'↕ จัดเรียง')+'</button>')+'</div><div class="small muted">'+devs.length+' เครื่อง · ออนไลน์ '+on+'</div></div>'+(socs.length?'<div class="nf" style="text-align:right"><div class="small muted">กำลังรวม / SOC เฉลี่ย</div><b style="font-size:20px">'+Math.round(pw)+' W · '+Math.round(socs.reduce((a,b)=>a+b,0)/socs.length)+'%</b>'+(()=>{const T=groupTotals(devs);return T.hasE||T.kwh?'<div class="tiny muted">'+(T.kwh?'คงเหลือ '+T.kwh.toFixed(1)+' kWh':'')+(T.hasE?' · วันนี้ +'+T.ei.toFixed(1)+' / −'+T.eo.toFixed(1)+' kWh':'')+'</div>':''})()+'</div>':'')+'</div>';
+ morph($('fleet'),'<div class="row wrap"><div><div class="big">'+(share?'แบตเตอรี่ที่แชร์ให้ดู':'อุปกรณ์ของฉัน')+(share||demo||devs.length<2?'':' <button class="ghost sortbtn'+(sortMode?' on':'')+'" id="btnSort">'+(sortMode?'✓ เสร็จ':'↕ จัดเรียง')+'</button>')+'</div><div class="small muted">'+devs.length+' เครื่อง · ออนไลน์ '+on+'</div></div>'+(socs.length?'<div class="nf" style="text-align:right"><div class="small muted">กำลังรวม / SOC เฉลี่ย</div><b style="font-size:20px">'+Math.round(pw)+' W · '+Math.round(socs.reduce((a,b)=>a+b,0)/socs.length)+'%</b>'+(()=>{const T=groupTotals(devs);return T.hasE||T.kwh?'<div class="tiny muted">'+(T.kwh?'คงเหลือ '+T.kwh.toFixed(1)+' kWh':'')+(T.hasE?' · วันนี้ +'+T.ei.toFixed(1)+' / −'+T.eo.toFixed(1)+' kWh':'')+'</div>':''})()+'</div>':'')+'</div>');
  const card=d=>{const l=latest[d.id],s=dset(d),[st,txt]=statusOf(l),al=evalAlerts(d,l);trackAlerts(d,al);const x=l&&l.data||{};const live=st==='on';const rk=live?evRange(x,s):null;
   return '<div class="card dcard" data-id="'+esc(d.id)+'" data-gk="'+esc(dset(d).group||'_')+'" style="--dc:'+(live?socColor(x.soc):st==='wait'?'var(--warn)':'var(--line)')+'"><div class="row">'+(sortMode?'<span class="drag" data-dd="'+esc(d.id)+'" title="ลากเพื่อจัดลำดับ">⠿</span>':'')+'<span class="ic nf">'+esc(s.icon)+'</span><div><b>'+esc(d.name)+(x.par?' <span class="abadge" style="background:var(--s1)">ขนาน ×'+x.par+'</span>':'')+'</b>'+(al.length?'<span class="abadge">'+al.length+'</span>':'')+(fwUpdate(x)&&!share?(updPend[d.id]&&Date.now()-updPend[d.id]<300000?'<span class="abadge upd busy">⏳ กำลังอัปเดต…</span>':'<button class="abadge upd" data-upd="'+esc(d.id)+'"'+(st==='off'?' disabled title="บอร์ดต้องออนไลน์ก่อน"':'')+'>⬆ อัปเดต '+esc(fwUpdate(x).version)+'</button>'):'')+(live&&x.bank>1?'<span class="abadge" style="background:var(--good)">🔋×'+x.bank+'</span>':'')+'<div class="small muted"><span class="dot '+st+'"></span> '+esc(txt)+'</div></div><div class="nf row" style="gap:10px">'+(live&&num(x.soc)?liqHtml(d.id,x.soc,!num(x.i)?'idle':x.i>0.3?'chg':x.i<-0.3?'dsg':'idle')+'<span class="big">'+Math.round(x.soc)+'%</span>':'')+'</div></div>'+
   (live&&x.inv?'<div class="invline"><span>☀️ <b>'+fmt(x.ppv,0)+'</b> W</span><span>🏠 <b>'+fmt(x.pload,0)+'</b> W</span><span>🔌 <b>'+fmt(x.pgrid,0)+'</b> W</span>'+(num(x.epv)?'<span class="muted">วันนี้ ☀️ '+(+x.epv).toFixed(1)+' kWh</span>':'')+'</div>':'')+(live?'<div class="socbar"><i style="width:'+Math.max(0,Math.min(100,x.soc))+'%;background:'+socColor(x.soc)+'"></i></div><div class="kv"><span><b>'+fmt(x.v,1)+'</b> V</span><span><b>'+fmt(x.i,1)+'</b> A</span><span>'+(rk!=null?'<b>'+Math.round(rk)+'</b> กม.':'<b>'+fmt(x.p,0)+'</b> W')+'</span><span><b>'+fmtT(x.t1)+'</b> '+tU()+'</span></div>':'')+'</div>'};
@@ -743,10 +769,9 @@ function renderList(){
    cards.push('<div class="grp'+(isC?' closed':'')+'" data-g="'+esc(key)+'"><div>'+(sortMode?'<span class="drag" data-dg="'+esc(key)+'" title="ลากเพื่อจัดลำดับกรุ๊ป">⠿</span>':'')+(isC?'▸ ':'▾ ')+ic+' '+esc(g||'อื่นๆ')+' · '+ds.length+'<div class="tiny muted" style="font-weight:500">'+(T.kwh?'คงเหลือ '+T.kwh.toFixed(1)+' kWh':'')+(T.hasE?(T.kwh?' · ':'')+'วันนี้ +'+T.ei.toFixed(1)+' / −'+T.eo.toFixed(1)+' kWh':'')+'</div></div><span>'+(T.live?(T.hasKm&&ev?Math.round(T.km)+' กม.':kw(T.pw))+(T.soc!=null?' · '+Math.round(T.soc)+'%':''):'ออฟไลน์')+(g?' <a class="gview" data-gv="'+esc(g)+'">ภาพรวม ›</a>':'')+'</span></div>');
    if(!isC)ds.forEach(d=>cards.push(card(d)))}}
  if(!demo&&!share)cards.push('<div class="card dcard" data-id="'+DEMO_ID+'" style="border-style:dashed"><div class="row"><span class="ic nf">✨</span><div><b>ดูตัวอย่างแดชบอร์ด</b><div class="small muted">ข้อมูลจำลอง ให้เห็นทุกฟังก์ชัน</div></div></div></div>');
- $('devList').innerHTML=devs.length||!demo?cards.join(''):'';
- if(!devs.length&&!demo)$('devList').insertAdjacentHTML('afterbegin','<div class="card empty"><div class="e">🔌</div><b>ยังไม่มีอุปกรณ์</b><div class="small muted">เพิ่มด้วยรหัสจับคู่ด้านล่าง</div></div>');
+ morph($('devList'),(!devs.length&&!demo?'<div class="card empty"><div class="e">🔌</div><b>ยังไม่มีอุปกรณ์</b><div class="small muted">เพิ่มด้วยรหัสจับคู่ด้านล่าง</div></div>':'')+(devs.length||!demo?cards.join(''):''));
  runTweens($('devList'));{const sb2=$('btnSort');if(sb2)sb2.onclick=()=>{sortMode=!sortMode;document.body.classList.toggle('sorting',sortMode);if(sortMode)toast('ลาก ⠿ เพื่อเลื่อนกรุ๊ปหรือการ์ด · กด ✓ เสร็จ เมื่อเรียงเสร็จ');renderList()}}
- $('devList').querySelectorAll('.drag').forEach(h=>h.addEventListener('pointerdown',dragStart));
+ $('devList').querySelectorAll('.drag').forEach(h=>{if(!h._dg){h._dg=1;h.addEventListener('pointerdown',dragStart)}});
  $('devList').querySelectorAll('[data-upd]').forEach(b=>b.onclick=ev=>{ev.stopPropagation();homeOta(b.dataset.upd)});
  $('devList').querySelectorAll('[data-gv]').forEach(e=>e.onclick=ev=>{ev.stopPropagation();go('g/'+encodeURIComponent(e.dataset.gv))});
  $('devList').querySelectorAll('.grp').forEach(e=>e.onclick=()=>{if(sortMode)return;const k=e.dataset.g;closed.has(k)?closed.delete(k):closed.add(k);try{localStorage.setItem('bl_grp_closed',JSON.stringify([...closed]))}catch(x){}renderList()});
@@ -1283,6 +1308,7 @@ async function openSettings(){let em='';if(!demo){const {data}=await sb.auth.get
  '<label>สีหลัก</label><div class="sw">'+Object.entries(ACCENTS).map(([k,c])=>'<span class="'+(P.accent===k?'on':'')+'" data-a="'+k+'" style="background:'+c+'"></span>').join('')+'</div>'+
  '<label>หน่วยอุณหภูมิ</label>'+seg('tempUnit',[['C','°C'],['F','°F']])+
  '<label>อัปเดตค่าทุก</label>'+seg('refresh',[[3,'3 วิ'],[5,'5 วิ'],[10,'10 วิ'],[30,'30 วิ']])+
+ '<label>ตัวเลขตอนข้อมูลอัปเดต</label>'+seg('upd',[['A','A · นิ่ง'],['B','B · ไฮไลต์'],['C','C · หมุน']])+
  '<div class="card" style="background:var(--card2);margin:6px 0 14px"><b>ติดตั้งเป็นแอป</b><div class="small muted">Android/Chrome: เมนู ⋮ → ติดตั้งแอป · iPhone/Safari: ปุ่มแชร์ → เพิ่มไปยังหน้าจอโฮม</div></div>'+
  (demo?'<button id="mLogin">เข้าสู่ระบบ / สมัคร</button>':'<div class="small muted">บัญชี: <b style="color:var(--text)">'+esc(em)+'</b></div><div class="row wrap" style="margin-top:10px"><button class="soft" id="mPw">เปลี่ยนรหัสผ่าน</button><button class="danger" id="mOut">ออกจากระบบ</button></div>');
  $('mSet').classList.remove('hide');
