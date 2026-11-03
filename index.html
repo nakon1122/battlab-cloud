@@ -154,6 +154,7 @@ body.shared #btnLogin,body.shared #btnBack{display:none!important}
 body.sorting .dcard{cursor:default;animation:sortWob .35s ease-in-out infinite alternate}body.sorting .grp{cursor:default}@keyframes sortWob{from{transform:rotate(-.3deg)}to{transform:rotate(.3deg)}}
 .dragging{opacity:.35}.dghost{opacity:.92;box-shadow:0 18px 40px rgba(0,0,0,.45);transform:scale(1.02)}.drop-b{box-shadow:0 -4px 0 0 var(--accent)!important}.drop-a{box-shadow:0 4px 0 0 var(--accent)!important}
 .sortbtn{font-size:12px;padding:4px 10px;margin-left:8px;vertical-align:middle}.sortbtn.on{background:var(--accent)!important;color:var(--on-accent,#06100d)!important}
+.updall{margin-top:8px;border:0;cursor:pointer;font:inherit;font-size:13px;font-weight:700;color:#fff;background:var(--s1);border-radius:10px;padding:7px 14px;box-shadow:0 0 0 0 rgba(57,135,229,.6);animation:updPulse 2s infinite}.updall:active{transform:scale(.97)}
 @media (prefers-reduced-motion:reduce){body.sorting .dcard{animation:none}}
 .gview{margin-left:8px;color:var(--accent);font-weight:700;cursor:pointer;white-space:nowrap}
 .gtiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
@@ -824,6 +825,13 @@ async function homeOta(id){const d=devs.find(x=>x.id===id),l=latest[id],x=l&&l.d
  if(d.demo){toast('นี่คือบอร์ดตัวอย่าง');return}
  const {error}=await sb.rpc('send_command',{p_device:id,p_cmd:'ota',p_args:{url:FW_BASE+up.url}});if(error){toast('ส่งไม่สำเร็จ: '+error.message);return}
  sb.rpc('remote_touch',{p_device:id}).then(()=>{},()=>{});updPend[id]=Date.now();toast('ส่งคำสั่งอัปเดตแล้ว บอร์ดจะดาวน์โหลดและรีสตาร์ทเอง');renderList()}
+async function otaAll(ids){if(!ids||!ids.length)return;
+ if(!confirm('อัปเดตเฟิร์มแวร์ทั้งหมด '+ids.length+' เครื่องพร้อมกัน?\nแต่ละบอร์ดจะหยุดอ่าน BMS ประมาณ 1 นาทีระหว่างดาวน์โหลด แล้วรีสตาร์ทเอง'))return;
+ let ok=0,fail=0;
+ for(const id of ids){const d=devs.find(x=>x.id===id),l=latest[id],x=l&&l.data,up=fwUpdate(x);if(!d||!up||d.demo)continue;
+  const {error}=await sb.rpc('send_command',{p_device:id,p_cmd:'ota',p_args:{url:FW_BASE+up.url}});
+  if(error){fail++}else{ok++;sb.rpc('remote_touch',{p_device:id}).then(()=>{},()=>{});updPend[id]=Date.now()}}
+ toast('ส่งคำสั่งอัปเดตแล้ว '+ok+' เครื่อง'+(fail?' · ไม่สำเร็จ '+fail+' เครื่อง':'')+' · บอร์ดจะทยอยดาวน์โหลดและรีสตาร์ทเอง');renderList()}
 // ---------- LuxPower cloud link (server polls the LuxPower View account every minute)
 let lux=null;
 async function luxLoad(){const b=$('luxBox');if(!b)return;const {data,error}=await sb.from('lux_accounts').select('username,status,last_ok,last_error,server,inverters').maybeSingle();if(error){b.innerHTML='<div class="small muted">'+esc(error.message)+'</div>';return}lux=data;luxPaint()}
@@ -877,10 +885,11 @@ function flashNum(e,ov,nv){const M=P.upd||'B';if(M==='A')return;const x=parseFlo
  if(M==='C')return;const dc=tg.closest('.dcard');const d=dc&&dc.querySelector('.dot.on');if(d&&!d._pg){d._pg=1;d.classList.remove('ping');void d.offsetWidth;d.classList.add('ping');setTimeout(()=>{d._pg=0;d.classList.remove('ping')},800)}}
 function renderList(){
  const on=devs.filter(d=>statusOf(latest[d.id])[0]!=='off').length;let pw=0,socs=[];const invOf=d=>d.kind==='inverter'||!!((latest[d.id]||{}).data||{}).inv,anyBoard=devs.some(d=>!invOf(d));
+ const updList=share||demo?[]:devs.filter(d=>{const x=(latest[d.id]||{}).data||{};return fwUpdate(x)&&statusOf(latest[d.id])[0]==='on'&&!(updPend[d.id]&&Date.now()-updPend[d.id]<300000)});
  devs.forEach(d=>{const l=latest[d.id];if(anyBoard&&invOf(d))return;if(l&&statusOf(l)[0]==='on'){if(num(l.data.p))pw+=l.data.p;if(num(l.data.soc))socs.push(l.data.soc)}});
  {const lc=$('luxCard');if(lc){lc.classList.toggle('hide',!!share||demo);if(!lc.dataset.w){lc.dataset.w=1;luxLoad();lc.addEventListener('toggle',()=>{if(lc.open)luxLoad()})}}}
  {const sa=$('shareAll');if(sa){sa.classList.toggle('hide',!!share||demo||!devs.length);if(!sa.dataset.w){sa.dataset.w=1;sa.addEventListener('toggle',()=>{if(sa.open)shareCard($('shareAllBox'),{all:true})})}}}
- morph($('fleet'),'<div class="row wrap"><div><div class="big">'+(share?'แบตเตอรี่ที่แชร์ให้ดู':'อุปกรณ์ของฉัน')+(share||demo||devs.length<2?'':' <button class="ghost sortbtn'+(sortMode?' on':'')+'" id="btnSort">'+(sortMode?'✓ เสร็จ':'↕ จัดเรียง')+'</button>')+'</div><div class="small muted">'+devs.length+' เครื่อง · ออนไลน์ '+on+'</div></div>'+(socs.length?'<div class="nf" style="text-align:right"><div class="small muted">กำลังรวม / SOC เฉลี่ย</div><b style="font-size:20px">'+Math.round(pw)+' W · '+Math.round(socs.reduce((a,b)=>a+b,0)/socs.length)+'%</b>'+(()=>{const T=groupTotals(devs);return T.hasE||T.kwh?'<div class="tiny muted">'+(T.kwh?'คงเหลือ '+T.kwh.toFixed(1)+' kWh':'')+(T.hasE?' · วันนี้ +'+T.ei.toFixed(1)+' / −'+T.eo.toFixed(1)+' kWh':'')+'</div>':''})()+'</div>':'')+'</div>');
+ morph($('fleet'),'<div class="row wrap"><div><div class="big">'+(share?'แบตเตอรี่ที่แชร์ให้ดู':'อุปกรณ์ของฉัน')+(share||demo||devs.length<2?'':' <button class="ghost sortbtn'+(sortMode?' on':'')+'" id="btnSort">'+(sortMode?'✓ เสร็จ':'↕ จัดเรียง')+'</button>')+'</div><div class="small muted">'+devs.length+' เครื่อง · ออนไลน์ '+on+'</div>'+(updList.length?'<button class="updall" id="btnUpdAll">⬆ อัปเดตทั้งหมด ('+updList.length+' เครื่อง)</button>':'')+'</div>'+(socs.length?'<div class="nf" style="text-align:right"><div class="small muted">กำลังรวม / SOC เฉลี่ย</div><b style="font-size:20px">'+Math.round(pw)+' W · '+Math.round(socs.reduce((a,b)=>a+b,0)/socs.length)+'%</b>'+(()=>{const T=groupTotals(devs);return T.hasE||T.kwh?'<div class="tiny muted">'+(T.kwh?'คงเหลือ '+T.kwh.toFixed(1)+' kWh':'')+(T.hasE?' · วันนี้ +'+T.ei.toFixed(1)+' / −'+T.eo.toFixed(1)+' kWh':'')+'</div>':''})()+'</div>':'')+'</div>');
  const card=d=>{const l=latest[d.id],s=dset(d),[st,txt]=statusOf(l),al=evalAlerts(d,l);trackAlerts(d,al);const x=l&&l.data||{};const live=st==='on';const rk=live?evRange(x,s):null;
   return '<div class="card dcard" data-id="'+esc(d.id)+'" data-gk="'+esc(dset(d).group||'_')+'" style="--dc:'+(live?socColor(x.soc):st==='wait'?'var(--warn)':'var(--line)')+'"><div class="row">'+(sortMode?'<span class="drag" data-dd="'+esc(d.id)+'" title="ลากเพื่อจัดลำดับ">⠿</span>':'')+'<span class="ic nf">'+esc(s.icon)+'</span><div><b>'+esc(d.name)+(x.par?' <span class="abadge" style="background:var(--s1)">ขนาน ×'+x.par+'</span>':'')+(x.inv&&live?' <span class="abadge srcb'+(x.src==='dongle'?' dg':'')+'" title="'+(x.src==='dongle'?'อ่านตรงจากดองเกิลในบ้าน ทุก 10 วินาที':'ดึงจากคลาวด์ LuxPower ทุก 1 นาที')+'">'+(x.src==='dongle'?'📡 ดองเกิล':'☁️ คลาวด์')+'</span>':'')+'</b>'+(al.length?'<span class="abadge">'+al.length+'</span>':'')+(fwUpdate(x)&&!share?(updPend[d.id]&&Date.now()-updPend[d.id]<300000?'<span class="abadge upd busy">⏳ กำลังอัปเดต…</span>':'<button class="abadge upd" data-upd="'+esc(d.id)+'"'+(st==='off'?' disabled title="บอร์ดต้องออนไลน์ก่อน"':'')+'>⬆ อัปเดต '+esc(fwUpdate(x).version)+'</button>'):'')+(live&&x.bank>1?'<span class="abadge" style="background:var(--good)">🔋×'+x.bank+'</span>':'')+'<div class="small muted"><span class="dot '+st+'"></span> '+esc(txt)+'</div></div><div class="nf row" style="gap:10px">'+(live&&num(x.soc)?liqHtml(d.id,x.soc,!num(x.i)?'idle':x.i>0.3?'chg':x.i<-0.3?'dsg':'idle')+'<span class="big">'+Math.round(x.soc)+'%</span>':'')+'</div></div>'+
   (live&&x.inv?'<div class="invline"><span>☀️ <b>'+fmt(x.ppv,0)+'</b> W</span><span>🏠 <b>'+fmt(x.pload,0)+'</b> W</span><span>🔌 <b>'+fmt(x.pgrid,0)+'</b> W</span>'+(num(x.epv)?'<span class="muted">วันนี้ ☀️ '+(+x.epv).toFixed(1)+' kWh</span>':'')+'</div>':'')+(live?'<div class="socbar"><i style="width:'+Math.max(0,Math.min(100,x.soc))+'%;background:'+socColor(x.soc)+'"></i></div><div class="kv"><span><b>'+fmt(x.v,1)+'</b> V</span><span><b>'+fmt(x.i,1)+'</b> A</span><span>'+(rk!=null?'<b>'+Math.round(rk)+'</b> กม.':'<b>'+fmt(x.p,0)+'</b> W')+'</span><span><b>'+fmtT(x.t1)+'</b> '+tU()+'</span></div>':'')+'</div>'};
@@ -894,6 +903,7 @@ function renderList(){
  if(!demo&&!share)cards.push('<div class="card dcard" data-id="'+DEMO_ID+'" style="border-style:dashed"><div class="row"><span class="ic nf">✨</span><div><b>ดูตัวอย่างแดชบอร์ด</b><div class="small muted">ข้อมูลจำลอง ให้เห็นทุกฟังก์ชัน</div></div></div></div>');
  morph($('devList'),(!devs.length&&!demo?'<div class="card empty"><div class="e">🔌</div><b>ยังไม่มีอุปกรณ์</b><div class="small muted">เพิ่มด้วยรหัสจับคู่ด้านล่าง</div></div>':'')+(devs.length||!demo?cards.join(''):''));
  runTweens($('devList'));{const sb2=$('btnSort');if(sb2)sb2.onclick=()=>{sortMode=!sortMode;document.body.classList.toggle('sorting',sortMode);if(sortMode)toast('ลาก ⠿ เพื่อเลื่อนกรุ๊ปหรือการ์ด · กด ✓ เสร็จ เมื่อเรียงเสร็จ');renderList()}}
+ {const ba=$('btnUpdAll');if(ba)ba.onclick=()=>otaAll(updList.map(d=>d.id))}
  $('devList').querySelectorAll('.drag').forEach(h=>{if(!h._dg){h._dg=1;h.addEventListener('pointerdown',dragStart)}});
  $('devList').querySelectorAll('[data-upd]').forEach(b=>b.onclick=ev=>{ev.stopPropagation();homeOta(b.dataset.upd)});
  $('devList').querySelectorAll('[data-gv]').forEach(e=>e.onclick=ev=>{ev.stopPropagation();go('g/'+encodeURIComponent(e.dataset.gv))});
@@ -953,7 +963,14 @@ function tileHtml(k,d,x,s){const a=s.alerts;let n,v,u='',cls='',sub='';
   case 'cyc':n='รอบการชาร์จ';v=num(d.cyc)?d.cyc:'--';u='รอบ';break;
   case 'energy':{n='พลังงานวันนี้';const bd=num(d.ein),E=bd?{in:+d.ein,out:+(d.eout||0)}:energyToday;v=E?E.in.toFixed(2):'--';u='kWh เข้า';sub=E?'จ่ายออก '+E.out.toFixed(2)+' kWh'+(bd?' · นับบนบอร์ด':''):'คำนวณจากประวัติ';break}
   case 'rssi':n='สัญญาณ Bluetooth';v=num(d.rssi)&&d.rssi?d.rssi:'--';u='dBm';sub=!num(d.rssi)||!d.rssi?'':d.rssi>-70?'ดี':d.rssi>-85?'พอใช้':'อ่อน';break;
-  case 'up':n='บอร์ดทำงานมา';v=dur(d.up);break}
+  case 'up':n='บอร์ดทำงานมา';v=dur(d.up);break;
+  // inverter-specific tiles (LuxPower)
+  case 'soc':n='แบตคงเหลือ';v=num(d.soc)?Math.round(d.soc):'--';u='%';break;
+  case 'ppv':n='โซลาร์';v=num(d.ppv)?(Math.abs(d.ppv)>=1000?(d.ppv/1000).toFixed(2):d.ppv.toFixed(0)):'--';u=num(d.ppv)&&Math.abs(d.ppv)>=1000?'kW':'W';break;
+  case 'pload':n='ไฟบ้าน';v=num(d.pload)?(Math.abs(d.pload)>=1000?(d.pload/1000).toFixed(2):d.pload.toFixed(0)):'--';u=num(d.pload)&&Math.abs(d.pload)>=1000?'kW':'W';break;
+  case 'pgrid':n='การไฟฟ้า';v=num(d.pgrid)?(Math.abs(d.pgrid)>=1000?(Math.abs(d.pgrid)/1000).toFixed(2):Math.abs(d.pgrid).toFixed(0)):'--';u=num(d.pgrid)&&Math.abs(d.pgrid)>=1000?'kW':'W';sub=num(d.pgrid)?(d.pgrid>10?'กำลังซื้อไฟ':d.pgrid<-10?'กำลังขายไฟ':'สมดุล'):'';break;
+  case 'vac':n='ไฟ AC';v=num(d.vac)?(+d.vac).toFixed(0):'--';u='V';break;
+  case 'einv':{n='พลังงานวันนี้';const E=num(d.epv)?+d.epv:null;v=E!=null?E.toFixed(1):'--';u='kWh ผลิต';sub=num(d.eload)?'ใช้ '+(+d.eload).toFixed(1)+' kWh':'';break}}
  return '<div class="tile '+cls+'"><small>'+n+'</small><b>'+v+'</b><i>'+u+'</i>'+(sub?'<div class="sub">'+esc(sub)+'</div>':'')+'</div>'}
 function infoHtml(d,l){const c0=d.cfg||{};const rows=[['ชื่อบอร์ด (Wi-Fi / บลูทูธ)',c0.name||'--'],['Hardware ID (MAC)',c0.hwid||'--'],['สถานะบอร์ด',d.state||'--'],['ชนิด BMS',d.bms||'ยังไม่ระบุ'],['รุ่น BMS',d.model||'--'],['เฟิร์มแวร์',d.fw||'--'],['บอร์ดทำงานมา',dur(d.up)],['RAM ว่าง / ก้อนใหญ่สุด',num(d.heap)?Math.round(d.heap/1024)+' / '+Math.round((d.blk||0)/1024)+' KB':'--'],['ส่งข้อมูลล่าสุด',l?new Date(l.ts).toLocaleString('th-TH'):'--'],['รหัสจับคู่',cur.pair_code||'--']];
  return '<div class="card"><h3>ข้อมูลบอร์ด</h3><div class="info">'+rows.map(r=>'<div><span>'+r[0]+'</span><b>'+esc(r[1])+'</b></div>').join('')+'</div></div>'}
@@ -1027,8 +1044,10 @@ function renderOv(){const l=latest[cur.id],s=dset(cur),d=l&&l.data||{},x=derive(
    '<div style="margin-top:10px;font-size:28px;font-weight:800;font-variant-numeric:tabular-nums">'+rollHtml('v:'+cur.id,fmt(d.v,2))+' <span class="muted" style="font-size:16px">V</span> &nbsp; '+rollHtml('i:'+cur.id,fmt(d.i,1))+' <span class="muted" style="font-size:16px">A</span></div>'+
    '<div class="pills"><span class="pill '+(d.chg?'on':'off')+'">ชาร์จ '+(d.chg?'เปิด':'ปิด')+'</span><span class="pill '+(d.dsg?'on':'off')+'">จ่ายไฟ '+(d.dsg?'เปิด':'ปิด')+'</span><span class="pill">'+esc(CHEM[x.chem].n)+'</span>'+(x.cells?'<span class="pill">'+x.cells.length+'S</span>':'')+(packsOf(d)?'<span class="pill on">ทั้งแบงก์ '+packsOf(d).length+' ลูก</span>':'')+'</div>'+flowSvg(x.mode,d,s)+'</div></div>';
   }else h+=heroABC(DS,d,x,s,soc,rk,ev,st);}
-  const tiles=s.order.filter(k=>!s.hidden.includes(k)).map(k=>tileHtml(k,d,x,s)).join('');
-  h+='<div class="card"><div class="row"><h3 style="margin:0">ค่าทั้งหมด</h3><button class="ghost nf" style="padding:6px 12px;font-size:13px" onclick="go(\'d/'+esc(cur.id)+'/set\')">ปรับแต่ง</button></div><div class="tiles" style="margin-top:10px">'+tiles+'</div></div>';
+  const invKeys=['soc','ppv','pload','pgrid','v','i','vac','t1','einv'].filter(k=>{if(k==='vac')return num(d.vac)&&d.vac>0;if(k==='t1')return num(d.t1)&&d.t1>-50;if(k==='einv')return num(d.epv)||num(d.eload);return true});
+  const tkeys=d.inv?invKeys:s.order.filter(k=>!s.hidden.includes(k));
+  const tiles=tkeys.map(k=>tileHtml(k,d,x,s)).join('');
+  h+='<div class="card"><div class="row"><h3 style="margin:0">ค่าทั้งหมด</h3>'+(d.inv?'':'<button class="ghost nf" style="padding:6px 12px;font-size:13px" onclick="go(\'d/'+esc(cur.id)+'/set\')">ปรับแต่ง</button>')+'</div><div class="tiles" style="margin-top:10px">'+tiles+'</div></div>';
   if(x.cells)h+='<div class="card" style="cursor:pointer" onclick="go(\'d/'+esc(cur.id)+'/cells\')"><div class="row"><h3 style="margin:0">เซลล์ '+x.cells.length+' ก้อน</h3><span class="nf small muted">ดูทั้งหมด ›</span></div>'+cellDevSvg(x,120)+'<div class="small muted">ต่ำสุด '+x.cmin.toFixed(3)+' V (#'+x.imin+') · สูงสุด '+x.cmax.toFixed(3)+' V (#'+x.imax+') · Δ '+x.delta+' mV · '+balanceTxt(x.delta)+'</div></div>'}
  if(x.live)h+=bankHtml(d,l);
  h+=infoHtml(d,l);const keepFlow=$('flowBox');$('tab_ov').innerHTML=h;
