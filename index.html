@@ -1213,21 +1213,40 @@ async function sendCmd(cmd,args,okMsg){if(!cur)return;args=args||{};if(cur.ble)r
  if(cur.demo){const c={id:Date.now(),cmd,args,status:'sent',result:null,created_at:new Date().toISOString()};cmds.unshift(c);renderCmdLog();setTimeout(()=>{demoApply(cmd,args);c.status='done';c.result=okMsg||'ok';toast('✓ '+(CMD_TH[cmd]||cmd));if(cur&&cur.demo)latest[cur.id]={ts:new Date().toISOString(),data:demoAt(Date.now()/1000)};ctlKey='';renderDev();renderCmdLog()},1200);return}
  const {data,error}=await sb.rpc('send_command',{p_device:cur.id,p_cmd:cmd,p_args:args});if(error){toast('ส่งไม่สำเร็จ: '+error.message);return}
  touchAt=Date.now();cmds.unshift({id:data,cmd,args,status:'pending',created_at:new Date().toISOString()});renderCmdLog();toast('ส่งคำสั่งแล้ว รอบอร์ดรับ…');clearTimeout(cmdT);cmdT=setTimeout(loadCmds,1200)}
+// params that legitimately differ per pack -> never write the same value to all
+const NOALL_PARAMS=['Capacity'];
 // write one JK parameter to every Bluetooth-matched pack, one at a time, with live progress
 async function setAllPacks(idx,value){
  if(!cur||cur.demo){toast('ใช้ได้กับบอร์ดจริงเท่านั้น');return}
  const d=((latest[cur.id]||{}).data)||{},PK=packsOf(d),c=d.cfg||{},BT=c.bt||{},p=JKP[idx];
  if(!PK){toast('ไม่ใช่แบงก์หลายลูก');return}
+ if(NOALL_PARAMS.includes(p[0])){toast('ความจุแต่ละลูกไม่เท่ากัน — ตั้งทีละลูกเท่านั้น');return}
  const order=PK.map(x=>x.a);
  const targets=order.filter(a=>BT[a]&&BT[a].mac),skipped=order.filter(a=>!(BT[a]&&BT[a].mac));
  if(!targets.length){toast('ยังไม่มีลูกไหนจับคู่บลูทูธ · กด "จับคู่อัตโนมัติ" ก่อน');return}
  const vs=value.toFixed(p[6]);
- if(!confirm('ตั้ง '+p[1]+' = '+vs+' '+p[2]+' ให้ครบ '+targets.length+' ลูก?\n\nเขียนทีละลูกผ่านบลูทูธอัตโนมัติ (~10-15 วิ/ลูก · รวม ~'+Math.ceil(targets.length*13)+' วินาที) อ่านกลับมาตรวจทุกลูก'+(skipped.length?'\n\nลูกที่ยังไม่จับคู่บลูทูธจะถูกข้าม: #'+skipped.join(', #'):'')+'\n\nตรวจให้แน่ใจว่าค่าเหมาะกับเซลล์ของคุณ'))return;
- const PER=13,stt={};targets.forEach(a=>stt[a]='wait');skipped.forEach(a=>stt[a]='skip');
- let done=0,okN=0,failN=0,activeStart=0;
- const LAB={wait:['รอ','var(--muted)'],now:['◉ กำลังเขียน…','var(--warn)'],ok:[OKMARK+'สำเร็จ','var(--good)'],nochg:['⚠️ BMS ไม่รับค่า','var(--bad)'],nobt:['✗ เชื่อมบลูทูธไม่ได้','var(--bad)'],timeout:['✗ ไม่ตอบ (timeout)','var(--bad)'],skip:['— ยังไม่จับคู่บลูทูธ','var(--muted)']};
+ const curv=a=>{const pk=PK.find(x=>x.a===a);return pk&&pk.jk&&pk.jk.v?pk.jk.v[idx]:null};
+ const same=a=>{const cv=curv(a);return num(cv)&&Math.abs(cv-value)<=p[3]/2+1e-4};
+ // STEP 1 — read current values out and let the user review before any write
+ const writeList=targets.filter(a=>!same(a));
+ const go=await new Promise(res=>{
+  const rows=targets.map(a=>{const cv=curv(a),s=same(a);return '<div class="devrow"><div class="l"><b>ลูก #'+a+'</b></div><span class="small"><span class="muted">'+(num(cv)?cv.toFixed(p[6]):'— ยังไม่ได้อ่าน')+'</span> → <b style="color:'+(s?'var(--muted)':'var(--accent)')+'">'+vs+'</b>'+(s?' <span class="tiny muted">(เท่าเดิม)</span>':'')+'</span></div>'}).join('');
+  $('mAllBody').innerHTML='<div class="row"><div class="big">อ่านค่าปัจจุบันก่อนเขียน</div><button class="ghost icon nf" id="rX">✕</button></div>'+
+   '<div class="small muted" style="margin:2px 0 8px">'+esc(p[1])+' · จะเขียนเป็น <b style="color:var(--text)">'+vs+' '+p[2]+'</b> · ลูกที่ค่าต่าง <b style="color:var(--text)">'+writeList.length+'/'+targets.length+'</b>'+(skipped.length?' · ข้าม (ไม่จับคู่บลูทูธ) #'+skipped.join(', #'):'')+'</div>'+
+   '<div style="max-height:40vh;overflow:auto">'+rows+'</div>'+
+   '<div class="tiny muted" style="margin-top:8px">เขียนเฉพาะลูกที่ค่าต่าง ('+writeList.length+' ลูก) ลูกที่เท่าเดิมจะข้าม · ⚠️ ความจุ (Ah) ไม่อยู่ในโหมดนี้เพราะแต่ละลูกไม่เท่ากัน</div>'+
+   '<div class="row" style="margin-top:12px;gap:8px"><button class="soft" id="rCancel" style="flex:1">ยกเลิก</button><button id="rGo" style="flex:1"'+(writeList.length?'':' disabled')+'>'+(writeList.length?'เขียนทับ '+writeList.length+' ลูก':'ไม่มีลูกต้องเขียน')+'</button></div>';
+  $('mAll').classList.remove('hide');
+  $('rX').onclick=$('rCancel').onclick=()=>{$('mAll').classList.add('hide');res(false)};
+  const g=$('rGo');if(g&&writeList.length)g.onclick=()=>res(true);
+ });
+ if(!go||!writeList.length)return;
+ // STEP 2 — write sequentially with live progress
+ const PER=13,stt={};order.forEach(a=>stt[a]=skipped.includes(a)?'skip':same(a)?'same':'wait');
+ let done=0,okN=0,failN=0,activeStart=0;const total=writeList.length;
+ const LAB={wait:['รอ','var(--muted)'],now:['◉ กำลังเขียน…','var(--warn)'],ok:[OKMARK+'สำเร็จ','var(--good)'],nochg:['⚠️ BMS ไม่รับค่า','var(--bad)'],nobt:['✗ เชื่อมบลูทูธไม่ได้','var(--bad)'],timeout:['✗ ไม่ตอบ (timeout)','var(--bad)'],skip:['— ยังไม่จับคู่บลูทูธ','var(--muted)'],same:['เท่าเดิม (ข้าม)','var(--muted)']};
  function paint(){
-  const total=targets.length,busy=done<total;
+  const busy=done<total;
   const rows=order.map(a=>{const L=LAB[stt[a]]||[stt[a],'var(--muted)'];const el=(stt[a]==='now'&&activeStart)?' <span class="tiny muted">'+Math.round((Date.now()-activeStart)/1000)+' วิ</span>':'';return '<div class="devrow"><div class="l"><b>ลูก #'+a+'</b></div><span class="small" style="color:'+L[1]+';font-weight:700">'+L[0]+el+'</span></div>'}).join('');
   const remain=Math.max(0,Math.ceil((total-done)*PER-(activeStart?(Date.now()-activeStart)/1000:0)));
   const bar='<div style="height:9px;border-radius:5px;background:rgba(140,170,190,.2);margin:10px 0;overflow:hidden"><i style="display:block;height:100%;width:'+Math.round(done/total*100)+'%;background:linear-gradient(135deg,var(--accent),#4f8ff0);transition:width .4s"></i></div>';
@@ -1242,7 +1261,7 @@ async function setAllPacks(idx,value){
  const find=a=>((((latest[cur.id]||{}).data||{}).cfg||{}).pw||[]).find(e=>e.a===a&&(e.what||'').includes(vs)&&term(e.st));
  $('mAll').classList.remove('hide');paint();
  const tick=setInterval(paint,1000);
- for(const a of targets){
+ for(const a of writeList){
   stt[a]='now';activeStart=Date.now();paint();
   const sentAt=Date.now();
   try{await sb.rpc('send_command',{p_device:cur.id,p_cmd:'bms_param',p_args:{index:idx,value,a}})}catch(e){}
@@ -1324,7 +1343,7 @@ function renderCtl0(){if(pick)setTimeout(renderPicker,0);const l=latest[cur.id],
   tgl('cChg','ชาร์จ (Charge)','ตัด/ต่อการชาร์จเข้าแบต',chg,noBms)+tgl('cDsg','จ่ายไฟ (Discharge)','ปิดแล้วไฟออกโหลดจะดับทันที',dsg,noBms)+(fam===3||(fam===4&&String(d.bms||'').includes('A5'))?'':tgl('cBal','บาลานซ์ (Balancer)',bal==null?'สถานะปัจจุบันไม่ทราบ (ANT)':'บาลานซ์เซลล์อัตโนมัติ',bal,noBms))+'</div>';
  // JK params
  h+='<div class="card"><div class="row"><h3 style="margin:0">พารามิเตอร์ BMS'+(pkS?' · '+esc(packName(pkS,d)):'')+'</h3><button class="ghost nf" id="cRead" style="padding:6px 12px;font-size:13px" '+(noBms?'disabled':'')+'>อ่านค่าใหม่</button></div>';
- if(fam===1&&JJ&&JJ.v){h+=(c.lw?'<div class="small muted" style="margin-top:6px">เขียนล่าสุด: '+esc(c.lw)+'</div>':'')+JKP.map((p,i)=>{const v=JJ.v[i];return '<div class="prm"><div>'+p[1]+'<small>'+p[0]+' · '+p[4]+'–'+p[5]+' '+p[2]+'</small></div><input type="number" id="pv'+i+'" step="'+p[3]+'" min="'+p[4]+'" max="'+p[5]+'" value="'+(num(v)?v.toFixed(p[6]):'')+'" '+(wRO?'disabled':'')+'><button class="soft" data-p="'+i+'" '+(wRO?'disabled':'')+'>'+(paramAll?'ตั้งทุกลูก':'ตั้ง')+'</button></div>'}).join('')}
+ if(fam===1&&JJ&&JJ.v){h+=(c.lw?'<div class="small muted" style="margin-top:6px">เขียนล่าสุด: '+esc(c.lw)+'</div>':'')+JKP.map((p,i)=>{const v=JJ.v[i];const noAll=paramAll&&NOALL_PARAMS.includes(p[0]);const dis=wRO||noAll;return '<div class="prm"><div>'+p[1]+'<small>'+p[0]+' · '+p[4]+'–'+p[5]+' '+p[2]+(noAll?' · <span style="color:var(--warn)">แต่ละลูกไม่เท่ากัน ตั้งทีละลูก</span>':'')+'</small></div><input type="number" id="pv'+i+'" step="'+p[3]+'" min="'+p[4]+'" max="'+p[5]+'" value="'+(num(v)?v.toFixed(p[6]):'')+'" '+(dis?'disabled':'')+'><button class="soft" data-p="'+i+'" '+(dis?'disabled':'')+'>'+(noAll?'ทีละลูก':paramAll?'ตั้งทุกลูก':'ตั้ง')+'</button></div>'}).join('')}
  else if(fam===1&&PK)h+='<div class="small muted" style="margin-top:8px">ยังไม่ได้รับค่าตั้งของลูกนี้'+(RO?' (ลูกหลักส่งค่าตั้งเป็นระยะ รอสักครู่)':' (กด "อ่านค่าใหม่")')+'</div>';
  else if((fam===2||fam===3)&&d.pa&&Array.isArray(d.pa.v)&&typeof BMS_PARAMS!=='undefined'){const T=BMS_PARAMS[fam]||[];
   h+=(fam===2?'<div class="small" style="color:var(--warn);margin-top:8px">⚠️ ANT: อ่านค่าได้ครบ ส่วนการเขียนเป็นโหมดทดลอง ทุกครั้งที่ตั้งค่า บอร์ดจะอ่านกลับมาตรวจว่า BMS รับค่าจริงไหม (ดูผลที่บรรทัด "เขียนล่าสุด")</div>':'<div class="small muted" style="margin-top:8px">JBD / Xiaoxiang: เขียนลง EEPROM ของ BMS แล้วอ่านกลับมาตรวจทุกครั้ง</div>')+(c.lw?'<div class="small muted" style="margin-top:6px">เขียนล่าสุด: '+esc(c.lw)+'</div>':'');
