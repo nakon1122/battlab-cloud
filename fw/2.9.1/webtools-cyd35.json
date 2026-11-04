@@ -1,6 +1,6 @@
 {
-  "name": "BATTLAB Cloud Screen (CYD 3.5\")",
-  "version": "2.8.6",
+  "name": "BATTLAB CYD 3.5\" (BMS screen)",
+  "version": "2.9.1",
   "new_install_prompt_erase": true,
   "builds": [
     {
@@ -19,7 +19,7 @@
           "offset": 57344
         },
         {
-          "path": "BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
+          "path": "BATTLAB_CYD35_APP_UPDATE.bin",
           "offset": 65536
         }
       ]

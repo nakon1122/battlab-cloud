@@ -1,6 +1,6 @@
 {
-  "updated": "2026-11-04T04:24:23+07:00",
-  "notes": "2.9.0: ล้างเวลาทำงาน BMS ผ่าน RS485 (เฉพาะ super admin)",
+  "updated": "2026-11-04T16:34:41+07:00",
+  "notes": "EV home (CYD) ดีไซน์ใหม่: เกจสมมาตร regen/drive + การ์ด RANGE/SOC/VOLT/CURRENT, motion นุ่มขึ้น",
   "boards": {
     "s3": {
       "version": "2.9.0",
@@ -16,16 +16,16 @@
       "title": "ESP32-S3 (BMS board)"
     },
     "cyd35": {
-      "version": "2.9.0",
-      "url": "fw/2.9.0/BATTLAB_CYD35_APP_UPDATE.bin",
-      "size": 1783264,
-      "sha256": "ec765dc52bbf5d260dffbc5254e208cf5c42e02492ba63da8113a8f09d7e0c54",
+      "version": "2.9.1",
+      "url": "fw/2.9.1/BATTLAB_CYD35_APP_UPDATE.bin",
+      "size": 1782624,
+      "sha256": "0b86f57fb0d5bd63b8d66fd78e7ac8b2d7446267b264866c352c604342f8682e",
       "install": {
-        "url": "fw/2.9.0/BATTLAB_CYD35_INSTALL.bin",
-        "size": 1848800,
-        "sha256": "39921c8a90c138b7558bffe5b6784992a5be5f3586317371b28c202cdee814f7"
+        "url": "fw/2.9.1/BATTLAB_CYD35_INSTALL.bin",
+        "size": 1848160,
+        "sha256": "f8946d1d27e84203963e98e0d2fd8d57ed0c78927a7159570233d3c0513efa23"
       },
-      "webtools": "fw/2.9.0/webtools-cyd35.json",
+      "webtools": "fw/2.9.1/webtools-cyd35.json",
       "title": "CYD 3.5\" (BMS screen)"
     },
     "cloudscreen": {
@@ -43,10 +43,33 @@
     }
   },
   "zip": {
-    "url": "fw/2.9.0/BATTLAB_v2.9.0_READY_TO_FLASH.zip",
-    "size": 17006215
+    "url": "fw/2.9.1/BATTLAB_v2.9.1_READY_TO_FLASH.zip",
+    "size": 17013731
   },
   "history": [
+    {
+      "version": "2.9.1",
+      "date": "2026-11-04",
+      "notes": "EV home (CYD) ดีไซน์ใหม่: เกจสมมาตร regen/drive + การ์ด RANGE/SOC/VOLT/CURRENT, motion นุ่มขึ้น",
+      "zip": {
+        "url": "fw/2.9.1/BATTLAB_v2.9.1_READY_TO_FLASH.zip",
+        "size": 17013731
+      },
+      "boards": {
+        "s3": {
+          "app": "fw/2.9.0/BATTLAB_S3_APP_UPDATE.bin",
+          "install": "fw/2.9.0/BATTLAB_S3_BLEFIX_INSTALL.bin"
+        },
+        "cyd35": {
+          "app": "fw/2.9.1/BATTLAB_CYD35_APP_UPDATE.bin",
+          "install": "fw/2.9.1/BATTLAB_CYD35_INSTALL.bin"
+        },
+        "cloudscreen": {
+          "app": "fw/2.8.8/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
+          "install": "fw/2.8.8/BATTLAB_CLOUDSCREEN_INSTALL.bin"
+        }
+      }
+    },
     {
       "version": "2.9.0",
       "date": "2026-11-04",
@@ -136,29 +159,6 @@
         "cloudscreen": {
           "app": "fw/2.8.7/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
           "install": "fw/2.8.7/BATTLAB_CLOUDSCREEN_INSTALL.bin"
-        }
-      }
-    },
-    {
-      "version": "2.8.6",
-      "date": "2026-11-03",
-      "notes": "กู้รหัส JK BMS (รหัสบลูทูธ / รหัสตั้งค่า) ในหน้าเว็บบอร์ดและเว็บ Cloud",
-      "zip": {
-        "url": "fw/2.8.6/BATTLAB_v2.8.6_READY_TO_FLASH.zip",
-        "size": 23635611
-      },
-      "boards": {
-        "s3": {
-          "app": "fw/2.8.6/BATTLAB_S3_APP_UPDATE.bin",
-          "install": "fw/2.8.6/BATTLAB_S3_BLEFIX_INSTALL.bin"
-        },
-        "cyd35": {
-          "app": "fw/2.8.6/BATTLAB_CYD35_APP_UPDATE.bin",
-          "install": "fw/2.8.6/BATTLAB_CYD35_INSTALL.bin"
-        },
-        "cloudscreen": {
-          "app": "fw/2.8.6/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
-          "install": "fw/2.8.6/BATTLAB_CLOUDSCREEN_INSTALL.bin"
         }
       }
     }
