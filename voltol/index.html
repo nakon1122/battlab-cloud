@@ -327,7 +327,7 @@ body .track-cockpit::before{background:linear-gradient(105deg,transparent 42%,rg
 </div>
 <div id="cloud-history" class="cloud-view" hidden><section><h2>เหตุขัดข้องล่าสุด</h2><ul id="events"></ul><button id="exportReadings" type="button" disabled>ดาวน์โหลดข้อมูลล่าสุด (CSV)</button></section>
 </div>
-<div id="cloud-firmware" class="cloud-view" hidden><section><p class="dash-label">VOLTOL / FIRMWARE</p><h2>เฟิร์มแวร์สำหรับโมดูล VOLTOL</h2><section class="usb-install"><h3>ติดตั้งผ่าน USB บนเว็บ</h3><p>สำหรับโมดูลใหม่ ESP32-S3 DevKitC-1 แฟลช 8 MB ใช้ Chrome หรือ Edge บนคอมพิวเตอร์ (ล้างข้อมูลทั้งบอร์ด)</p><a href="/fw/flash/" target="_blank" rel="noopener">เปิดเครื่องมือแฟลชผ่านเว็บ</a></section><h3>อัปเดตผ่าน OTA</h3><p id="firmwareVersion"></p><p id="firmwareLatest">เวอร์ชันล่าสุด —</p><p><a href="/fw/VOLTOL-v1.7.2-ReadyToFlash.zip">ดาวน์โหลดเฟิร์มแวร์โมดูล VOLTOL v1.7.2 (ติดตั้งผ่าน USB)</a><br><small>บอร์ดที่ใช้อยู่แล้วให้ใช้ UPDATE_S3_WINDOWS.bat เพื่อเก็บ Wi-Fi โทเคน และค่าตั้งไว้ครบ</small></p><button id="remoteOta" type="button" disabled>สั่งอัปเดตผ่าน Cloud</button><p id="remoteOtaStatus" role="status"></p><a href="http://192.168.4.1/">เปิดเว็บตั้งค่าโมดูล</a> <a href="/fw/version.json" target="_blank" rel="noreferrer">ดูเวอร์ชันล่าสุด</a></section>
+<div id="cloud-firmware" class="cloud-view" hidden><section><p class="dash-label">VOLTOL / FIRMWARE</p><h2>เฟิร์มแวร์สำหรับโมดูล VOLTOL</h2><section class="usb-install"><h3>ติดตั้งผ่าน USB บนเว็บ</h3><p>สำหรับโมดูลใหม่ ESP32-S3 DevKitC-1 แฟลช 8 MB ใช้ Chrome หรือ Edge บนคอมพิวเตอร์ (ล้างข้อมูลทั้งบอร์ด)</p><a href="/fw/flash/" target="_blank" rel="noopener">เปิดเครื่องมือแฟลชผ่านเว็บ</a></section><h3>อัปเดตผ่าน OTA</h3><p id="firmwareVersion"></p><p id="firmwareLatest">เวอร์ชันล่าสุด —</p><p><a href="/fw/VOLTOL-v1.7.3-ReadyToFlash.zip">ดาวน์โหลดเฟิร์มแวร์โมดูล VOLTOL v1.7.3 (ติดตั้งผ่าน USB)</a><br><small>บอร์ดที่ใช้อยู่แล้วให้ใช้ UPDATE_S3_WINDOWS.bat เพื่อเก็บ Wi-Fi โทเคน และค่าตั้งไว้ครบ</small></p><button id="remoteOta" type="button" disabled>สั่งอัปเดตผ่าน Cloud</button><p id="remoteOtaStatus" role="status"></p><a href="http://192.168.4.1/">เปิดเว็บตั้งค่าโมดูล</a> <a href="/fw/version.json" target="_blank" rel="noreferrer">ดูเวอร์ชันล่าสุด</a></section>
 </div>
 <div id="cloud-drag" class="cloud-view" hidden>
 <section class="drag-console">
@@ -361,6 +361,7 @@ body .track-cockpit::before{background:linear-gradient(105deg,transparent 42%,rg
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script><script src="https://www.battlab.net/session-client.js?v=2"></script><script src="https://www.battlab.net/battlab-nav.js?v=2" defer></script><script type="module">
 const base='https://zpsxcdzkayqhzbdcdoed.supabase.co', key='sb_publishable_roXek86Fm64tr_vEG2pYRw_4onX6cBJ';
 const $=id=>document.getElementById(id);
+let framePlayTimer=0, framePlayKey='';
 function renderTrackCockpit({speed,rpm,volt,amp,max=120}={}){
   const live=[speed,rpm,volt,amp].some(Number.isFinite);
   const box=$('tcCockpit');
@@ -750,8 +751,18 @@ async function refreshData(generation,id) {
     : '';
   $('moduleHealth').dataset.live=String(board);
   $('moduleOnline').textContent=board?'โมดูลเชื่อมต่อ Cloud อยู่':reading?'Cloud ยังไม่ได้รับข้อมูลใหม่จากโมดูล':id?'ยังไม่มีข้อมูลจากโมดูล':'ยังไม่มีโมดูลที่ผูกกับบัญชี';
+  // firmware 1.7.3+: 0.2 s samples [uptime_ms,rpm,km/h,V,A] in every upload -> play them back smoothly
+  const fwv=String(p.firmware||'').match(/(\d+)\.(\d+)\.(\d+)/), fw173=!!fwv&&(+fwv[1])*1e6+(+fwv[2])*1e3+(+fwv[3])>=1007003;
+  const fr=board&&fw173&&Array.isArray(p.frames)?p.frames.filter(f=>Array.isArray(f)&&f.length===5&&f.every(Number.isFinite)):[];
+  if(fr.length>1&&Number.isFinite(fr[0][2])){
+    const key=reading?.received_at+'|'+fr.at(-1)[0];
+    if(key!==framePlayKey){framePlayKey=key;clearTimeout(framePlayTimer);let i=0;
+      const step=()=>{const f=fr[i];renderTrackCockpit({speed:f[2],rpm:controller?f[1]:null,volt:controller?f[3]:null,amp:controller?f[4]:null});
+        if(++i<fr.length)framePlayTimer=setTimeout(step,Math.max(50,Math.min(400,fr[i][0]-f[0])));};
+      step();}
+  }else{clearTimeout(framePlayTimer);framePlayKey='';
   renderTrackCockpit({speed:board?p.speed_kmh:null,rpm:controller?reading?.rpm:null,
-    volt:controller?p.voltage:null,amp:controller?p.current:null});
+    volt:controller?p.voltage:null,amp:controller?p.current:null});}
   $('controllerStatus').textContent=(board?'โมดูลออนไลน์':'โมดูลออฟไลน์ / ยังไม่มีข้อมูล')+' · '+(controller?'Controller Online':board?'Controller Offline':'Controller ยังไม่ทราบสถานะ');
   $('uartFlow').dataset.active=String(controller);
   $('firmwareVersion').textContent=p.firmware?'เวอร์ชันที่โมดูลรายงาน '+p.firmware:'ยังไม่มีรายงานเวอร์ชัน';
@@ -1026,7 +1037,7 @@ $('register').onsubmit=e=>{e.preventDefault();run(async()=>{
 window.addEventListener('online',()=>{setCloudHealth('busy','กำลังเชื่อมต่อ Cloud…');if(session)run(loadDevices)});
 window.addEventListener('offline',()=>markCloudUnavailable('เบราว์เซอร์ออฟไลน์'));
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&session)run(loadDevices)});
-setInterval(()=>{if(session&&navigator.onLine&&!document.hidden&&$('devices').value&&$('cloud-drag').hidden)void refresh()},1000);
+setInterval(()=>{if(session&&navigator.onLine&&!document.hidden&&$('devices').value&&$('cloud-drag').hidden)void refresh()},500);
 setInterval(()=>{if(session&&navigator.onLine&&!document.hidden&&$('devices').value&&!$('cloud-drag').hidden)void refresh()},1000);
 try{
   const {data,error}=await authClient.auth.getSession();
@@ -1045,7 +1056,7 @@ let rnBusy=false, rnKey='';
 function rnRender(){
   const p=lastReading?.payload||{}, fresh=receivedAgo(lastReading)<15000, ok=fwNum(p.firmware)>=1007000;
   $('rnFw').textContent=p.firmware?'FW '+p.firmware:'—';$('rnFw').classList.toggle('ok',ok&&fresh);
-  $('rnNow').innerHTML=!lastReading?'รอข้อมูลจากโมดูล':!ok?'โมดูลนี้ใช้เฟิร์มแวร์ '+(p.firmware||'เก่า')+' · ต้องอัปเดตเป็น 1.7.2 ก่อน (ครั้งแรกทำที่หน้าเว็บโมดูล เมนูเฟิร์มแวร์ หรือผ่าน USB) จึงจะจัดการ Wi-Fi จากเว็บได้':(fresh?'ต่ออยู่กับ <b>'+String(p.wifi_ssid||'—').replace(/[<>&]/g,'')+'</b>'+(Number.isFinite(p.wifi_rssi)?' · '+p.wifi_rssi+' dBm':'')+(p.hotspot_clients?' · มีมือถือต่อฮอตสปอต '+p.hotspot_clients+' เครื่อง':''):'โมดูลออฟไลน์ · คำสั่งจะถูกส่งเมื่อโมดูลกลับมาออนไลน์ (ภายใน 15 นาที)');
+  $('rnNow').innerHTML=!lastReading?'รอข้อมูลจากโมดูล':!ok?'โมดูลนี้ใช้เฟิร์มแวร์ '+(p.firmware||'เก่า')+' · ต้องอัปเดตเป็น 1.7.3 ก่อน (ครั้งแรกทำที่หน้าเว็บโมดูล เมนูเฟิร์มแวร์ หรือผ่าน USB) จึงจะจัดการ Wi-Fi จากเว็บได้':(fresh?'ต่ออยู่กับ <b>'+String(p.wifi_ssid||'—').replace(/[<>&]/g,'')+'</b>'+(Number.isFinite(p.wifi_rssi)?' · '+p.wifi_rssi+' dBm':'')+(p.hotspot_clients?' · มีมือถือต่อฮอตสปอต '+p.hotspot_clients+' เครื่อง':''):'โมดูลออฟไลน์ · คำสั่งจะถูกส่งเมื่อโมดูลกลับมาออนไลน์ (ภายใน 15 นาที)');
   const saved=Array.isArray(p.wifi_saved)?p.wifi_saved:[];
   const key=JSON.stringify([saved,p.wifi_ssid,ok]);
   if(key!==rnKey){rnKey=key;const ul=$('rnList');ul.replaceChildren();
