@@ -199,6 +199,17 @@ body .cloud-dock button[aria-pressed=true]{background:var(--cp-y);color:#151000;
 body .track-status article{background:var(--cp-card);border-color:var(--cp-line);border-radius:14px}
 body .track-cockpit::before{background:linear-gradient(105deg,transparent 42%,rgba(255,207,34,.07) 50%,transparent 58%)!important;background-size:250% 100%!important;animation:cpSweep 7s ease-in-out infinite;pointer-events:none}
 @keyframes cpSweep{0%{background-position:120% 0}60%,100%{background-position:-120% 0}}
+.remote-net{background:var(--cp-card);border:1px solid var(--cp-line);border-radius:20px;padding:18px;margin-bottom:14px;animation:cpRise .5s cubic-bezier(.2,.8,.2,1) both}
+.rn-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}.rn-head small{color:var(--cp-y);font:700 11px "Chakra Petch",sans-serif;letter-spacing:.16em}.rn-head h2{margin:4px 0 0;font:700 20px "Chakra Petch",sans-serif}
+.rn-pill{padding:5px 11px;border-radius:99px;background:#ffffff10;color:var(--cp-muted);font:600 12px "Chakra Petch",sans-serif;white-space:nowrap}.rn-pill.ok{background:#3ddc841f;color:#b9f5d2}
+.rn-now{margin:10px 0;color:var(--cp-muted)}.rn-now b{color:var(--cp-text)}
+.rn-list{list-style:none;margin:0 0 12px;padding:0;display:grid;gap:6px}.rn-list li{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:#0c1015;border:1px solid var(--cp-line)}
+.rn-list li span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.rn-list li i{width:8px;height:8px;border-radius:50%;background:#6f7c88;flex:none}.rn-list li.on i{background:var(--cp-ok);box-shadow:0 0 0 0 rgba(61,220,132,.6);animation:cpPulse 1.6s infinite}
+.rn-list button,.rn-actions button,.rn-add button{min-height:44px}
+.rn-add{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:end}.rn-add label{display:grid;gap:4px;font-size:12px;color:var(--cp-muted)}
+.rn-note{font-size:12px;color:var(--cp-muted);margin:8px 0 12px}.rn-actions{display:flex;flex-wrap:wrap;gap:8px}
+.rn-cmds{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:4px;font-size:12px;color:var(--cp-muted)}.rn-cmds b{color:var(--cp-text);font-weight:600}.rn-cmds .ok{color:#b9f5d2}.rn-cmds .bad{color:#ffb4a8}
+@media(max-width:620px){.rn-add{grid-template-columns:1fr}}
 @keyframes cpRise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 @keyframes cpPulse{0%,100%{box-shadow:0 0 0 0 rgba(61,220,132,.6)}50%{box-shadow:0 0 0 6px rgba(61,220,132,0)}}
 @keyframes cpSheen{0%{transform:translateX(-140%) skewX(-18deg)}55%,100%{transform:translateX(360%) skewX(-18deg)}}
@@ -304,7 +315,15 @@ body .track-cockpit::before{background:linear-gradient(105deg,transparent 42%,rg
 <figure><figcaption>แรงดัน <b id="cyberVolt">—</b></figcaption><svg id="cyberVoltChart" viewBox="0 0 300 72" role="img" aria-label="กราฟแรงดัน"></svg></figure>
 </div></section><section><h2>กราฟรอบมอเตอร์</h2><p id="chartLabel">รอข้อมูล RPM</p><svg id="rpmChart" viewBox="0 0 600 135" width="100%" role="img" aria-label="กราฟรอบมอเตอร์ย้อนหลัง"></svg></section></details>
 </div>
-<div id="cloud-link" class="cloud-view" hidden><section id="moduleHealth" class="module-health"><small>โมดูล · การเชื่อมต่อ Cloud</small><strong id="moduleOnline">รอข้อมูลจากโมดูล</strong><p id="dashboardLink"></p><p id="wifiHealth">Wi-Fi · ยังไม่ทราบสถานะ</p><p id="streamHealth"></p></section><section><h2>Controller · UART</h2><p id="controllerStatus"></p><div id="uartFlow" class="uart-flow" aria-label="สถานะการส่งข้อมูล UART"><span class="flow-node">โมดูล</span><div class="flow-wire"><svg viewBox="0 0 200 26" preserveAspectRatio="none" aria-hidden="true"><path d="M0 7H200"/><path d="M0 19H200"/></svg></div><span class="flow-node">Controller</span></div><div id="uartMetrics" class="grid"></div></section>
+<div id="cloud-link" class="cloud-view" hidden><section id="remoteNet" class="remote-net" aria-labelledby="rnTitle">
+<div class="rn-head"><div><small>VOLTOL / REMOTE</small><h2 id="rnTitle">Wi-Fi และการควบคุมโมดูล</h2></div><span id="rnFw" class="rn-pill">—</span></div>
+<p id="rnNow" class="rn-now">รอข้อมูลจากโมดูล</p>
+<ul id="rnList" class="rn-list" aria-label="Wi-Fi ที่บันทึกในโมดูล"></ul>
+<form id="rnAdd" class="rn-add"><label>ชื่อ Wi-Fi (2.4 GHz)<input name="ssid" maxlength="32" required autocomplete="off"></label><label>รหัสผ่าน<input name="pass" type="password" maxlength="64" autocomplete="new-password"></label><button type="submit">เพิ่ม Wi-Fi ให้โมดูล</button></form>
+<p class="rn-note">บันทึกได้ 8 เครือข่าย โมดูลจะลองต่อทีละวง · ส่งคำสั่งได้เมื่อโมดูลออนไลน์ (ต้องการเฟิร์มแวร์ 1.7.0 ขึ้นไป)</p>
+<div class="rn-actions"><button type="button" id="rnOta">อัปเดตเฟิร์มแวร์ผ่านเน็ต</button><button type="button" id="rnRestart" class="secondary">รีสตาร์ตโมดูล</button></div>
+<ol id="rnCmds" class="rn-cmds" aria-label="คำสั่งล่าสุด"></ol>
+</section><section id="moduleHealth" class="module-health"><small>โมดูล · การเชื่อมต่อ Cloud</small><strong id="moduleOnline">รอข้อมูลจากโมดูล</strong><p id="dashboardLink"></p><p id="wifiHealth">Wi-Fi · ยังไม่ทราบสถานะ</p><p id="streamHealth"></p></section><section><h2>Controller · UART</h2><p id="controllerStatus"></p><div id="uartFlow" class="uart-flow" aria-label="สถานะการส่งข้อมูล UART"><span class="flow-node">โมดูล</span><div class="flow-wire"><svg viewBox="0 0 200 26" preserveAspectRatio="none" aria-hidden="true"><path d="M0 7H200"/><path d="M0 19H200"/></svg></div><span class="flow-node">Controller</span></div><div id="uartMetrics" class="grid"></div></section>
 </div>
 <div id="cloud-history" class="cloud-view" hidden><section><h2>เหตุขัดข้องล่าสุด</h2><ul id="events"></ul><button id="exportReadings" type="button" disabled>ดาวน์โหลดข้อมูลล่าสุด (CSV)</button></section>
 </div>
@@ -1012,4 +1031,32 @@ try{
     await run(loadDevices);if(setupGrant&&setupGrant.until>Date.now())openCloudPair();
   }
 }catch{authStatus('เชื่อมต่อเซสชัน BATTLAB ไม่สำเร็จ กรุณารีเฟรชหน้า',true);}
+
+// ---- remote Wi-Fi + control (firmware 1.7.0+) ----
+const RN_CMD={wifi_add:'เพิ่ม Wi-Fi',wifi_remove:'ลบ Wi-Fi',ota_install:'อัปเดตเฟิร์มแวร์',ota_check:'ตรวจอัปเดต',restart:'รีสตาร์ต'};
+const RN_ST={queued:'รอโมดูลออนไลน์',sent:'ส่งถึงโมดูลแล้ว',done:'สำเร็จ',failed:'ไม่สำเร็จ',expired:'หมดเวลา (โมดูลไม่ออนไลน์)'};
+const fwNum=v=>{const m=String(v||'').match(/(\d+)\.(\d+)\.(\d+)/);return m?(+m[1])*1e6+(+m[2])*1e3+(+m[3]):0;};
+let rnBusy=false, rnKey='';
+function rnRender(){
+  const p=lastReading?.payload||{}, fresh=receivedAgo(lastReading)<15000, ok=fwNum(p.firmware)>=1007000;
+  $('rnFw').textContent=p.firmware?'FW '+p.firmware:'—';$('rnFw').classList.toggle('ok',ok&&fresh);
+  $('rnNow').innerHTML=!lastReading?'รอข้อมูลจากโมดูล':!ok?'โมดูลนี้ใช้เฟิร์มแวร์ '+(p.firmware||'เก่า')+' · ต้องอัปเดตเป็น 1.7.0 ก่อน (ผ่าน USB ครั้งแรก) จึงจะจัดการ Wi-Fi จากเว็บได้':(fresh?'ต่ออยู่กับ <b>'+String(p.wifi_ssid||'—').replace(/[<>&]/g,'')+'</b>'+(Number.isFinite(p.wifi_rssi)?' · '+p.wifi_rssi+' dBm':'')+(p.hotspot_clients?' · มีมือถือต่อฮอตสปอต '+p.hotspot_clients+' เครื่อง':''):'โมดูลออฟไลน์ · คำสั่งจะถูกส่งเมื่อโมดูลกลับมาออนไลน์ (ภายใน 15 นาที)');
+  const saved=Array.isArray(p.wifi_saved)?p.wifi_saved:[];
+  const key=JSON.stringify([saved,p.wifi_ssid,ok]);
+  if(key!==rnKey){rnKey=key;const ul=$('rnList');ul.replaceChildren();
+    for(const name of saved){const li=document.createElement('li');if(name===p.wifi_ssid&&fresh)li.className='on';const dot=document.createElement('i');const span=document.createElement('span');span.textContent=name;const del=document.createElement('button');del.type='button';del.className='secondary';del.textContent='ลบ';del.disabled=!ok;del.onclick=()=>rnSend('wifi_remove',{ssid:name},'ลบ '+name+' ออกจากโมดูล?');li.append(dot,span,del);ul.append(li);}
+    if(!saved.length&&ok){const li=document.createElement('li');li.textContent='ยังไม่มี Wi-Fi ที่บันทึก';ul.append(li);}}
+  for(const el of [...$('rnAdd').elements,$('rnOta'),$('rnRestart')])el.disabled=!ok||rnBusy;
+}
+async function rnCmds(){const id=$('devices').value;if(!id||$('cloud-link').hidden)return;
+  try{const rows=await api('/rest/v1/voltol_commands?select=cmd,args,status,result,created_at&device_id=eq.'+id+'&order=created_at.desc&limit=6');
+    const ol=$('rnCmds');ol.replaceChildren(...rows.map(r=>{const li=document.createElement('li');const b=document.createElement('b');b.textContent=RN_CMD[r.cmd]||r.cmd;li.append(b,' '+(r.args?.ssid?r.args.ssid+' · ':'')+new Date(r.created_at).toLocaleTimeString('th-TH')+' · ');const st=document.createElement('span');st.className=r.status==='done'?'ok':(r.status==='failed'||r.status==='expired')?'bad':'';st.textContent=(RN_ST[r.status]||r.status)+(r.result?' ('+r.result+')':'');li.append(st);return li;}));}catch{}}
+async function rnSend(cmd,args,ask){const id=$('devices').value;if(!id||rnBusy)return;if(ask&&!confirm(ask))return;rnBusy=true;rnRender();
+  try{await api('/rest/v1/rpc/voltol_send_command',{body:{p_device:id,p_cmd:cmd,p_args:args}});message('ส่งคำสั่งแล้ว · โมดูลจะทำในรอบส่งข้อมูลถัดไป');}catch(e){message(e.message||'ส่งคำสั่งไม่สำเร็จ');}
+  finally{rnBusy=false;rnRender();rnCmds();}}
+$('rnAdd').onsubmit=e=>{e.preventDefault();const f=e.currentTarget,ssid=f.elements.ssid.value.trim(),pass=f.elements.pass.value;if(!ssid)return;rnSend('wifi_add',{ssid,pass}).then(()=>{f.elements.pass.value='';f.elements.ssid.value='';});};
+$('rnOta').onclick=()=>rnSend('ota_install',{},'อัปเดตเฟิร์มแวร์ของโมดูลเป็นเวอร์ชันล่าสุด? จอดรถให้นิ่ง โมดูลจะรีสตาร์ตเอง');
+$('rnRestart').onclick=()=>rnSend('restart',{},'รีสตาร์ตโมดูล?');
+setInterval(()=>{if(!$('cloud-link').hidden)rnRender();},1500);
+setInterval(()=>rnCmds(),4000);
 </script></html>
