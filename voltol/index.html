@@ -328,7 +328,7 @@ body .track-cockpit::before{background:linear-gradient(105deg,transparent 42%,rg
 </div>
 <div id="cloud-history" class="cloud-view" hidden><section><h2>เหตุขัดข้องล่าสุด</h2><ul id="events"></ul><button id="exportReadings" type="button" disabled>ดาวน์โหลดข้อมูลล่าสุด (CSV)</button></section>
 </div>
-<div id="cloud-firmware" class="cloud-view" hidden><section><p class="dash-label">VOLTOL / FIRMWARE</p><h2>เฟิร์มแวร์สำหรับโมดูล VOLTOL</h2><section class="usb-install"><h3>ติดตั้งผ่าน USB บนเว็บ</h3><p>สำหรับโมดูลใหม่ ESP32-S3 DevKitC-1 แฟลช 8 MB ใช้ Chrome หรือ Edge บนคอมพิวเตอร์ (ล้างข้อมูลทั้งบอร์ด)</p><a href="/fw/flash/" target="_blank" rel="noopener">เปิดเครื่องมือแฟลชผ่านเว็บ</a></section><h3>อัปเดตผ่าน OTA</h3><p id="firmwareVersion"></p><p id="firmwareLatest">เวอร์ชันล่าสุด —</p><p><a href="/fw/VOLTOL-v1.7.4-ReadyToFlash.zip">ดาวน์โหลดเฟิร์มแวร์โมดูล VOLTOL v1.7.4 (ติดตั้งผ่าน USB)</a><br><small>บอร์ดที่ใช้อยู่แล้วให้ใช้ UPDATE_S3_WINDOWS.bat เพื่อเก็บ Wi-Fi โทเคน และค่าตั้งไว้ครบ</small></p><button id="remoteOta" type="button" disabled>สั่งอัปเดตผ่าน Cloud</button><p id="remoteOtaStatus" role="status"></p><a href="http://192.168.4.1/">เปิดเว็บตั้งค่าโมดูล</a> <a href="/fw/version.json" target="_blank" rel="noreferrer">ดูเวอร์ชันล่าสุด</a></section>
+<div id="cloud-firmware" class="cloud-view" hidden><section><p class="dash-label">VOLTOL / FIRMWARE</p><h2>เฟิร์มแวร์สำหรับโมดูล VOLTOL</h2><section class="usb-install"><h3>ติดตั้งผ่าน USB บนเว็บ</h3><p>สำหรับโมดูลใหม่ ESP32-S3 DevKitC-1 แฟลช 8 MB ใช้ Chrome หรือ Edge บนคอมพิวเตอร์ (ล้างข้อมูลทั้งบอร์ด)</p><a href="/fw/flash/" target="_blank" rel="noopener">เปิดเครื่องมือแฟลชผ่านเว็บ</a></section><h3>อัปเดตผ่าน OTA</h3><p id="firmwareVersion"></p><p id="firmwareLatest">เวอร์ชันล่าสุด —</p><p><a href="/fw/VOLTOL-v1.7.5-ReadyToFlash.zip">ดาวน์โหลดเฟิร์มแวร์โมดูล VOLTOL v1.7.5 (ติดตั้งผ่าน USB)</a><br><small>บอร์ดที่ใช้อยู่แล้วให้ใช้ UPDATE_S3_WINDOWS.bat เพื่อเก็บ Wi-Fi โทเคน และค่าตั้งไว้ครบ</small></p><button id="remoteOta" type="button" disabled>สั่งอัปเดตผ่าน Cloud</button><p id="remoteOtaStatus" role="status"></p><a href="http://192.168.4.1/">เปิดเว็บตั้งค่าโมดูล</a> <a href="/fw/version.json" target="_blank" rel="noreferrer">ดูเวอร์ชันล่าสุด</a></section>
 </div>
 <div id="cloud-drag" class="cloud-view" hidden>
 <section class="drag-console">
@@ -493,8 +493,9 @@ function renderDragHistory(history,device){
       timeZone:'Asia/Bangkok',year:'numeric',month:'2-digit',day:'2-digit',
       hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'
     });
-    summary.textContent=recordedAt+' · '+drag.distance_m.toFixed(0)+' ม. · '+drag.elapsed_s.toFixed(3)+' วิ';
-    body.textContent='จบการวิ่ง · ระยะที่รายงาน '+drag.distance_m.toFixed(1)+' ม. · เวลา '+drag.elapsed_s.toFixed(3)+' วิ';
+    const last=readDragSplit(drag,3), dist=last?.done&&Number.isFinite(last.t)&&Math.abs(last.t-drag.elapsed_s)<0.01?402.3:drag.distance_m;
+    summary.textContent=recordedAt+' · '+dist.toFixed(0)+' ม. · '+drag.elapsed_s.toFixed(3)+' วิ';
+    body.textContent='จบการวิ่ง · ระยะ '+dist.toFixed(1)+' ม. · เวลา '+drag.elapsed_s.toFixed(3)+' วิ'+(drag.splits?.some(x=>x&&x.done&&Number.isFinite(x.rpm))?'':' · ค่า RPM/A/V ต่อช่วงมีตั้งแต่เฟิร์มแวร์ 1.7.5');
     details.append(summary,body,splitDetails(drag));list.append(details);
   }
 }
@@ -740,9 +741,9 @@ async function refreshData(generation,id) {
     wifi===true&&Number.isFinite(p.wifi_rssi)?p.wifi_rssi+' dBm':'—');
   trackStatus('tcUart',board&&typeof uartReported==='boolean'?(uartReported?'on':'off'):'unknown',
     board&&typeof uartReported==='boolean'?(uartReported?'Controller ตอบ':'Controller ไม่ตอบ'):'ยังไม่ทราบ',
-    board?'TX '+(p.tx??'—')+' · RX '+(p.rx_bytes??'—')+' B':'—');
+    board?(p.tx==null&&Number.isFinite(p.valid_frames)?'เฟรมถูก '+p.valid_frames+' · ผิด '+(p.bad_frames??0):'TX '+(p.tx??'—')+' · RX '+(p.rx_bytes??'—')+' B'):'—');
   const controller=board && (p.controller_online===true || (p.controller_online===undefined && typeof reading?.rpm==='number'));
-  $('dashboardLink').textContent=(board?'โมดูลออนไลน์':'รอข้อมูลสดจากโมดูล')+' · Controller '+(controller?'Online':board?'Offline':'—')+' · TX '+(p.tx??'—')+' · RX '+(p.rx_bytes??'—')+' ไบต์';
+  $('dashboardLink').textContent=(board?'โมดูลออนไลน์':'รอข้อมูลสดจากโมดูล')+' · Controller '+(controller?'Online':board?'Offline':'—')+(p.tx==null&&Number.isFinite(p.valid_frames)?' · เฟรมถูก '+p.valid_frames+' · ผิด '+(p.bad_frames??0)+'':' · TX '+(p.tx??'—')+' · RX '+(p.rx_bytes??'—')+' ไบต์');
   $('wifiHealth').textContent=board
     ? 'Wi-Fi · '+(p.wifi_online===true?'ออนไลน์'+(Number.isFinite(p.wifi_rssi)?' · '+p.wifi_rssi+' dBm':''):'รับข้อมูลผ่าน Wi-Fi · เฟิร์มแวร์เดิม')
     : 'Wi-Fi · ยังไม่ทราบสถานะปัจจุบัน';
@@ -773,7 +774,7 @@ async function refreshData(generation,id) {
    $('remoteOtaStatus').textContent=!p.firmware?'':!can?'โมดูลเวอร์ชัน '+p.firmware+' ยังรับคำสั่งจาก Cloud ไม่ได้ · อัปเดตครั้งแรกที่หน้าเว็บโมดูล (เมนูตั้งค่า > เฟิร์มแวร์ > ตรวจสอบ > ติดตั้ง) หรือผ่าน USB หลังจากนั้นกดปุ่มนี้ได้'
      :!newer?'โมดูลใช้เวอร์ชันล่าสุดแล้ว':!board?'โมดูลออฟไลน์ · รอให้โมดูลออนไลน์ก่อนสั่งอัปเดต':'มีเวอร์ชันใหม่ '+fwLatest+' · กดปุ่มเพื่อสั่งอัปเดต';}}
   const uart=$('uartMetrics');uart.replaceChildren();
-  for(const [label,value] of [['UART baud',p.uart_baud],['เฟรม/วินาที',p.uart_hz],['TX requests',p.tx],['RX bytes',p.rx_bytes],['เฟรมผ่าน',p.valid_frames],['เฟรมผิด',p.bad_frames],['Timeout',p.timeouts],['ตอบล่าสุด',p.reply_age_ms>=0?(p.reply_age_ms/1000).toFixed(2)+' s':null]]){
+  for(const [label,value] of [['UART baud',p.uart_baud],['เฟรม/วินาที',p.uart_hz],...(p.tx==null&&Number.isFinite(p.valid_frames)?[]:[['TX requests',p.tx],['RX bytes',p.rx_bytes]]),['เฟรมผ่าน',p.valid_frames],['เฟรมผิด',p.bad_frames],['Timeout',p.timeouts],['ตอบล่าสุด',p.reply_age_ms>=0?(p.reply_age_ms/1000).toFixed(2)+' s':null]]){
     const card=document.createElement('div'),title=document.createElement('small'),val=document.createElement('strong');
     card.className='metric';title.textContent=label;val.textContent=value??'—';card.append(title,val);uart.append(card);
   }
@@ -1057,7 +1058,7 @@ let rnBusy=false, rnKey='', rnScanAsked=0, rnScanKey='';
 function rnRender(){
   const p=lastReading?.payload||{}, fresh=receivedAgo(lastReading)<15000, ok=fwNum(p.firmware)>=1007000;
   $('rnFw').textContent=p.firmware?'FW '+p.firmware:'—';$('rnFw').classList.toggle('ok',ok&&fresh);
-  $('rnNow').innerHTML=!lastReading?'รอข้อมูลจากโมดูล':!ok?'โมดูลนี้ใช้เฟิร์มแวร์ '+(p.firmware||'เก่า')+' · ต้องอัปเดตเป็น 1.7.4 ก่อน (ครั้งแรกทำที่หน้าเว็บโมดูล เมนูเฟิร์มแวร์ หรือผ่าน USB) จึงจะจัดการ Wi-Fi จากเว็บได้':(fresh?'ต่ออยู่กับ <b>'+String(p.wifi_ssid||'—').replace(/[<>&]/g,'')+'</b>'+(Number.isFinite(p.wifi_rssi)?' · '+p.wifi_rssi+' dBm':'')+(p.hotspot_clients?' · มีมือถือต่อฮอตสปอต '+p.hotspot_clients+' เครื่อง':''):'โมดูลออฟไลน์ · คำสั่งจะถูกส่งเมื่อโมดูลกลับมาออนไลน์ (ภายใน 15 นาที)');
+  $('rnNow').innerHTML=!lastReading?'รอข้อมูลจากโมดูล':!ok?'โมดูลนี้ใช้เฟิร์มแวร์ '+(p.firmware||'เก่า')+' · ต้องอัปเดตเป็น 1.7.5 ก่อน (ครั้งแรกทำที่หน้าเว็บโมดูล เมนูเฟิร์มแวร์ หรือผ่าน USB) จึงจะจัดการ Wi-Fi จากเว็บได้':(fresh?'ต่ออยู่กับ <b>'+String(p.wifi_ssid||'—').replace(/[<>&]/g,'')+'</b>'+(Number.isFinite(p.wifi_rssi)?' · '+p.wifi_rssi+' dBm':'')+(p.hotspot_clients?' · มีมือถือต่อฮอตสปอต '+p.hotspot_clients+' เครื่อง':''):'โมดูลออฟไลน์ · คำสั่งจะถูกส่งเมื่อโมดูลกลับมาออนไลน์ (ภายใน 15 นาที)');
   const saved=Array.isArray(p.wifi_saved)?p.wifi_saved:[];
   const key=JSON.stringify([saved,p.wifi_ssid,ok]);
   if(key!==rnKey){rnKey=key;const ul=$('rnList');ul.replaceChildren();
