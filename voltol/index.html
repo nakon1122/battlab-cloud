@@ -327,7 +327,7 @@ body .track-cockpit::before{background:linear-gradient(105deg,transparent 42%,rg
 </div>
 <div id="cloud-history" class="cloud-view" hidden><section><h2>เหตุขัดข้องล่าสุด</h2><ul id="events"></ul><button id="exportReadings" type="button" disabled>ดาวน์โหลดข้อมูลล่าสุด (CSV)</button></section>
 </div>
-<div id="cloud-firmware" class="cloud-view" hidden><section><p class="dash-label">VOLTOL / FIRMWARE</p><h2>เฟิร์มแวร์ ESP32-S3</h2><section class="usb-install"><h3>ติดตั้งผ่าน USB บนเว็บ</h3><p>สำหรับติดตั้งใหม่บน ESP32-S3 DevKitC-1 แฟลช 8 MB ใช้ Chrome หรือ Edge บนคอมพิวเตอร์</p><a href="/fw/gemini-flash/" target="_blank" rel="noopener">เปิดเครื่องมือแฟลชผ่านเว็บ</a></section><h3>อัปเดตผ่าน OTA</h3><p id="firmwareVersion"></p><p><a href="/fw/VOLTOL-S3-Gemini-ReadyToFlash.zip">ดาวน์โหลดเฟิร์มแวร์ Gemini สำหรับ ESP32-S3 ผ่าน USB</a><br><small>บิลด์ Gemini รายงานเวอร์ชัน 1.6.6 บอร์ด VOLTOL เดิมให้ใช้ UPDATE_S3_WINDOWS.bat เพื่อเก็บ Wi-Fi และโทเคน</small></p><p>ดาวน์โหลด <a href="/fw/VOLTOL-S3-v1.6.6-ReadyToFlash.zip">VOLTOL v1.6.6 รุ่นเดิม</a> สำหรับอัปเดตผ่าน USB หรือใช้เมนู Firmware บน <a href="http://192.168.4.1/">หน้าโมดูล</a></p><button id="remoteOta" type="button" disabled>สั่งอัปเดตผ่าน Cloud</button><p id="remoteOtaStatus" role="status"></p><a href="http://192.168.4.1/">เปิดเว็บตั้งค่าโมดูล</a> <a href="https://v.racexesc.chatgpt.site/version.json" target="_blank" rel="noreferrer">ดูเวอร์ชันล่าสุด</a></section>
+<div id="cloud-firmware" class="cloud-view" hidden><section><p class="dash-label">VOLTOL / FIRMWARE</p><h2>เฟิร์มแวร์สำหรับโมดูล VOLTOL</h2><section class="usb-install"><h3>ติดตั้งผ่าน USB บนเว็บ</h3><p>สำหรับโมดูลใหม่ ESP32-S3 DevKitC-1 แฟลช 8 MB ใช้ Chrome หรือ Edge บนคอมพิวเตอร์ (ล้างข้อมูลทั้งบอร์ด)</p><a href="/fw/flash/" target="_blank" rel="noopener">เปิดเครื่องมือแฟลชผ่านเว็บ</a></section><h3>อัปเดตผ่าน OTA</h3><p id="firmwareVersion"></p><p id="firmwareLatest">เวอร์ชันล่าสุด —</p><p><a href="/fw/VOLTOL-v1.7.1-ReadyToFlash.zip">ดาวน์โหลดเฟิร์มแวร์โมดูล VOLTOL v1.7.1 (ติดตั้งผ่าน USB)</a><br><small>บอร์ดที่ใช้อยู่แล้วให้ใช้ UPDATE_S3_WINDOWS.bat เพื่อเก็บ Wi-Fi โทเคน และค่าตั้งไว้ครบ</small></p><button id="remoteOta" type="button" disabled>สั่งอัปเดตผ่าน Cloud</button><p id="remoteOtaStatus" role="status"></p><a href="http://192.168.4.1/">เปิดเว็บตั้งค่าโมดูล</a> <a href="/fw/version.json" target="_blank" rel="noreferrer">ดูเวอร์ชันล่าสุด</a></section>
 </div>
 <div id="cloud-drag" class="cloud-view" hidden>
 <section class="drag-console">
@@ -513,13 +513,15 @@ $('dragArm').onclick=()=>sendDragCommand('A');
 $('dragCancel').onclick=()=>sendDragCommand('C');
 $('remoteOta').onclick=async ()=>{
   const button=$('remoteOta'), device=$('devices').value, status=$('remoteOtaStatus');
-  if(!session||!device||button.disabled||!confirm('ยืนยันว่ารถจอดนิ่ง โมดูลอาจรีสตาร์ตระหว่างอัปเดต'))return;
+  if(!session||!device||button.disabled||!confirm('อัปเดตเฟิร์มแวร์โมดูลเป็น '+(fwLatest||'เวอร์ชันล่าสุด')+'? จอดรถให้นิ่ง โมดูลจะรีสตาร์ตเอง'))return;
   button.disabled=true;
   try{
-    await api('/rest/v1/voltol_drag_commands',{body:{device_id:device,command:'U'}});
-    status.textContent='ส่งคำสั่งแล้ว · รอให้โมดูลรายงานเวอร์ชันใหม่';
-  }catch(error){status.textContent=error.message||'ส่งคำสั่งอัปเดตไม่สำเร็จ';}
+    await api('/rest/v1/rpc/voltol_send_command',{body:{p_device:device,p_cmd:'ota_install',p_args:{}}});
+    otaSentAt=Date.now();status.textContent='ส่งคำสั่งแล้ว · โมดูลจะดาวน์โหลดและรีสตาร์ตเอง (ประมาณ 1-2 นาที)';
+  }catch(error){status.textContent=error.message||'ส่งคำสั่งอัปเดตไม่สำเร็จ';button.disabled=false;}
 };
+let fwLatest='', otaSentAt=0;
+fetch('/fw/version.json',{cache:'no-store'}).then(r=>r.json()).then(v=>{fwLatest=v.version||'';$('firmwareLatest').textContent='เวอร์ชันล่าสุด '+fwLatest;}).catch(()=>{});
 const authClient=window.supabase.createClient(base,key,{auth:window.battlabAuthOptions});
 let renewing=null, accountGeneration=0;
 function rememberSession(data){ session=data; }
@@ -753,8 +755,11 @@ async function refreshData(generation,id) {
   $('controllerStatus').textContent=(board?'โมดูลออนไลน์':'โมดูลออฟไลน์ / ยังไม่มีข้อมูล')+' · '+(controller?'Controller Online':board?'Controller Offline':'Controller ยังไม่ทราบสถานะ');
   $('uartFlow').dataset.active=String(controller);
   $('firmwareVersion').textContent=p.firmware?'เวอร์ชันที่โมดูลรายงาน '+p.firmware:'ยังไม่มีรายงานเวอร์ชัน';
-  $('remoteOta').disabled=true; // Enable after the firmware and server command are released together.
-  $('remoteOtaStatus').textContent='การสั่ง OTA จาก Cloud อยู่ระหว่างเตรียมสำหรับรุ่นถัดไป';
+  {const n=v=>{const m=String(v||'').match(/(\d+)\.(\d+)\.(\d+)/);return m?(+m[1])*1e6+(+m[2])*1e3+(+m[3]):0;};
+   const cur=n(p.firmware), can=cur>=1007000, newer=fwLatest&&n(fwLatest)>cur;
+   if(Date.now()-otaSentAt>120000){$('remoteOta').disabled=!(board&&can&&newer);
+   $('remoteOtaStatus').textContent=!p.firmware?'':!can?'โมดูลเวอร์ชัน '+p.firmware+' ยังรับคำสั่งจาก Cloud ไม่ได้ · อัปเดตครั้งแรกที่หน้าเว็บโมดูล (เมนูตั้งค่า > เฟิร์มแวร์ > ตรวจสอบ > ติดตั้ง) หรือผ่าน USB หลังจากนั้นกดปุ่มนี้ได้'
+     :!newer?'โมดูลใช้เวอร์ชันล่าสุดแล้ว':!board?'โมดูลออฟไลน์ · รอให้โมดูลออนไลน์ก่อนสั่งอัปเดต':'มีเวอร์ชันใหม่ '+fwLatest+' · กดปุ่มเพื่อสั่งอัปเดต';}}
   const uart=$('uartMetrics');uart.replaceChildren();
   for(const [label,value] of [['UART baud',p.uart_baud],['เฟรม/วินาที',p.uart_hz],['TX requests',p.tx],['RX bytes',p.rx_bytes],['เฟรมผ่าน',p.valid_frames],['เฟรมผิด',p.bad_frames],['Timeout',p.timeouts],['ตอบล่าสุด',p.reply_age_ms>=0?(p.reply_age_ms/1000).toFixed(2)+' s':null]]){
     const card=document.createElement('div'),title=document.createElement('small'),val=document.createElement('strong');
@@ -1040,7 +1045,7 @@ let rnBusy=false, rnKey='';
 function rnRender(){
   const p=lastReading?.payload||{}, fresh=receivedAgo(lastReading)<15000, ok=fwNum(p.firmware)>=1007000;
   $('rnFw').textContent=p.firmware?'FW '+p.firmware:'—';$('rnFw').classList.toggle('ok',ok&&fresh);
-  $('rnNow').innerHTML=!lastReading?'รอข้อมูลจากโมดูล':!ok?'โมดูลนี้ใช้เฟิร์มแวร์ '+(p.firmware||'เก่า')+' · ต้องอัปเดตเป็น 1.7.0 ก่อน (ผ่าน USB ครั้งแรก) จึงจะจัดการ Wi-Fi จากเว็บได้':(fresh?'ต่ออยู่กับ <b>'+String(p.wifi_ssid||'—').replace(/[<>&]/g,'')+'</b>'+(Number.isFinite(p.wifi_rssi)?' · '+p.wifi_rssi+' dBm':'')+(p.hotspot_clients?' · มีมือถือต่อฮอตสปอต '+p.hotspot_clients+' เครื่อง':''):'โมดูลออฟไลน์ · คำสั่งจะถูกส่งเมื่อโมดูลกลับมาออนไลน์ (ภายใน 15 นาที)');
+  $('rnNow').innerHTML=!lastReading?'รอข้อมูลจากโมดูล':!ok?'โมดูลนี้ใช้เฟิร์มแวร์ '+(p.firmware||'เก่า')+' · ต้องอัปเดตเป็น 1.7.1 ก่อน (ครั้งแรกทำที่หน้าเว็บโมดูล เมนูเฟิร์มแวร์ หรือผ่าน USB) จึงจะจัดการ Wi-Fi จากเว็บได้':(fresh?'ต่ออยู่กับ <b>'+String(p.wifi_ssid||'—').replace(/[<>&]/g,'')+'</b>'+(Number.isFinite(p.wifi_rssi)?' · '+p.wifi_rssi+' dBm':'')+(p.hotspot_clients?' · มีมือถือต่อฮอตสปอต '+p.hotspot_clients+' เครื่อง':''):'โมดูลออฟไลน์ · คำสั่งจะถูกส่งเมื่อโมดูลกลับมาออนไลน์ (ภายใน 15 นาที)');
   const saved=Array.isArray(p.wifi_saved)?p.wifi_saved:[];
   const key=JSON.stringify([saved,p.wifi_ssid,ok]);
   if(key!==rnKey){rnKey=key;const ul=$('rnList');ul.replaceChildren();

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ติดตั้งเฟิร์มแวร์โมดูล VOLTOL</title>
+<script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
+<style>body{margin:0;min-height:100vh;display:grid;place-items:center;background:#0b0f14;color:#e8edf2;font:16px/1.6 system-ui,"Noto Sans Thai",sans-serif}
+main{max-width:520px;padding:28px;border:1px solid #233040;border-radius:18px;background:#111821}
+h1{font-size:22px;margin:0 0 4px}small{color:#8a99a8}ol{padding-left:20px}b{color:#ffcc00}
+esp-web-install-button button{background:#ffcc00;color:#111;border:0;border-radius:10px;padding:12px 20px;font-weight:700;font-size:16px;cursor:pointer}</style></head>
+<body><main><small>VOLTOL / FIRMWARE</small><h1>ติดตั้งเฟิร์มแวร์โมดูล VOLTOL v1.7.1</h1>
+<p>สำหรับโมดูล ESP32-S3 DevKitC-1 (แฟลช 8 MB) ใช้ Chrome หรือ Edge บนคอมพิวเตอร์</p>
+<ol><li>เสียบสาย USB เข้าโมดูล</li><li>กดปุ่มด้านล่าง แล้วเลือกพอร์ต COM</li><li>เครื่องมือนี้<b>ล้างข้อมูลทั้งบอร์ด</b> (Wi-Fi โทเคน ค่าตั้ง) เหมาะกับบอร์ดใหม่</li></ol>
+<p>บอร์ดที่ใช้อยู่แล้ว ให้อัปเดตจากหน้าเว็บโมดูล หรือใช้ UPDATE_S3_WINDOWS.bat จากไฟล์ดาวน์โหลด จะได้ไม่เสียค่าเดิม</p>
+<esp-web-install-button manifest="manifest.json"><button slot="activate">ติดตั้งเฟิร์มแวร์</button>
+<span slot="unsupported">เบราว์เซอร์นี้ไม่รองรับ ใช้ Chrome หรือ Edge บนคอมพิวเตอร์</span></esp-web-install-button>
+</main></body></html>
