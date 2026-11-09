@@ -206,6 +206,7 @@ body .track-cockpit::before{background:linear-gradient(105deg,transparent 42%,rg
 .rn-list{list-style:none;margin:0 0 12px;padding:0;display:grid;gap:6px}.rn-list li{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:#0c1015;border:1px solid var(--cp-line)}
 .rn-list li span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.rn-list li i{width:8px;height:8px;border-radius:50%;background:#6f7c88;flex:none}.rn-list li.on i{background:var(--cp-ok);box-shadow:0 0 0 0 rgba(61,220,132,.6);animation:cpPulse 1.6s infinite}
 .rn-list button,.rn-actions button,.rn-add button{min-height:44px}
+.rn-scan{display:grid;grid-template-columns:1fr auto;gap:8px;margin:4px 0}.rn-scan select{min-height:44px;background:#0b1118;color:inherit;border:1px solid #2a3a4a;border-radius:10px;padding:0 10px}.rn-scan button{min-height:44px}
 .rn-add{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:end}.rn-add label{display:grid;gap:4px;font-size:12px;color:var(--cp-muted)}
 .rn-note{font-size:12px;color:var(--cp-muted);margin:8px 0 12px}.rn-actions{display:flex;flex-wrap:wrap;gap:8px}
 .rn-cmds{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:4px;font-size:12px;color:var(--cp-muted)}.rn-cmds b{color:var(--cp-text);font-weight:600}.rn-cmds .ok{color:#b9f5d2}.rn-cmds .bad{color:#ffb4a8}
@@ -319,15 +320,15 @@ body .track-cockpit::before{background:linear-gradient(105deg,transparent 42%,rg
 <div class="rn-head"><div><small>VOLTOL / REMOTE</small><h2 id="rnTitle">Wi-Fi และการควบคุมโมดูล</h2></div><span id="rnFw" class="rn-pill">—</span></div>
 <p id="rnNow" class="rn-now">รอข้อมูลจากโมดูล</p>
 <ul id="rnList" class="rn-list" aria-label="Wi-Fi ที่บันทึกในโมดูล"></ul>
-<form id="rnAdd" class="rn-add"><label>ชื่อ Wi-Fi (2.4 GHz)<input name="ssid" maxlength="32" required autocomplete="off"></label><label>รหัสผ่าน<input name="pass" type="password" maxlength="64" autocomplete="new-password"></label><button type="submit">เพิ่ม Wi-Fi ให้โมดูล</button></form>
-<p class="rn-note">บันทึกได้ 8 เครือข่าย โมดูลจะลองต่อทีละวง · ส่งคำสั่งได้เมื่อโมดูลออนไลน์ (ต้องการเฟิร์มแวร์ 1.7.0 ขึ้นไป)</p>
+<div class="rn-scan"><select id="rnScanSel" aria-label="เครือข่ายใกล้โมดูล"><option value="">กด "ค้นหา Wi-Fi" เพื่อดูเครือข่ายรอบโมดูล</option></select><button type="button" class="secondary" id="rnScan">ค้นหา Wi-Fi</button></div><p class="rn-note" id="rnScanMsg"></p><form id="rnAdd" class="rn-add"><label>ชื่อ Wi-Fi (2.4 GHz)<input name="ssid" maxlength="32" required autocomplete="off"></label><label>รหัสผ่าน<input name="pass" type="password" maxlength="64" autocomplete="new-password"></label><button type="submit">เพิ่ม Wi-Fi ให้โมดูล</button></form>
+<p class="rn-note">บันทึกได้ 8 เครือข่าย โมดูลจะลองต่อทีละวง · ส่งคำสั่งได้เมื่อโมดูลออนไลน์ (ต้องการเฟิร์มแวร์ 1.7.0 ขึ้นไป · ค้นหา Wi-Fi ต้อง 1.7.4)</p>
 <div class="rn-actions"><button type="button" id="rnOta">อัปเดตเฟิร์มแวร์ผ่านเน็ต</button><button type="button" id="rnRestart" class="secondary">รีสตาร์ตโมดูล</button></div>
 <ol id="rnCmds" class="rn-cmds" aria-label="คำสั่งล่าสุด"></ol>
 </section><section id="moduleHealth" class="module-health"><small>โมดูล · การเชื่อมต่อ Cloud</small><strong id="moduleOnline">รอข้อมูลจากโมดูล</strong><p id="dashboardLink"></p><p id="wifiHealth">Wi-Fi · ยังไม่ทราบสถานะ</p><p id="streamHealth"></p></section><section><h2>Controller · UART</h2><p id="controllerStatus"></p><div id="uartFlow" class="uart-flow" aria-label="สถานะการส่งข้อมูล UART"><span class="flow-node">โมดูล</span><div class="flow-wire"><svg viewBox="0 0 200 26" preserveAspectRatio="none" aria-hidden="true"><path d="M0 7H200"/><path d="M0 19H200"/></svg></div><span class="flow-node">Controller</span></div><div id="uartMetrics" class="grid"></div></section>
 </div>
 <div id="cloud-history" class="cloud-view" hidden><section><h2>เหตุขัดข้องล่าสุด</h2><ul id="events"></ul><button id="exportReadings" type="button" disabled>ดาวน์โหลดข้อมูลล่าสุด (CSV)</button></section>
 </div>
-<div id="cloud-firmware" class="cloud-view" hidden><section><p class="dash-label">VOLTOL / FIRMWARE</p><h2>เฟิร์มแวร์สำหรับโมดูล VOLTOL</h2><section class="usb-install"><h3>ติดตั้งผ่าน USB บนเว็บ</h3><p>สำหรับโมดูลใหม่ ESP32-S3 DevKitC-1 แฟลช 8 MB ใช้ Chrome หรือ Edge บนคอมพิวเตอร์ (ล้างข้อมูลทั้งบอร์ด)</p><a href="/fw/flash/" target="_blank" rel="noopener">เปิดเครื่องมือแฟลชผ่านเว็บ</a></section><h3>อัปเดตผ่าน OTA</h3><p id="firmwareVersion"></p><p id="firmwareLatest">เวอร์ชันล่าสุด —</p><p><a href="/fw/VOLTOL-v1.7.3-ReadyToFlash.zip">ดาวน์โหลดเฟิร์มแวร์โมดูล VOLTOL v1.7.3 (ติดตั้งผ่าน USB)</a><br><small>บอร์ดที่ใช้อยู่แล้วให้ใช้ UPDATE_S3_WINDOWS.bat เพื่อเก็บ Wi-Fi โทเคน และค่าตั้งไว้ครบ</small></p><button id="remoteOta" type="button" disabled>สั่งอัปเดตผ่าน Cloud</button><p id="remoteOtaStatus" role="status"></p><a href="http://192.168.4.1/">เปิดเว็บตั้งค่าโมดูล</a> <a href="/fw/version.json" target="_blank" rel="noreferrer">ดูเวอร์ชันล่าสุด</a></section>
+<div id="cloud-firmware" class="cloud-view" hidden><section><p class="dash-label">VOLTOL / FIRMWARE</p><h2>เฟิร์มแวร์สำหรับโมดูล VOLTOL</h2><section class="usb-install"><h3>ติดตั้งผ่าน USB บนเว็บ</h3><p>สำหรับโมดูลใหม่ ESP32-S3 DevKitC-1 แฟลช 8 MB ใช้ Chrome หรือ Edge บนคอมพิวเตอร์ (ล้างข้อมูลทั้งบอร์ด)</p><a href="/fw/flash/" target="_blank" rel="noopener">เปิดเครื่องมือแฟลชผ่านเว็บ</a></section><h3>อัปเดตผ่าน OTA</h3><p id="firmwareVersion"></p><p id="firmwareLatest">เวอร์ชันล่าสุด —</p><p><a href="/fw/VOLTOL-v1.7.4-ReadyToFlash.zip">ดาวน์โหลดเฟิร์มแวร์โมดูล VOLTOL v1.7.4 (ติดตั้งผ่าน USB)</a><br><small>บอร์ดที่ใช้อยู่แล้วให้ใช้ UPDATE_S3_WINDOWS.bat เพื่อเก็บ Wi-Fi โทเคน และค่าตั้งไว้ครบ</small></p><button id="remoteOta" type="button" disabled>สั่งอัปเดตผ่าน Cloud</button><p id="remoteOtaStatus" role="status"></p><a href="http://192.168.4.1/">เปิดเว็บตั้งค่าโมดูล</a> <a href="/fw/version.json" target="_blank" rel="noreferrer">ดูเวอร์ชันล่าสุด</a></section>
 </div>
 <div id="cloud-drag" class="cloud-view" hidden>
 <section class="drag-console">
@@ -1049,20 +1050,32 @@ try{
 }catch{authStatus('เชื่อมต่อเซสชัน BATTLAB ไม่สำเร็จ กรุณารีเฟรชหน้า',true);}
 
 // ---- remote Wi-Fi + control (firmware 1.7.0+) ----
-const RN_CMD={wifi_add:'เพิ่ม Wi-Fi',wifi_remove:'ลบ Wi-Fi',ota_install:'อัปเดตเฟิร์มแวร์',ota_check:'ตรวจอัปเดต',restart:'รีสตาร์ต'};
+const RN_CMD={wifi_scan:'ค้นหา Wi-Fi',wifi_add:'เพิ่ม Wi-Fi',wifi_remove:'ลบ Wi-Fi',ota_install:'อัปเดตเฟิร์มแวร์',ota_check:'ตรวจอัปเดต',restart:'รีสตาร์ต'};
 const RN_ST={queued:'รอโมดูลออนไลน์',sent:'ส่งถึงโมดูลแล้ว',done:'สำเร็จ',failed:'ไม่สำเร็จ',expired:'หมดเวลา (โมดูลไม่ออนไลน์)'};
 const fwNum=v=>{const m=String(v||'').match(/(\d+)\.(\d+)\.(\d+)/);return m?(+m[1])*1e6+(+m[2])*1e3+(+m[3]):0;};
-let rnBusy=false, rnKey='';
+let rnBusy=false, rnKey='', rnScanAsked=0, rnScanKey='';
 function rnRender(){
   const p=lastReading?.payload||{}, fresh=receivedAgo(lastReading)<15000, ok=fwNum(p.firmware)>=1007000;
   $('rnFw').textContent=p.firmware?'FW '+p.firmware:'—';$('rnFw').classList.toggle('ok',ok&&fresh);
-  $('rnNow').innerHTML=!lastReading?'รอข้อมูลจากโมดูล':!ok?'โมดูลนี้ใช้เฟิร์มแวร์ '+(p.firmware||'เก่า')+' · ต้องอัปเดตเป็น 1.7.3 ก่อน (ครั้งแรกทำที่หน้าเว็บโมดูล เมนูเฟิร์มแวร์ หรือผ่าน USB) จึงจะจัดการ Wi-Fi จากเว็บได้':(fresh?'ต่ออยู่กับ <b>'+String(p.wifi_ssid||'—').replace(/[<>&]/g,'')+'</b>'+(Number.isFinite(p.wifi_rssi)?' · '+p.wifi_rssi+' dBm':'')+(p.hotspot_clients?' · มีมือถือต่อฮอตสปอต '+p.hotspot_clients+' เครื่อง':''):'โมดูลออฟไลน์ · คำสั่งจะถูกส่งเมื่อโมดูลกลับมาออนไลน์ (ภายใน 15 นาที)');
+  $('rnNow').innerHTML=!lastReading?'รอข้อมูลจากโมดูล':!ok?'โมดูลนี้ใช้เฟิร์มแวร์ '+(p.firmware||'เก่า')+' · ต้องอัปเดตเป็น 1.7.4 ก่อน (ครั้งแรกทำที่หน้าเว็บโมดูล เมนูเฟิร์มแวร์ หรือผ่าน USB) จึงจะจัดการ Wi-Fi จากเว็บได้':(fresh?'ต่ออยู่กับ <b>'+String(p.wifi_ssid||'—').replace(/[<>&]/g,'')+'</b>'+(Number.isFinite(p.wifi_rssi)?' · '+p.wifi_rssi+' dBm':'')+(p.hotspot_clients?' · มีมือถือต่อฮอตสปอต '+p.hotspot_clients+' เครื่อง':''):'โมดูลออฟไลน์ · คำสั่งจะถูกส่งเมื่อโมดูลกลับมาออนไลน์ (ภายใน 15 นาที)');
   const saved=Array.isArray(p.wifi_saved)?p.wifi_saved:[];
   const key=JSON.stringify([saved,p.wifi_ssid,ok]);
   if(key!==rnKey){rnKey=key;const ul=$('rnList');ul.replaceChildren();
     for(const name of saved){const li=document.createElement('li');if(name===p.wifi_ssid&&fresh)li.className='on';const dot=document.createElement('i');const span=document.createElement('span');span.textContent=name;const del=document.createElement('button');del.type='button';del.className='secondary';del.textContent='ลบ';del.disabled=!ok;del.onclick=()=>rnSend('wifi_remove',{ssid:name},'ลบ '+name+' ออกจากโมดูล?');li.append(dot,span,del);ul.append(li);}
     if(!saved.length&&ok){const li=document.createElement('li');li.textContent='ยังไม่มี Wi-Fi ที่บันทึก';ul.append(li);}}
   for(const el of [...$('rnAdd').elements,$('rnOta'),$('rnRestart')])el.disabled=!ok||rnBusy;
+  const scanOk=fwNum(p.firmware)>=1007004, sel=$('rnScanSel');
+  $('rnScan').disabled=!scanOk||rnBusy||!fresh;
+  if(!scanOk&&ok)$('rnScanMsg').textContent='การค้นหา Wi-Fi จากหน้า Cloud ต้องใช้เฟิร์มแวร์ 1.7.4 ขึ้นไป · กด "อัปเดตเฟิร์มแวร์ผ่านเน็ต" ก่อน';
+  else if(rnScanAsked&&Date.now()-rnScanAsked<120000){
+    if(Array.isArray(p.wifi_scan)&&!p.wifi_scan_busy&&receivedAgo(lastReading)<6000&&Date.parse(lastReading.received_at)>rnScanAsked){
+      const key=JSON.stringify(p.wifi_scan);
+      if(key!==rnScanKey){rnScanKey=key;const keep=sel.value;sel.replaceChildren(new Option(p.wifi_scan.length?'เลือกเครือข่าย ('+p.wifi_scan.length+')':'ไม่พบเครือข่าย',''));
+        const seen=new Set();for(const n of p.wifi_scan.slice().sort((a,b)=>b.r-a.r)){if(!n.s||seen.has(n.s))continue;seen.add(n.s);sel.add(new Option((n.l?'🔒 ':'')+n.s+' · '+n.r+' dBm',n.s));}
+        sel.value=keep;}
+      $('rnScanMsg').textContent=p.wifi_scan.length?'เลือกเครือข่ายแล้วกรอกรหัสผ่าน':'ไม่พบ Wi-Fi 2.4 GHz รอบโมดูล ลองค้นหาอีกครั้ง';
+    }else $('rnScanMsg').textContent='โมดูลกำลังค้นหา Wi-Fi…';
+  }else if(scanOk)$('rnScanMsg').textContent='';
 }
 async function rnCmds(){const id=$('devices').value;if(!id||$('cloud-link').hidden)return;
   try{const rows=await api('/rest/v1/voltol_commands?select=cmd,args,status,result,created_at&device_id=eq.'+id+'&order=created_at.desc&limit=6');
@@ -1072,6 +1085,8 @@ async function rnSend(cmd,args,ask){const id=$('devices').value;if(!id||rnBusy)r
   finally{rnBusy=false;rnRender();rnCmds();}}
 $('rnAdd').onsubmit=e=>{e.preventDefault();const f=e.currentTarget,ssid=f.elements.ssid.value.trim(),pass=f.elements.pass.value;if(!ssid)return;rnSend('wifi_add',{ssid,pass}).then(()=>{f.elements.pass.value='';f.elements.ssid.value='';});};
 $('rnOta').onclick=()=>rnSend('ota_install',{},'อัปเดตเฟิร์มแวร์ของโมดูลเป็นเวอร์ชันล่าสุด? จอดรถให้นิ่ง โมดูลจะรีสตาร์ตเอง');
+$('rnScanSel').onchange=()=>{if($('rnScanSel').value){$('rnAdd').elements.ssid.value=$('rnScanSel').value;$('rnAdd').elements.pass.focus();}};
+$('rnScan').onclick=()=>{rnScanAsked=Date.now();rnScanKey='';rnSend('wifi_scan',{});rnRender();};
 $('rnRestart').onclick=()=>rnSend('restart',{},'รีสตาร์ตโมดูล?');
 setInterval(()=>{if(!$('cloud-link').hidden)rnRender();},1500);
 setInterval(()=>rnCmds(),4000);
