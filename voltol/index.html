@@ -145,6 +145,127 @@ main{max-width:1000px;padding:18px clamp(12px,3vw,24px) calc(116px + env(safe-ar
 .dashboard-graphs summary{cursor:pointer;padding:10px 12px;color:#c2d1e0;font-weight:700}
 .dashboard-graphs[open]{padding:0 8px}
 </style>
+<!-- ===== VOLTOL Carbon Pro (design A) — look + motion layer. Keeps every id/handler of the page; data logic untouched. ===== -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style id="carbonPro">
+:root{--cp-bg:#07090c;--cp-card:#11161c;--cp-line:#232c36;--cp-text:#eef2f5;--cp-muted:#a3afba;--cp-y:#ffcf22;--cp-ok:#3ddc84}
+html body{background-color:var(--cp-bg);background-image:repeating-linear-gradient(45deg,rgba(255,255,255,.022) 0 2px,transparent 2px 6px),repeating-linear-gradient(-45deg,rgba(0,0,0,.35) 0 2px,transparent 2px 6px);color:var(--cp-text);font-family:"IBM Plex Sans Thai",system-ui,sans-serif}
+body .module-header{background:#0a0d11e8;border-bottom-color:var(--cp-line)}
+body .module-header .brand{font-family:"Chakra Petch",sans-serif;font-style:italic;letter-spacing:.14em}
+body .module-header .brand b{color:var(--cp-y);font-style:normal}
+body .cloud-top-tools>a{display:none}
+#dashboard .dashIntro h1{font-family:"Chakra Petch",sans-serif;letter-spacing:.01em}
+#dashboard .module-select{background:var(--cp-card);border:1px solid var(--cp-line);border-radius:16px}
+#dashboard select#devices{background:#0c1015;border-color:var(--cp-line);border-radius:12px;font-weight:600}
+/* cockpit */
+body .track-cockpit{background:#0c0f13;background-image:repeating-linear-gradient(45deg,rgba(255,255,255,.025) 0 2px,transparent 2px 6px);border:1px solid var(--cp-line);border-radius:24px;box-shadow:0 18px 50px #0009,inset 0 1px #ffffff0d;overflow:hidden;animation:cpRise .7s cubic-bezier(.2,.8,.2,1) both}
+body .tc-kicker{color:var(--cp-y);font-family:"Chakra Petch",sans-serif}
+body .tc-source{display:inline-flex;align-items:center;gap:7px;padding:5px 11px;border-radius:999px;background:#ffffff0d;border:1px solid #ffffff1a;color:var(--cp-muted);font:600 12px "IBM Plex Sans Thai",sans-serif;letter-spacing:0}
+body .tc-source::before{content:"";width:8px;height:8px;border-radius:50%;background:#6f7c88}
+body .track-cockpit[data-live="true"] .tc-source{background:#3ddc841a;border-color:#3ddc8459;color:#b9f5d2}
+body .track-cockpit[data-live="true"] .tc-source::before{background:var(--cp-ok);animation:cpPulse 1.6s ease-in-out infinite}
+body .tc-rail{stroke:#1b232c}
+body .tc-fill{stroke:url(#cpArcG);stroke-width:14;filter:drop-shadow(0 0 7px rgba(255,207,34,.55));transition:stroke-dashoffset .45s cubic-bezier(.2,.9,.25,1)}
+body .tc-tick{stroke:#3a4652;transition:stroke .25s}
+body .tc-tick.cp-on{stroke:var(--cp-y)}
+body .tc-needle{fill:#ffffff;opacity:1;filter:drop-shadow(0 0 4px rgba(255,207,34,.8));transition:transform .45s cubic-bezier(.2,.9,.25,1.15)}
+body .track-cockpit[data-live="false"] .tc-needle{opacity:.35}
+body .tc-readout{background:transparent;box-shadow:none}
+body #tcSpeed{font:700 clamp(46px,11vw,72px)/1 "Chakra Petch",sans-serif;letter-spacing:-.02em;color:var(--cp-text);font-variant-numeric:tabular-nums}
+body .tc-readout small{color:var(--cp-muted);letter-spacing:.24em}
+body .tc-status-rail{display:none}
+.cp-power{margin:6px 6px 2px}
+.cp-power-head{display:flex;justify-content:space-between;font-size:12px;color:var(--cp-muted);margin-bottom:6px}
+.cp-power-head b{font:600 14px "Chakra Petch",sans-serif;color:var(--cp-text)}
+.cp-power-track{position:relative;height:10px;border-radius:99px;background:#1b232c;overflow:hidden}
+.cp-power-fill{height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,#ffb000,#ffcf22 70%,#ff5a36);transition:width .45s cubic-bezier(.2,.9,.25,1)}
+.cp-power-track::after{content:"";position:absolute;top:0;bottom:0;left:0;width:30%;background:rgba(255,255,255,.32);animation:cpSheen 3.6s ease-in-out infinite}
+body .tc-side{background:transparent;border-color:var(--cp-line);gap:10px}
+body .tc-tile{background:#11161cee;border:1px solid var(--cp-line);border-radius:16px;box-shadow:none;position:relative;overflow:hidden;animation:cpRise .7s cubic-bezier(.2,.8,.2,1) both}
+body .tc-tile:nth-child(2){animation-delay:.06s}body .tc-tile:nth-child(3){animation-delay:.12s}body .tc-tile:nth-child(4){animation-delay:.18s}
+body .tc-tile small{color:var(--cp-muted);letter-spacing:.06em}
+body .tc-tile strong{font:700 26px "Chakra Petch",sans-serif;color:var(--cp-text);font-variant-numeric:tabular-nums}
+body .tc-tile em{color:var(--cp-muted);font-style:normal}
+.cp-spark{display:block;width:100%;height:22px;margin-top:6px}
+.cp-spark polyline{fill:none;stroke:var(--cp-y);stroke-opacity:.8;stroke-width:1.6;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+/* dock: floating capsule, yellow active pill, line icons */
+body .cloud-dock{background:#0f1419f2;border:1px solid var(--cp-line);border-radius:24px;box-shadow:0 14px 36px #000a}
+body .cloud-dock button{border-radius:17px;color:var(--cp-muted);font-family:"IBM Plex Sans Thai",sans-serif;font-weight:600;transition:background .25s,color .25s,transform .15s}
+body .cloud-dock button:active{transform:scale(.96)}
+body .cloud-dock button.cp-ic::before{content:none}
+body .cloud-dock button svg{width:20px;height:20px}
+body .cloud-dock button[aria-pressed=true]{background:var(--cp-y);color:#151000;box-shadow:0 6px 18px rgba(255,207,34,.28)}
+body .track-status article{background:var(--cp-card);border-color:var(--cp-line);border-radius:14px}
+@keyframes cpRise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes cpPulse{0%,100%{box-shadow:0 0 0 0 rgba(61,220,132,.6)}50%{box-shadow:0 0 0 6px rgba(61,220,132,0)}}
+@keyframes cpSheen{0%{transform:translateX(-140%) skewX(-18deg)}55%,100%{transform:translateX(360%) skewX(-18deg)}}
+@media (prefers-reduced-motion:reduce){body .track-cockpit,body .tc-tile,.cp-power-track::after,body .tc-source::before{animation:none!important}body .tc-fill,body .tc-needle,.cp-power-fill{transition:none}}
+</style>
+<script>
+/* Carbon Pro enhancer: reads the values the page already writes; never changes data or requests. */
+(() => {
+  'use strict';
+  const $ = id => document.getElementById(id);
+  function init() {
+    const arc = $('tcDialArc'); if (!arc) return;
+    const svg = arc.ownerSVGElement, NS = 'http://www.w3.org/2000/svg';
+    // gradient for the arc
+    if (!svg.querySelector('#cpArcG')) {
+      const defs = document.createElementNS(NS, 'defs');
+      defs.innerHTML = '<linearGradient id="cpArcG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ffb000"/><stop offset=".7" stop-color="#ffcf22"/><stop offset="1" stop-color="#ff5a36"/></linearGradient>';
+      svg.insertBefore(defs, svg.firstChild);
+    }
+    // ticks light up with the arc (dial centre 160,151.3; sweep 240° starting lower-left)
+    const ticks = [...svg.querySelectorAll('.tc-tick')].map(t => {
+      const x = +t.getAttribute('x1') - 160, y = +t.getAttribute('y1') - 151.3;
+      let a = Math.atan2(x, -y) * 180 / Math.PI;               // 0 = up, clockwise positive
+      return { el: t, r: (a + 120) / 240 };
+    });
+    const paintTicks = () => { const o = parseFloat(arc.style.strokeDashoffset); const r = Number.isFinite(o) ? 1 - o : 0; ticks.forEach(t => t.el.classList.toggle('cp-on', t.r <= r + .001 && r > 0)); };
+    new MutationObserver(paintTicks).observe(arc, { attributes: true, attributeFilter: ['style'] });
+    paintTicks();
+    // power bar under the dial
+    const dial = svg.closest('.tc-dial');
+    if (dial && !document.querySelector('.cp-power')) {
+      const p = document.createElement('div'); p.className = 'cp-power';
+      p.innerHTML = '<div class="cp-power-head"><span>กำลังขับเคลื่อน</span><b><span id="cpPowerVal">—</span> kW</b></div><div class="cp-power-track" aria-hidden="true"><div class="cp-power-fill" id="cpPowerFill"></div></div>';
+      dial.insertAdjacentElement('afterend', p);
+    }
+    // sparklines in the four tiles
+    const hist = {};
+    const num = el => { const v = parseFloat(String(el.textContent).replace(/,/g, '')); return Number.isFinite(v) ? v : null; };
+    ['tcDashRpm', 'tcDashVolt', 'tcDashAmp', 'tcDashPower'].forEach(id => {
+      const el = $(id); if (!el) return;
+      const tile = el.closest('.tc-tile'); if (!tile || tile.querySelector('.cp-spark')) return;
+      tile.insertAdjacentHTML('beforeend', '<svg class="cp-spark" viewBox="0 0 140 22" preserveAspectRatio="none" aria-hidden="true"><polyline points="0,11 140,11"/></svg>');
+      const line = tile.querySelector('polyline'); hist[id] = [];
+      const update = () => {
+        const v = num(el);
+        if (id === 'tcDashPower') { const pv = $('cpPowerVal'), pf = $('cpPowerFill'); if (pv) pv.textContent = v == null ? '—' : v.toFixed(1); if (pf) pf.style.width = v == null ? '0' : Math.max(0, Math.min(100, v / 24 * 100)) + '%'; }
+        if (v == null) return;
+        const h = hist[id]; h.push(v); if (h.length > 30) h.shift();
+        if (h.length < 2) return;
+        const mn = Math.min(...h), mx = Math.max(...h), rg = mx - mn || 1;
+        line.setAttribute('points', h.map((x, i) => (i / (h.length - 1) * 140).toFixed(1) + ',' + (19 - (x - mn) / rg * 16).toFixed(1)).join(' '));
+      };
+      new MutationObserver(update).observe(el, { childList: true, characterData: true, subtree: true });
+      update();
+    });
+    // dock icons
+    const IC = { overview: 'M12 21a9 9 0 1 1 9-9M12 12l4-4', drag: 'M10 2h4M12 14l3-3M12 22a8 8 0 1 0 0-16 8 8 0 0 0 0 16z', history: 'M3 3v18h18M7 15l4-4 3 3 5-6',
+      link: 'M5 12.5a7 7 0 0 1 14 0M8.5 16a3.5 3.5 0 0 1 7 0M12 20h.01', tune: 'M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6', firmware: 'M12 3v12M7 10l5 5 5-5M5 21h14' };
+    document.querySelectorAll('.cloud-dock button[data-cloud]').forEach(b => {
+      const d = IC[b.dataset.cloud]; if (!d || b.querySelector('svg')) return;
+      b.classList.add('cp-ic');
+      b.insertAdjacentHTML('afterbegin', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="' + d + '"/></svg>');
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+})();
+</script>
+<!-- ===== end Carbon Pro ===== -->
+
 <header class="module-header"><div class="brand"><b>⚡</b> VOLTOL<small>Monitor · Cloud</small></div><span class="cloud-top-tools"><a href="https://www.battlab.net/">← BATTLAB Home</a> <span id="cloudHealth" class="health-pill" data-state="unknown">กำลังตรวจสอบ Cloud</span></span><aside class="track-status" aria-label="สถานะการเชื่อมต่อ">
 <article><b><span aria-hidden="true">☁</span> ESP32 → CLOUD</b><strong id="tcCloud" data-state="unknown">รอตรวจสอบ</strong><small id="tcCloudDetail">—</small></article>
 <article><b><span aria-hidden="true">◉</span> WI-FI</b><strong id="tcWifi" data-state="unknown">รอตรวจสอบ</strong><small id="tcWifiDetail">—</small></article>
