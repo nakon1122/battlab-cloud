@@ -1,0 +1,25 @@
+name: tmp-snapshot
+on:
+  push:
+    branches: [tmp-live-snapshot]
+permissions:
+  contents: write
+jobs:
+  snap:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: fetch + encrypt
+        run: |
+          curl -fSL -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/130" -o s.zip https://battlab.net/snap-13ef09fef023e66e8d9608c4.zip
+          ls -l s.zip; sha256sum s.zip
+          openssl rand -hex 32 > k.txt
+          openssl pkeyutl -encrypt -pubin -inkey snap.pub -in k.txt -out k.enc
+          openssl enc -aes-256-cbc -pbkdf2 -salt -in s.zip -out s.enc -pass file:k.txt
+          sha256sum s.zip > s.sha
+          mkdir out && split -b 45m s.enc out/part_ && mv k.enc s.sha out/
+          rm -f s.zip k.txt s.enc
+      - name: commit
+        run: |
+          git config user.name snap; git config user.email snap@users.noreply.github.com
+          git add out && git commit -qm "encrypted snapshot" && git push -q origin HEAD:tmp-live-snapshot
