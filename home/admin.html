@@ -85,6 +85,14 @@ a{color:var(--y)}a.btn{color:var(--text)}
 .gate{max-width:460px;margin:12vh auto;text-align:center}
 .note{font-size:12px;color:var(--dim)}
 .log .row{cursor:default}
+.otaRow{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:14px;background:var(--card);border:1px solid var(--line)}
+.otaRow input[type=checkbox]{width:22px;height:22px;accent-color:#ffcf22;flex:none}
+.otaRow label{flex:1;min-width:0;display:flex;align-items:center;gap:12px;cursor:pointer}
+.st{font-size:12px;font-weight:700;padding:3px 9px;border-radius:99px;background:#ffffff12;color:var(--muted);white-space:nowrap}
+.st.ok{background:#3ddc8422;color:var(--ok)}.st.err{background:#ff6b5a22;color:var(--bad)}.st.run{background:#ffcf2222;color:var(--y)}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-bottom:12px}
+.confirm{position:fixed;inset:0;z-index:2147483150;display:grid;place-items:center;background:#000b;backdrop-filter:blur(4px)}
+.confirm>div{width:min(460px,92vw)}
 @media(max-width:640px){.kv{grid-template-columns:1fr}.kv dt{margin-top:6px}.row .r{display:none}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
@@ -101,7 +109,7 @@ a{color:var(--y)}a.btn{color:var(--text)}
       <button type="button" data-tab="ov" aria-pressed="true">ภาพรวม</button>
       <button type="button" data-tab="mem" aria-pressed="false">สมาชิก <span class="cnt num" id="cMem">–</span></button>
       <button type="button" data-tab="esp" aria-pressed="false">ESP32 / อุปกรณ์ <span class="cnt num" id="cEsp">–</span></button>
-      <button type="button" data-tab="log" aria-pressed="false">บันทึกการแก้ไข</button>
+      <button type="button" data-tab="ota" aria-pressed="false">อัปเดตเฟิร์มแวร์</button><button type="button" data-tab="log" aria-pressed="false">บันทึกการแก้ไข</button>
     </nav>
     <main id="view"></main>
   </div>
@@ -146,7 +154,7 @@ async function boot() {
   $('#app').hidden = false;
   document.querySelectorAll('[data-tab]').forEach(b => b.onclick = () => go(b.dataset.tab));
   $('#reload').onclick = () => { S.members = S.esp = null; render(); };
-  const h = location.hash.slice(1); go(['ov','mem','esp','log'].includes(h) ? h : 'ov');
+  const h = location.hash.slice(1); go(['ov','mem','esp','ota','log'].includes(h) ? h : 'ov');
   loadCounts();
 }
 function gate(t, msg, login) { const g = $('#gate'); g.hidden = false; g.innerHTML = `<h2 style="margin-top:0">${t}</h2><p class="note" style="font-size:14px">${msg}</p>` + (login ? '<a class="btn y" style="display:inline-flex;align-items:center;text-decoration:none" href="/">ไปหน้าเข้าสู่ระบบ</a>' : ''); }
@@ -189,13 +197,81 @@ async function render() {
     document.querySelectorAll('[data-k]').forEach(b => b.onclick = () => { S.espKind = b.dataset.k; document.querySelectorAll('[data-k]').forEach(x => x.setAttribute('aria-pressed', x === b)); paint(); });
     $('#onl').onclick = e => { S.espOnline = !S.espOnline; e.currentTarget.setAttribute('aria-pressed', S.espOnline); paint(); };
     paint();
+  } else if (S.tab === 'ota') {
+    renderOta(v);
   } else {
     v.innerHTML = skel(6);
-    const A = {update_device:'แก้ไขอุปกรณ์',transfer_device:'ย้ายเจ้าของบอร์ด',release_device:'ปลดบอร์ดจากบัญชี',command:'ส่งคำสั่ง',update_screen:'แก้ไขจอ',release_screen:'ปลดจอ',transfer_screen:'ย้ายเจ้าของจอ',set_role:'ตั้งสิทธิ์',set_password:'ตั้งรหัสผ่านใหม่',confirm_email:'ยืนยันอีเมล',suspend_user:'ระงับบัญชี',restore_user:'เปิดบัญชีคืน',delete_user:'ลบบัญชี',voltol_set_owner:'ย้ายเจ้าของ VOLTOL',voltol_rename:'เปลี่ยนชื่อ VOLTOL',voltol_delete:'ลบโมดูล VOLTOL',delete_device:'ลบอุปกรณ์'};
+    const A = {update_device:'แก้ไขอุปกรณ์',transfer_device:'ย้ายเจ้าของบอร์ด',release_device:'ปลดบอร์ดจากบัญชี',command:'ส่งคำสั่ง',update_screen:'แก้ไขจอ',release_screen:'ปลดจอ',transfer_screen:'ย้ายเจ้าของจอ',set_role:'ตั้งสิทธิ์',set_password:'ตั้งรหัสผ่านใหม่',confirm_email:'ยืนยันอีเมล',suspend_user:'ระงับบัญชี',restore_user:'เปิดบัญชีคืน',delete_user:'ลบบัญชี',voltol_set_owner:'ย้ายเจ้าของ VOLTOL',voltol_rename:'เปลี่ยนชื่อ VOLTOL',voltol_delete:'ลบโมดูล VOLTOL',delete_device:'ลบอุปกรณ์',bulk_ota:'สั่งอัปเดตเฟิร์มแวร์หลายเครื่อง'};
     try { const L = await rpc('admin_log_list', {p_limit: 200});
       v.innerHTML = '<div class="list log">' + (L.length ? L.map(g => `<div class="row"><span class="main"><span class="t">${esc(A[g.action] || g.action)}</span><span class="m">${dt(g.at)} · ${esc(g.by || '')} · ${esc(JSON.stringify(g.detail || {}).slice(0, 160))}</span></span></div>`).join('') : '<div class="card empty">ยังไม่มีบันทึก</div>') + '</div>';
     } catch (e) { v.innerHTML = `<div class="card empty">${esc(thErr(e))}</div>`; }
   }
+}
+
+// ---------- bulk firmware update
+const FW_BASE = 'https://nakon1122.github.io/battlab-cloud/';   // boards on v2.9.2 and older accept firmware only from this address
+const OTA_T = { s3: {n:'บอร์ด ESP32-S3 (BMS)', match: d => d.kind === 'board' && /-s3$/.test(d.fw || '')},
+               cyd35: {n:'บอร์ดจอ CYD 3.5" (BMS)', match: d => d.kind === 'board' && /-cyd35$/.test(d.fw || '')},
+               cloudscreen: {n:'จอ Cloud Screen', match: d => d.kind === 'screen'} };
+const verNum = v => (String(v || '').match(/(\d+)\.(\d+)\.(\d+)/) || [0, 0, 0, 0]).slice(1).reduce((a, x) => a * 1000 + +x, 0);
+async function renderOta(v) {
+  if (!isSuper()) { v.innerHTML = '<div class="card empty">สั่งอัปเดตเฟิร์มแวร์ได้เฉพาะ Super admin</div>'; return; }
+  v.innerHTML = skel(4);
+  try { if (!S.esp) S.esp = await rpc('admin_esp32'); if (!S.man) S.man = await (await fetch(FW_BASE + 'fw/manifest.json', {cache: 'no-store'})).json(); }
+  catch (e) { v.innerHTML = `<div class="card empty">โหลดรายการเฟิร์มแวร์ไม่สำเร็จ: ${esc(thErr(e))}</div>`; return; }
+  S.otaT = S.otaT || 's3';
+  const vers = t => { const seen = new Set(), out = []; const add = (url, note) => { if (!url || seen.has(url)) return; seen.add(url); const ver = (url.match(/fw\/([0-9.]+)\//) || [])[1] || '?'; out.push({url, ver, note}); };
+    add(S.man.boards?.[t]?.url, 'ล่าสุด'); (S.man.history || []).forEach(h => add(h.boards?.[t]?.app, h.date)); return out.sort((a, b) => verNum(b.ver) - verNum(a.ver)); };
+  const list = vers(S.otaT); if (!S.otaUrl || !list.some(x => x.url === S.otaUrl)) S.otaUrl = list[0]?.url;
+  const target = list.find(x => x.url === S.otaUrl);
+  const devs = S.esp.filter(OTA_T[S.otaT].match);
+  v.innerHTML = `<div class="steps">
+      <label class="field card">1. ประเภทบอร์ด<select id="otaT">${Object.entries(OTA_T).map(([k, o]) => `<option value="${k}"${k === S.otaT ? ' selected' : ''}>${o.n} (${S.esp.filter(o.match).length})</option>`).join('')}</select></label>
+      <label class="field card">2. เวอร์ชันที่จะติดตั้ง<select id="otaV">${list.map(x => `<option value="${esc(x.url)}"${x.url === S.otaUrl ? ' selected' : ''}>${esc(x.ver)}${x.note ? ' · ' + esc(x.note) : ''}</option>`).join('')}</select></label>
+      <div class="card"><div class="note" style="font-size:13px">3. เลือกเครื่อง แล้วกดอัปเดต</div><div class="act" style="margin-top:8px"><button class="btn" type="button" id="otaAllOn">เลือกที่ออนไลน์ทั้งหมด</button><button class="btn" type="button" id="otaNone">ล้าง</button></div></div></div>
+    <div class="list" id="otaList">${devs.length ? devs.map(d => { const same = verNum(d.fw) === verNum(target?.ver);
+      return `<div class="otaRow"><input type="checkbox" id="o_${d.id}" data-o="${d.id}" data-k="${d.kind}" data-on="${d.online ? 1 : 0}"${same ? ' data-same="1"' : ''}><label for="o_${d.id}">${icon(d.kind)}<span class="main" style="flex:1;min-width:0"><span class="t" style="display:block;font-weight:600">${esc(d.name || '(ไม่มีชื่อ)')}</span><span class="m" style="display:block;font-size:12px;color:var(--muted)"><span class="dot ${d.online ? 'on' : ''}"></span>${d.online ? 'ออนไลน์' : 'ออฟไลน์ · ' + ago(d.last)} · ${esc(d.email || 'ยังไม่จับคู่')}</span></span></label><span class="num" style="font-size:13px">${esc(d.fw || '?')}</span><span class="st" id="s_${d.id}">${same ? 'เวอร์ชันนี้อยู่แล้ว' : 'พร้อม'}</span></div>`; }).join('') : '<div class="card empty">ไม่มีเครื่องประเภทนี้</div>'}</div>
+    <div class="card" style="margin-top:12px;display:flex;flex-wrap:wrap;gap:12px;align-items:center"><span class="note" style="flex:1 1 260px;font-size:13px">บอร์ดจะดาวน์โหลดเฟิร์มแวร์เองแล้วรีสตาร์ต (ประมาณ 1–2 นาที) · เครื่องที่ออฟไลน์จะอัปเดตเมื่อกลับมาออนไลน์ภายใน 3 นาทีถัดไปเท่านั้น · ค่าที่ตั้งไว้ในบอร์ดไม่หาย · <b>โมดูล VOLTOL</b> ยังสั่งอัปเดตจากคลาวด์ไม่ได้ ใช้หน้าเฟิร์มแวร์บนโมดูลแทน</span><button class="btn y" type="button" id="otaGo" disabled>อัปเดต 0 เครื่อง</button></div>`;
+  const boxes = () => [...document.querySelectorAll('[data-o]')], picked = () => boxes().filter(b => b.checked);
+  const sync = () => { const n = picked().length; $('#otaGo').disabled = !n; $('#otaGo').textContent = `อัปเดต ${n} เครื่อง เป็น ${target?.ver || ''}`; };
+  boxes().forEach(b => b.onchange = sync);
+  $('#otaT').onchange = e => { S.otaT = e.target.value; S.otaUrl = null; renderOta(v); };
+  $('#otaV').onchange = e => { S.otaUrl = e.target.value; renderOta(v); };
+  $('#otaAllOn').onclick = () => { boxes().forEach(b => b.checked = b.dataset.on === '1' && !b.dataset.same); sync(); };
+  $('#otaNone').onclick = () => { boxes().forEach(b => b.checked = false); sync(); };
+  $('#otaGo').onclick = () => {
+    const sel = picked(); if (!sel.length || !target) return;
+    const off = sel.filter(b => b.dataset.on !== '1').length;
+    const c = document.createElement('div'); c.className = 'confirm';
+    c.innerHTML = `<div class="card" role="dialog" aria-modal="true" aria-labelledby="cfT"><h2 id="cfT" style="margin:0 0 8px;font:700 20px 'Chakra Petch'">อัปเดต ${sel.length} เครื่อง เป็น ${esc(target.ver)}?</h2><p class="note" style="font-size:14px">${OTA_T[S.otaT].n}${off ? ` · ในนี้ออฟไลน์ ${off} เครื่อง` : ''}<br>ระหว่างอัปเดตบอร์ดจะหยุดส่งข้อมูลชั่วคราว ห้ามถอดไฟ</p><div class="act" style="justify-content:flex-end"><button class="btn" type="button" id="cfNo">ยกเลิก</button><button class="btn y" type="button" id="cfYes">ยืนยันอัปเดต</button></div></div>`;
+    document.body.append(c); $('#cfNo').focus();
+    $('#cfNo').onclick = () => c.remove();
+    $('#cfYes').onclick = async () => { c.remove(); $('#otaGo').disabled = true;
+      const items = sel.map(b => ({id: b.dataset.o, kind: b.dataset.k, url: FW_BASE + target.url}));
+      let res; try { res = await rpc('admin_bulk_ota', {p_items: items}); } catch (e) { toast(thErr(e), 1); sync(); return; }
+      res.forEach(r => { const el = document.getElementById('s_' + r.id); if (el) { el.className = 'st ' + (r.ok ? 'run' : 'err'); el.textContent = r.ok ? 'ส่งคำสั่งแล้ว' : 'ไม่สำเร็จ: ' + thErr({message: r.error}); } });
+      toast('ส่งคำสั่งอัปเดต ' + res.filter(r => r.ok).length + ' เครื่อง');
+      pollOta(res.filter(r => r.ok).map(r => r.id), target.ver);
+    };
+  };
+  sync();
+}
+function pollOta(ids, ver) {
+  if (!ids.length) return; let n = 0;
+  const tick = async () => { n++;
+    try { const st = await rpc('admin_ota_status', {p_ids: ids});
+      st.forEach(x => { const el = document.getElementById('s_' + x.id); if (!el) return;
+        let cls = 'run', t = 'รอบอร์ดรับคำสั่ง';
+        const res = x.result == null ? '' : String(typeof x.result === 'string' ? x.result : (x.result.msg || JSON.stringify(x.result)));
+        if (verNum(x.fw) === verNum(ver)) { cls = 'ok'; t = '✓ เป็น ' + ver + ' แล้ว'; }
+        else if (x.status === 'error' || x.status === 'expired') { cls = 'err'; t = x.status === 'expired' ? 'บอร์ดไม่ได้ออนไลน์ คำสั่งหมดอายุ' : 'ไม่สำเร็จ: ' + res.slice(0, 60); }
+        else if (x.status === 'done' && /not allowed|unknown|only/i.test(res)) { cls = 'err'; t = 'บอร์ดปฏิเสธ: ' + res.slice(0, 60); }
+        else if (x.status === 'done') { t = 'กำลังดาวน์โหลด/รีสตาร์ต'; }
+        else if (x.status === 'queued') { t = 'รอจอรับคำสั่ง'; }
+        el.className = 'st ' + cls; el.textContent = t; }); } catch {}
+    if (n < 45 && S.tab === 'ota') setTimeout(tick, 4000); else { S.esp = null; }
+  };
+  setTimeout(tick, 3000);
 }
 
 // ---------- drawer
