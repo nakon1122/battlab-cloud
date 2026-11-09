@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#0c0f13">
+<title>หลังบ้าน BATTLAB</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2213%22%20fill%3D%22%23101820%22%2F%3E%3Cpath%20fill%3D%22%23FFD326%22%20d%3D%22M38%205%2013%2035h16l-4%2024%2026-32H35z%22%2F%3E%3C%2Fsvg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#07090c;--card:#11161c;--card2:#0e1318;--line:#232c36;--text:#eef2f5;--muted:#a3afba;--dim:#6f7c88;--y:#ffcf22;--ok:#3ddc84;--bad:#ff6b5a;--warn:#ffb020;--blue:#59c3ff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 "IBM Plex Sans Thai",system-ui,sans-serif;
+  background-image:repeating-linear-gradient(45deg,rgba(255,255,255,.018) 0 2px,transparent 2px 6px)}
+.num{font-family:"Chakra Petch",sans-serif;font-variant-numeric:tabular-nums}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--y);outline-offset:2px}
+.wrap{max-width:1240px;margin:0 auto;padding:18px clamp(12px,3vw,28px) 60px}
+.head{display:flex;flex-wrap:wrap;align-items:center;gap:12px 18px;margin:6px 0 16px}
+.head h1{margin:0;font:700 26px "Chakra Petch",sans-serif;letter-spacing:.04em}
+.head h1 b{color:var(--y)}
+.role{padding:4px 10px;border-radius:999px;background:#ffcf2222;color:var(--y);font-size:12px;font-weight:700}
+.sp{flex:1}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;padding:6px;background:var(--card2);border:1px solid var(--line);border-radius:18px;margin-bottom:16px}
+.tabs button{min-height:44px;padding:8px 16px;border:0;border-radius:13px;background:transparent;color:var(--muted);font-weight:600;display:flex;align-items:center;gap:8px}
+.tabs button[aria-pressed=true]{background:var(--y);color:#151000}
+.tabs .cnt{font:600 12px "Chakra Petch";padding:1px 7px;border-radius:99px;background:#ffffff14}
+.tabs button[aria-pressed=true] .cnt{background:#0000001f}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+.tile{position:relative;overflow:hidden}
+.tile .l{font-size:12px;color:var(--muted)}
+.tile .v{font:700 30px "Chakra Petch",sans-serif;margin-top:2px}
+.tile .s{font-size:12px;color:var(--dim)}
+.tile:after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.06) 50%,transparent 60%);transform:translateX(-100%);animation:sheen 4s ease-in-out infinite}
+@keyframes sheen{60%,100%{transform:translateX(100%)}}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
+.bar input[type=search]{flex:1 1 240px;min-height:44px;padding:10px 14px;border-radius:12px;border:1px solid var(--line);background:var(--card2)}
+.chip{min-height:38px;padding:6px 12px;border-radius:99px;border:1px solid var(--line);background:transparent;color:var(--muted);font-size:13px;font-weight:600}
+.chip[aria-pressed=true]{border-color:var(--y);color:var(--y);background:#ffcf2214}
+.list{display:flex;flex-direction:column;gap:8px}
+.row{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;background:var(--card);border:1px solid var(--line);width:100%;text-align:left;transition:border-color .2s,transform .2s}
+.row:hover{border-color:#3a4652;transform:translateY(-1px)}
+.row .main{flex:1;min-width:0}
+.row .t{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row .m{font-size:12px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row .r{font-size:12px;color:var(--muted);text-align:right;white-space:nowrap}
+.ic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;flex:none;background:#ffffff0d}
+.ic svg{width:22px;height:22px}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--dim);margin-right:6px;vertical-align:middle}
+.dot.on{background:var(--ok);box-shadow:0 0 0 0 rgba(61,220,132,.6);animation:pulse 1.8s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 7px rgba(61,220,132,0)}100%{box-shadow:0 0 0 0 rgba(61,220,132,0)}}
+.badge{display:inline-block;padding:1px 8px;border-radius:99px;font-size:11px;font-weight:700;margin-left:6px;vertical-align:1px}
+.b-super{background:#ffcf2226;color:var(--y)}.b-support{background:#59c3ff22;color:var(--blue)}.b-ban{background:#ff6b5a26;color:var(--bad)}.b-unc{background:#ffb02026;color:var(--warn)}
+.empty{padding:30px;text-align:center;color:var(--muted)}
+.sk{height:62px;border-radius:14px;background:linear-gradient(90deg,#11161c,#18202a,#11161c);background-size:200% 100%;animation:sk 1.2s infinite}
+@keyframes sk{to{background-position:-200% 0}}
+/* drawer */
+.drawer{position:fixed;inset:0;z-index:50;display:flex;justify-content:flex-end;background:#000a;backdrop-filter:blur(4px);animation:fade .2s}
+.drawer[hidden]{display:none}
+.panel{width:min(520px,100%);height:100%;overflow:auto;background:#0d1217;border-left:1px solid var(--line);padding:20px;animation:slide .28s cubic-bezier(.2,.9,.2,1)}
+@keyframes slide{from{transform:translateX(40px);opacity:0}}
+@keyframes fade{from{opacity:0}}
+.panel h2{margin:0;font:700 22px "Chakra Petch",sans-serif;word-break:break-all}
+.kv{display:grid;grid-template-columns:130px 1fr;gap:6px 12px;font-size:14px;margin:14px 0}
+.kv dt{color:var(--muted)}.kv dd{margin:0;word-break:break-all}
+.sec{margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}
+.sec h3{margin:0 0 10px;font-size:14px;color:var(--muted);font-weight:600}
+.act{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.btn{min-height:44px;padding:9px 16px;border-radius:12px;border:1px solid var(--line);background:#16202a;font-weight:600}
+.btn:hover{filter:brightness(1.2)}
+.btn.y{background:var(--y);border-color:var(--y);color:#151000}
+.btn.red{background:transparent;border-color:#ff6b5a88;color:var(--bad)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.field{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted);flex:1 1 200px}
+.field input,.field select{min-height:44px;padding:9px 12px;border-radius:12px;border:1px solid var(--line);background:var(--card2);color:var(--text)}
+.x{float:right;width:44px;height:44px;border-radius:12px;border:1px solid var(--line);background:transparent;font-size:20px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:80;padding:12px 18px;border-radius:12px;background:#1b252f;border:1px solid var(--line);box-shadow:0 10px 30px #0008;animation:fade .2s;max-width:90vw}
+.toast.err{border-color:var(--bad);color:#ffd4ce}
+.gate{max-width:460px;margin:12vh auto;text-align:center}
+.note{font-size:12px;color:var(--dim)}
+.log .row{cursor:default}
+@media(max-width:640px){.kv{grid-template-columns:1fr}.kv dt{margin-top:6px}.row .r{display:none}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div id="gate" class="gate card" hidden></div>
+  <div id="app" hidden>
+    <div class="head">
+      <h1><b>⚡</b> หลังบ้าน BATTLAB</h1><span class="role" id="who"></span><span class="sp"></span>
+      <button class="btn" id="reload" type="button">↻ โหลดใหม่</button>
+    </div>
+    <nav class="tabs" aria-label="ส่วนของหลังบ้าน">
+      <button type="button" data-tab="ov" aria-pressed="true">ภาพรวม</button>
+      <button type="button" data-tab="mem" aria-pressed="false">สมาชิก <span class="cnt num" id="cMem">–</span></button>
+      <button type="button" data-tab="esp" aria-pressed="false">ESP32 / อุปกรณ์ <span class="cnt num" id="cEsp">–</span></button>
+      <button type="button" data-tab="log" aria-pressed="false">บันทึกการแก้ไข</button>
+    </nav>
+    <main id="view"></main>
+  </div>
+</div>
+<div class="drawer" id="drawer" hidden><div class="panel" id="panel" role="dialog" aria-modal="true" aria-labelledby="dTitle"></div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="/session-client.js?v=2"></script>
+<script src="/battlab-nav.js?v=3" defer></script>
+<script>
+'use strict';
+const sb = supabase.createClient('https://zpsxcdzkayqhzbdcdoed.supabase.co','sb_publishable_roXek86Fm64tr_vEG2pYRw_4onX6cBJ',{auth:window.battlabAuthOptions});
+const $ = s => document.querySelector(s);
+const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ago = ts => { if (!ts) return 'ไม่เคย'; const s = (Date.now() - new Date(ts)) / 1000;
+  if (s < 60) return 'เมื่อสักครู่'; if (s < 3600) return Math.floor(s/60)+' นาทีที่แล้ว'; if (s < 86400) return Math.floor(s/3600)+' ชม.ที่แล้ว'; return Math.floor(s/86400)+' วันที่แล้ว'; };
+const dt = ts => ts ? new Date(ts).toLocaleString('th-TH',{day:'numeric',month:'short',year:'2-digit',hour:'2-digit',minute:'2-digit'}) : '—';
+const ERR = {'admin only':'บัญชีนี้ไม่ใช่แอดมิน','super admin only':'ต้องเป็น Super admin','cannot suspend yourself':'ระงับบัญชีตัวเองไม่ได้','cannot delete yourself':'ลบบัญชีตัวเองไม่ได้',
+  'remove super admin role first':'ถอดสิทธิ์ Super admin ก่อน','type the e-mail to confirm':'พิมพ์อีเมลให้ตรงเพื่อยืนยัน','no account with that e-mail':'ไม่พบบัญชีอีเมลนี้',
+  'no account with that email':'ไม่พบบัญชีอีเมลนี้','type the module name to confirm':'พิมพ์ชื่อโมดูลให้ตรงเพื่อยืนยัน','type the device name to confirm':'พิมพ์ชื่ออุปกรณ์ให้ตรงเพื่อยืนยัน',
+  "move this account's VOLTOL modules first":'ย้ายโมดูล VOLTOL ของบัญชีนี้ไปบัญชีอื่นก่อน','password must be 8-72 characters':'รหัสผ่าน 8–72 ตัวอักษร','cannot remove yourself':'ถอดสิทธิ์ตัวเองไม่ได้','cannot demote yourself':'ลดสิทธิ์ตัวเองไม่ได้'};
+const thErr = e => { const m = e?.message || String(e); for (const k in ERR) if (m.includes(k)) return ERR[k]; return m; };
+function toast(msg, err) { const t = document.createElement('div'); t.className = 'toast' + (err ? ' err' : ''); t.setAttribute('role','status'); t.textContent = msg; document.body.append(t); setTimeout(() => t.remove(), 3200); }
+async function rpc(fn, args) { const { data, error } = await sb.rpc(fn, args || {}); if (error) throw error; return data; }
+
+const KIND = {
+  board:   {n:'บอร์ด BATTLAB', c:'#ffcf22', p:'M7 2v4M17 2v4M7 18v4M17 18v4M2 7h4M2 17h4M18 7h4M18 17h4M6 6h12v12H6zM10 10h4v4h-4z'},
+  inverter:{n:'อินเวอร์เตอร์', c:'#59c3ff', p:'M4 4h16v16H4zM8 12h8M12 8v8'},
+  screen:  {n:'จอ Cloud Screen', c:'#b98cff', p:'M3 5h18v11H3zM8 20h8M12 16v4'},
+  voltol:  {n:'โมดูล VOLTOL', c:'#3ddc84', p:'M13 2 4 14h7l-1 8 9-12h-7z'}
+};
+const icon = k => `<span class="ic" style="color:${KIND[k]?.c||'#fff'}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${KIND[k]?.p||''}"></path></svg></span>`;
+
+const S = { tab:'ov', me:null, members:null, esp:null, q:'', memFilter:'all', espKind:'all', espOnline:false };
+const isSuper = () => S.me?.role === 'super';
+
+async function boot() {
+  const { data } = await sb.auth.getSession();
+  if (!data.session) return gate('เข้าสู่ระบบก่อน', 'ล็อกอินที่หน้าหลัก BATTLAB ด้วยบัญชีแอดมิน แล้วกลับมาหน้านี้', true);
+  try { S.me = await rpc('admin_whoami'); } catch (e) { return gate('หน้านี้สำหรับแอดมินเท่านั้น', 'บัญชี ' + esc(data.session.user.email) + ' ไม่มีสิทธิ์เข้าหลังบ้าน'); }
+  $('#who').textContent = (S.me.role === 'super' ? 'Super admin' : 'Support') + ' · ' + S.me.email;
+  $('#app').hidden = false;
+  document.querySelectorAll('[data-tab]').forEach(b => b.onclick = () => go(b.dataset.tab));
+  $('#reload').onclick = () => { S.members = S.esp = null; render(); };
+  const h = location.hash.slice(1); go(['ov','mem','esp','log'].includes(h) ? h : 'ov');
+  loadCounts();
+}
+function gate(t, msg, login) { const g = $('#gate'); g.hidden = false; g.innerHTML = `<h2 style="margin-top:0">${t}</h2><p class="note" style="font-size:14px">${msg}</p>` + (login ? '<a class="btn y" style="display:inline-flex;align-items:center;text-decoration:none" href="/">ไปหน้าเข้าสู่ระบบ</a>' : ''); }
+async function loadCounts() { try { [S.members, S.esp] = await Promise.all([rpc('admin_members'), rpc('admin_esp32')]); $('#cMem').textContent = S.members.length; $('#cEsp').textContent = S.esp.length; if (S.tab === 'mem' || S.tab === 'esp') render(); } catch (e) { toast(thErr(e), 1); } }
+function go(tab) { S.tab = tab; S.q = ''; history.replaceState(null, '', '#' + tab); document.querySelectorAll('[data-tab]').forEach(b => b.setAttribute('aria-pressed', b.dataset.tab === tab)); render(); }
+const skel = n => '<div class="list">' + '<div class="sk"></div>'.repeat(n) + '</div>';
+
+async function render() {
+  const v = $('#view');
+  if (S.tab === 'ov') {
+    v.innerHTML = skel(2);
+    try { const o = await rpc('admin_overview'); const t = (l, val, s) => `<div class="card tile"><div class="l">${l}</div><div class="v">${val}</div><div class="s">${s||''}</div></div>`;
+      v.innerHTML = '<div class="tiles">' + t('สมาชิก', o.users, 'ใช้งานใน 7 วัน ' + o.users_7d) + t('บอร์ด BATTLAB ออนไลน์', o.boards_online + ' / ' + o.boards, o.boards_unpaired ? 'ยังไม่จับคู่ ' + o.boards_unpaired : 'จับคู่ครบ') +
+        t('โมดูล VOLTOL ออนไลน์', (o.voltol_online||0) + ' / ' + (o.voltol||0), 'ข้อมูล 24 ชม. ' + (o.voltol_rows_24h||0) + ' แถว') + t('จอ Cloud Screen', o.screens_online + ' / ' + o.screens, 'ออนไลน์ / ทั้งหมด') +
+        t('อินเวอร์เตอร์', o.inverters, 'บัญชี LuxPower ' + o.lux_accounts) + t('คำสั่ง 24 ชม.', o.cmds_24h) + t('ข้อมูลแบต 24 ชม.', o.readings_24h) + t('ฐานข้อมูล', o.db_mb + ' MB', 'จาก 500 MB') + '</div>' +
+        '<div class="card" style="margin-top:12px"><h3 style="margin:0 0 8px;font-size:14px;color:var(--muted)">เฟิร์มแวร์บอร์ด BATTLAB</h3><div class="act">' + Object.entries(o.fw || {}).sort().map(([k, n]) => `<span class="chip num" style="cursor:default">${esc(k)} · ${n}</span>`).join('') + '</div></div>';
+    } catch (e) { v.innerHTML = `<div class="card empty">${esc(thErr(e))}</div>`; }
+  } else if (S.tab === 'mem') {
+    if (!S.members) { v.innerHTML = skel(5); try { S.members = await rpc('admin_members'); $('#cMem').textContent = S.members.length; } catch (e) { v.innerHTML = `<div class="card empty">${esc(thErr(e))}</div>`; return; } }
+    const F = [['all','ทั้งหมด'],['admin','แอดมิน'],['ban','ถูกระงับ'],['unc','ยังไม่ยืนยันอีเมล'],['dev','มีอุปกรณ์']];
+    v.innerHTML = `<div class="bar"><input type="search" id="q" placeholder="ค้นหาอีเมล" aria-label="ค้นหาสมาชิก" value="${esc(S.q)}">${F.map(([k,n]) => `<button type="button" class="chip" data-f="${k}" aria-pressed="${S.memFilter===k}">${n}</button>`).join('')}</div><div class="list" id="list"></div>`;
+    const paint = () => { const q = S.q.toLowerCase(); const rows = S.members.filter(m => (!q || (m.email||'').toLowerCase().includes(q)) &&
+        (S.memFilter === 'all' || (S.memFilter === 'admin' && m.role) || (S.memFilter === 'ban' && m.banned) || (S.memFilter === 'unc' && !m.confirmed) || (S.memFilter === 'dev' && (m.boards + m.inverters + m.screens + m.voltol) > 0)));
+      $('#list').innerHTML = rows.length ? rows.map(m => `<button type="button" class="row" data-u="${m.id}"><span class="ic" style="color:var(--y);font:700 16px 'Chakra Petch'">${esc((m.email||'?')[0].toUpperCase())}</span><span class="main"><span class="t">${esc(m.email)}${m.role ? `<span class="badge b-${m.role}">${m.role === 'super' ? 'Super' : 'Support'}</span>` : ''}${m.banned ? '<span class="badge b-ban">ระงับ</span>' : ''}${m.confirmed ? '' : '<span class="badge b-unc">ยังไม่ยืนยัน</span>'}</span><span class="m">BATTLAB ${m.boards} · อินเวอร์เตอร์ ${m.inverters} · จอ ${m.screens} · VOLTOL ${m.voltol}${m.online ? ' · <span class="dot on"></span>ออนไลน์ ' + m.online : ''}</span></span><span class="r">สมัคร ${dt(m.created)}<br>เข้าล่าสุด ${ago(m.last_login)}</span></button>`).join('') : '<div class="card empty">ไม่พบสมาชิก</div>';
+      document.querySelectorAll('[data-u]').forEach(r => r.onclick = () => openMember(r.dataset.u)); };
+    $('#q').oninput = e => { S.q = e.target.value; paint(); };
+    document.querySelectorAll('[data-f]').forEach(b => b.onclick = () => { S.memFilter = b.dataset.f; document.querySelectorAll('[data-f]').forEach(x => x.setAttribute('aria-pressed', x === b)); paint(); });
+    paint();
+  } else if (S.tab === 'esp') {
+    if (!S.esp) { v.innerHTML = skel(6); try { S.esp = await rpc('admin_esp32'); $('#cEsp').textContent = S.esp.length; } catch (e) { v.innerHTML = `<div class="card empty">${esc(thErr(e))}</div>`; return; } }
+    const cnt = k => S.esp.filter(d => k === 'all' || d.kind === k).length;
+    v.innerHTML = `<div class="bar"><input type="search" id="q" placeholder="ค้นหา ชื่อ / อีเมล / รหัสจับคู่ / เฟิร์มแวร์ / IP" aria-label="ค้นหาอุปกรณ์" value="${esc(S.q)}">` +
+      [['all','ทั้งหมด'],['board','BATTLAB'],['voltol','VOLTOL'],['screen','Cloud Screen'],['inverter','อินเวอร์เตอร์']].map(([k,n]) => `<button type="button" class="chip" data-k="${k}" aria-pressed="${S.espKind===k}">${n} <span class="num">${cnt(k)}</span></button>`).join('') +
+      `<button type="button" class="chip" id="onl" aria-pressed="${S.espOnline}"><span class="dot on"></span>ออนไลน์เท่านั้น</button></div><div class="list" id="list"></div>`;
+    const paint = () => { const q = S.q.toLowerCase(); const rows = S.esp.filter(d => (S.espKind === 'all' || d.kind === S.espKind) && (!S.espOnline || d.online) &&
+        (!q || [d.name, d.email, d.pair, d.fw, d.ip, d.label].some(x => String(x || '').toLowerCase().includes(q))));
+      $('#list').innerHTML = rows.length ? rows.map(d => `<button type="button" class="row" data-d="${d.id}">${icon(d.kind)}<span class="main"><span class="t">${esc(d.name || '(ไม่มีชื่อ)')}</span><span class="m"><span class="dot ${d.online ? 'on' : ''}"></span>${d.online ? 'ออนไลน์' : 'ออฟไลน์ · ' + ago(d.last)} · ${KIND[d.kind].n} · ${esc(d.email || 'ยังไม่จับคู่')}</span></span><span class="r num">${esc(d.fw || '')}${d.ip ? '<br>' + esc(d.ip) : d.pair ? '<br>' + esc(d.pair) : ''}</span></button>`).join('') : '<div class="card empty">ไม่พบอุปกรณ์</div>';
+      document.querySelectorAll('[data-d]').forEach(r => r.onclick = () => openDevice(r.dataset.d)); };
+    $('#q').oninput = e => { S.q = e.target.value; paint(); };
+    document.querySelectorAll('[data-k]').forEach(b => b.onclick = () => { S.espKind = b.dataset.k; document.querySelectorAll('[data-k]').forEach(x => x.setAttribute('aria-pressed', x === b)); paint(); });
+    $('#onl').onclick = e => { S.espOnline = !S.espOnline; e.currentTarget.setAttribute('aria-pressed', S.espOnline); paint(); };
+    paint();
+  } else {
+    v.innerHTML = skel(6);
+    const A = {update_device:'แก้ไขอุปกรณ์',transfer_device:'ย้ายเจ้าของบอร์ด',release_device:'ปลดบอร์ดจากบัญชี',command:'ส่งคำสั่ง',update_screen:'แก้ไขจอ',release_screen:'ปลดจอ',transfer_screen:'ย้ายเจ้าของจอ',set_role:'ตั้งสิทธิ์',set_password:'ตั้งรหัสผ่านใหม่',confirm_email:'ยืนยันอีเมล',suspend_user:'ระงับบัญชี',restore_user:'เปิดบัญชีคืน',delete_user:'ลบบัญชี',voltol_set_owner:'ย้ายเจ้าของ VOLTOL',voltol_rename:'เปลี่ยนชื่อ VOLTOL',voltol_delete:'ลบโมดูล VOLTOL',delete_device:'ลบอุปกรณ์'};
+    try { const L = await rpc('admin_log_list', {p_limit: 200});
+      v.innerHTML = '<div class="list log">' + (L.length ? L.map(g => `<div class="row"><span class="main"><span class="t">${esc(A[g.action] || g.action)}</span><span class="m">${dt(g.at)} · ${esc(g.by || '')} · ${esc(JSON.stringify(g.detail || {}).slice(0, 160))}</span></span></div>`).join('') : '<div class="card empty">ยังไม่มีบันทึก</div>') + '</div>';
+    } catch (e) { v.innerHTML = `<div class="card empty">${esc(thErr(e))}</div>`; }
+  }
+}
+
+// ---------- drawer
+function openDrawer(html) { const d = $('#drawer'); $('#panel').innerHTML = '<button type="button" class="x" id="dx" aria-label="ปิด">×</button>' + html; d.hidden = false; $('#dx').onclick = closeDrawer; $('#dx').focus(); }
+function closeDrawer() { $('#drawer').hidden = true; }
+$('#drawer').addEventListener('click', e => { if (e.target.id === 'drawer') closeDrawer(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#drawer').hidden) closeDrawer(); });
+async function act(btn, fn, okMsg, after) { btn.disabled = true; try { const r = await fn(); toast(okMsg || 'สำเร็จ'); if (after) await after(r); } catch (e) { toast(thErr(e), 1); } finally { btn.disabled = false; } }
+const refresh = async () => { S.members = S.esp = null; await loadCounts(); render(); };
+
+async function openMember(id) {
+  openDrawer(skel(3));
+  let m; try { m = await rpc('admin_member', {p_user: id}); } catch (e) { $('#panel').insertAdjacentHTML('beforeend', `<p>${esc(thErr(e))}</p>`); return; }
+  const self = id === S.me.id, sup = isSuper();
+  openDrawer(`<h2 id="dTitle">${esc(m.email)}</h2>
+    <div style="margin-top:6px">${m.role ? `<span class="badge b-${m.role}" style="margin:0">${m.role === 'super' ? 'Super admin' : 'Support'}</span>` : ''}${m.banned ? '<span class="badge b-ban">ถูกระงับ</span>' : ''}${m.confirmed ? '' : '<span class="badge b-unc">ยังไม่ยืนยันอีเมล</span>'}</div>
+    <dl class="kv"><dt>สมัครเมื่อ</dt><dd>${dt(m.created)}</dd><dt>เข้าระบบล่าสุด</dt><dd>${dt(m.last_login)} (${ago(m.last_login)})</dd><dt>LuxPower</dt><dd>${esc(m.lux || 'ไม่ได้เชื่อม')}</dd><dt>ลิงก์แชร์</dt><dd>${m.shares}</dd><dt>รหัสบัญชี</dt><dd class="num" style="font-size:12px">${esc(m.id)}</dd></dl>
+    <div class="sec"><h3>อุปกรณ์ของบัญชีนี้ (${m.devices.length})</h3><div class="list">${m.devices.length ? m.devices.map(d => `<button type="button" class="row" data-d="${d.id}">${icon(d.kind)}<span class="main"><span class="t">${esc(d.name || '(ไม่มีชื่อ)')}</span><span class="m"><span class="dot ${d.online ? 'on' : ''}"></span>${d.online ? 'ออนไลน์' : ago(d.last)} · ${KIND[d.kind].n}</span></span></button>`).join('') : '<div class="note">ยังไม่มีอุปกรณ์</div>'}</div></div>
+    <div class="sec"><h3>รหัสผ่านและอีเมล</h3><div class="act"><label class="field">รหัสผ่านใหม่ (8 ตัวขึ้นไป)<input id="pw" type="text" autocomplete="new-password" minlength="8"></label><button class="btn" type="button" id="pwGen">สุ่ม</button><button class="btn y" type="button" id="pwSet">ตั้งรหัสผ่าน</button></div>
+      ${m.confirmed ? '' : '<div class="act" style="margin-top:8px"><button class="btn" type="button" id="conf">ยืนยันอีเมลให้</button></div>'}<p class="note">ตั้งรหัสแล้วแจ้งลูกค้าทางช่องทางอื่น ระบบไม่ส่งอีเมลให้</p></div>
+    ${sup ? `<div class="sec"><h3>สิทธิ์หลังบ้าน</h3><div class="act"><label class="field">สิทธิ์<select id="role"><option value="">สมาชิกทั่วไป</option><option value="support"${m.role === 'support' ? ' selected' : ''}>Support (ดู/แก้ข้อมูลลูกค้า)</option><option value="super"${m.role === 'super' ? ' selected' : ''}>Super admin (ทำได้ทุกอย่าง)</option></select></label><button class="btn y" type="button" id="roleSet"${self ? ' disabled' : ''}>บันทึกสิทธิ์</button></div></div>
+    <div class="sec"><h3>การเข้าใช้งาน</h3><div class="act"><button class="btn ${m.banned ? 'y' : 'red'}" type="button" id="ban"${self ? ' disabled' : ''}>${m.banned ? 'เปิดบัญชีคืน' : 'ระงับบัญชี (ล็อกอินไม่ได้)'}</button></div><p class="note">ระงับแล้วจะออกจากระบบทุกเครื่องทันที อุปกรณ์ยังส่งข้อมูลเข้าบัญชีตามปกติ</p></div>
+    <div class="sec"><h3 style="color:var(--bad)">ลบบัญชี</h3><p class="note">บอร์ด BATTLAB และจอจะถูกปลดออก (ข้อมูลยังอยู่ จับคู่ใหม่ได้) · ถ้ามีโมดูล VOLTOL ต้องย้ายไปบัญชีอื่นก่อน · ย้อนกลับไม่ได้</p><div class="act"><label class="field">พิมพ์อีเมลนี้เพื่อยืนยัน<input id="delConf" type="text" autocomplete="off"></label><button class="btn red" type="button" id="del"${self ? ' disabled' : ''}>ลบบัญชีถาวร</button></div></div>` : '<p class="note sec">การตั้งสิทธิ์ ระงับ และลบบัญชี ทำได้เฉพาะ Super admin</p>'}`);
+  document.querySelectorAll('#panel [data-d]').forEach(r => r.onclick = () => openDevice(r.dataset.d));
+  $('#pwGen').onclick = () => { const a = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789'; const r = crypto.getRandomValues(new Uint32Array(12)); $('#pw').value = [...r].map(x => a[x % a.length]).join(''); };
+  $('#pwSet').onclick = e => act(e.target, () => rpc('admin_set_password', {p_user: id, p_password: $('#pw').value}), 'ตั้งรหัสผ่านใหม่แล้ว');
+  if ($('#conf')) $('#conf').onclick = e => act(e.target, () => rpc('admin_confirm_user', {p_user: id}), 'ยืนยันอีเมลแล้ว', () => { refresh(); openMember(id); });
+  if (!sup) return;
+  $('#roleSet').onclick = e => act(e.target, () => rpc('admin_set_role', {p_email: m.email, p_role: $('#role').value || null}), 'บันทึกสิทธิ์แล้ว', () => { refresh(); openMember(id); });
+  $('#ban').onclick = e => act(e.target, () => rpc('admin_ban_user', {p_user: id, p_ban: !m.banned}), m.banned ? 'เปิดบัญชีคืนแล้ว' : 'ระงับบัญชีแล้ว', () => { refresh(); openMember(id); });
+  $('#del').onclick = e => act(e.target, () => rpc('admin_delete_user', {p_user: id, p_confirm_email: $('#delConf').value}), 'ลบบัญชีแล้ว', () => { closeDrawer(); refresh(); });
+}
+
+async function openDevice(id) {
+  if (!S.esp) S.esp = await rpc('admin_esp32');
+  let d = S.esp.find(x => x.id === id); if (!d) { S.esp = await rpc('admin_esp32'); d = S.esp.find(x => x.id === id); }
+  if (!d) return toast('ไม่พบอุปกรณ์', 1);
+  const sup = isSuper(), k = d.kind, canRelease = k === 'board' || k === 'inverter' || k === 'screen';
+  const rows = [['ประเภท', KIND[k].n], ['สถานะ', `<span class="dot ${d.online ? 'on' : ''}"></span>${d.online ? 'ออนไลน์' : 'ออฟไลน์'} · ส่งข้อมูลล่าสุด ${dt(d.last)}`], ['เจ้าของ', esc(d.email || 'ยังไม่จับคู่')],
+    ['เฟิร์มแวร์', esc(d.fw || '—')], d.board ? ['บอร์ด', esc(d.board)] : null, d.pair ? ['รหัสจับคู่', `<span class="num">${esc(d.pair)}</span>`] : null,
+    d.ip ? ['เครือข่าย', esc((d.ssid || '') + ' · ' + d.ip + (d.rssi != null ? ' · ' + d.rssi + ' dBm' : ''))] : null, d.soc != null ? ['SOC', d.soc + '%'] : null,
+    d.rows_24h != null ? ['ข้อมูล 24 ชม.', d.rows_24h + ' แถว'] : null, d.label ? ['ชื่อจากบอร์ด', esc(d.label)] : null, ['เพิ่มเข้าระบบ', dt(d.created)], ['รหัสอุปกรณ์', `<span class="num" style="font-size:12px">${esc(d.id)}</span>`]].filter(Boolean);
+  openDrawer(`<div style="display:flex;gap:12px;align-items:center">${icon(k)}<h2 id="dTitle">${esc(d.name || '(ไม่มีชื่อ)')}</h2></div>
+    <dl class="kv">${rows.map(([a, b]) => `<dt>${a}</dt><dd>${b}</dd>`).join('')}</dl>
+    <div class="sec"><h3>ชื่อที่แสดง</h3><div class="act"><label class="field">ชื่อ<input id="nm" value="${esc(d.name || '')}" maxlength="60"></label><button class="btn y" type="button" id="nmSet">บันทึกชื่อ</button></div></div>
+    <div class="sec"><h3>ย้ายไปบัญชีอื่น</h3><div class="act"><label class="field">อีเมลเจ้าของใหม่<input id="ow" type="email" list="mails" autocomplete="off"></label><datalist id="mails">${(S.members || []).map(m => `<option value="${esc(m.email)}">`).join('')}</datalist><button class="btn y" type="button" id="owSet">ย้าย</button>${canRelease && d.owner ? '<button class="btn" type="button" id="rel">ปลดออกจากบัญชี</button>' : ''}</div><p class="note">${k === 'board' ? 'ย้าย/ปลดแล้วลิงก์แชร์ของบอร์ดนี้จะถูกลบ' : k === 'voltol' ? 'โมดูลยังส่งข้อมูลต่อตามปกติ แค่ไปแสดงในบัญชีใหม่' : 'จอจะแสดงแบตของบัญชีใหม่'}</p></div>
+    ${k === 'board' ? `<div class="sec"><h3>สั่งงานบอร์ด</h3><div class="act"><button class="btn" type="button" data-cmd="ping">ทดสอบการเชื่อมต่อ</button><button class="btn" type="button" data-cmd="bms_read">อ่านค่า BMS ใหม่</button><button class="btn red" type="button" data-cmd="restart">รีสตาร์ตบอร์ด</button></div><p class="note">บอร์ดรับคำสั่งในรอบส่งข้อมูลถัดไป (ไม่กี่วินาที)</p></div>` : ''}
+    ${k === 'board' || k === 'inverter' ? '<div class="sec"><a class="btn" style="display:inline-flex;align-items:center;text-decoration:none" href="https://batterycloud.battlab.net/#admin/dev" target="_blank" rel="noopener">เปิดรายละเอียดเต็มใน Battery Cloud ↗</a></div>' : ''}
+    ${sup && k !== 'screen' ? `<div class="sec"><h3 style="color:var(--bad)">ลบอุปกรณ์</h3><p class="note">${k === 'voltol' ? 'ลบโมดูลและข้อมูลวิ่งทั้งหมด บอร์ดจะส่งข้อมูลไม่ได้จนกว่าจะลงทะเบียนใหม่' : 'ลบอุปกรณ์และประวัติทั้งหมด บอร์ดที่ยังออนไลน์จะลงทะเบียนตัวเองใหม่เป็นอุปกรณ์ที่ยังไม่จับคู่'} · ย้อนกลับไม่ได้</p><div class="act"><label class="field">พิมพ์ชื่ออุปกรณ์เพื่อยืนยัน<input id="delConf" autocomplete="off"></label><button class="btn red" type="button" id="del">ลบถาวร</button></div></div>` : ''}`);
+  const back = () => refresh().then(() => openDevice(id));
+  $('#nmSet').onclick = e => act(e.target, () => k === 'voltol' ? rpc('admin_voltol_rename', {p_id: id, p_name: $('#nm').value}) : k === 'screen' ? rpc('admin_set_viewer', {p_id: id, p_name: $('#nm').value, p_eco: d.eco ?? -1, p_release: false}) : rpc('admin_update_device', {p_id: id, p_name: $('#nm').value, p_settings: null}), 'บันทึกชื่อแล้ว', back);
+  $('#owSet').onclick = e => { const em = $('#ow').value.trim(); if (!em) return toast('กรอกอีเมลเจ้าของใหม่', 1);
+    act(e.target, () => k === 'voltol' ? rpc('admin_voltol_set_owner', {p_id: id, p_email: em}) : k === 'screen' ? rpc('admin_viewer_set_owner', {p_id: id, p_email: em}) : rpc('admin_set_owner', {p_id: id, p_email: em}), 'ย้ายเจ้าของแล้ว', back); };
+  if ($('#rel')) $('#rel').onclick = e => act(e.target, () => k === 'screen' ? rpc('admin_viewer_set_owner', {p_id: id, p_email: null}) : rpc('admin_set_owner', {p_id: id, p_email: null}), 'ปลดออกจากบัญชีแล้ว', back);
+  document.querySelectorAll('#panel [data-cmd]').forEach(b => b.onclick = () => act(b, () => rpc('admin_send_command', {p_device: id, p_cmd: b.dataset.cmd, p_args: {}}), 'ส่งคำสั่งแล้ว'));
+  if ($('#del')) $('#del').onclick = e => act(e.target, () => k === 'voltol' ? rpc('admin_voltol_delete', {p_id: id, p_confirm_name: $('#delConf').value}) : rpc('admin_device_delete', {p_id: id, p_confirm_name: $('#delConf').value}), 'ลบแล้ว', () => { closeDrawer(); refresh(); });
+}
+boot();
+</script>
+</body>
+</html>

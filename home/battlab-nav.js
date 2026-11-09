@@ -6,7 +6,7 @@
   'use strict';
   if (document.getElementById('bl-appbar')) return;
   const host = location.hostname;
-  const here = host.startsWith('batterycloud.') ? 'battery' : host.startsWith('voltol.') ? 'voltol' : 'home';
+  const here = host.startsWith('batterycloud.') ? 'battery' : host.startsWith('voltol.') ? 'voltol' : location.pathname.endsWith('/admin.html') ? 'admin' : 'home';
   const apps = [
     { id: 'home', href: 'https://www.battlab.net/', icon: '⌂', label: 'หน้าหลัก' },
     { id: 'battery', href: 'https://batterycloud.battlab.net/', icon: '🔋', label: 'Battery Cloud' },
@@ -61,6 +61,21 @@
       location.reload();
     });
     paint();
+    // admins get a back-office link (checked once per page)
+    (async () => {
+      const ses = window.battlabSession?.current();
+      if (!ses?.access_token) return;
+      try {
+        const r = await fetch('https://zpsxcdzkayqhzbdcdoed.supabase.co/rest/v1/rpc/is_admin', { method: 'POST',
+          headers: { apikey: 'sb_publishable_roXek86Fm64tr_vEG2pYRw_4onX6cBJ', Authorization: 'Bearer ' + ses.access_token, 'Content-Type': 'application/json' }, body: '{}' });
+        if (!r.ok || (await r.json()) !== true) return;
+        const a = document.createElement('a');
+        a.href = 'https://www.battlab.net/admin.html';
+        if (location.pathname.endsWith('/admin.html') && host.endsWith('battlab.net') && !host.startsWith('batterycloud.') && !host.startsWith('voltol.')) a.setAttribute('aria-current', 'page');
+        a.innerHTML = '<span aria-hidden="true">🛡</span><span class="bl-l">หลังบ้าน</span>';
+        bar.querySelector('nav').appendChild(a);
+      } catch {}
+    })();
     setInterval(paint, 5000);
     window.addEventListener('focus', paint);
   }
