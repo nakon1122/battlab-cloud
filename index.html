@@ -11,10 +11,10 @@
 <meta name="description" content="BattLab Cloud - ดูและควบคุมแบตเตอรี่ลิเธียมของคุณจากทุกที่">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="icon" href="icon-192.png">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2213%22%20fill%3D%22%23101820%22%2F%3E%3Cpath%20fill%3D%22%23FFD326%22%20d%3D%22M38%205%2013%2035h16l-4%2024%2026-32H35z%22%2F%3E%3C%2Fsvg%3E">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uplot@1.6.30/dist/uPlot.min.css">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script><script src="https://www.battlab.net/session-client.js?v=2"></script><script src="https://www.battlab.net/battlab-nav.js?v=2" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/uplot@1.6.30/dist/uPlot.iife.min.js"></script>
 <script src="params.js"></script>
 <script src="fwpage.js"></script>
@@ -469,7 +469,7 @@ table th,table td{padding:10px 12px}
 }
 @media(max-width:380px){header .battlab-logo{width:94px}header{gap:4px}.landing h1{font-size:29px}.auth-card{padding:18px!important}header .badge{font-size:10px;padding:3px 6px}}
 @media(prefers-reduced-motion:reduce){.hero-batt .lvl{animation:none;width:65%}.enter>.card,.enter>.alerts,.enter>.grid>.card{animation:none}.arc,.roll .rd span{transition:none}}
-</style></head>
+.auth-home-link{display:inline-flex;align-items:center;padding:8px 10px;border:1px solid currentColor;border-radius:8px;color:inherit;text-decoration:none;font-weight:700}.auth-home-link:hover{text-decoration:underline}</style></head>
 <body>
 <header>
  <svg id="logo" class="battlab-logo" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 360 109" role="img" aria-label="BattLab" tabindex="0">
@@ -503,7 +503,7 @@ table th,table td{padding:10px 12px}
    <p class="muted small" style="margin-top:4px">ใช้อีเมลเดียวกันได้ทุกเครื่อง</p>
    <label>อีเมล<input id="email" type="email" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" placeholder="you@example.com"></label>
    <label>รหัสผ่าน (อย่างน้อย 8 ตัว)<span class="password-field"><input id="pass" type="password" autocomplete="current-password"><button id="btnShowPass" type="button" aria-controls="pass" aria-pressed="false" aria-label="แสดงรหัสผ่าน">แสดง</button></span></label>
-   <div class="row"><button id="btnIn">เข้าสู่ระบบ</button><button class="soft" id="btnUp">สมัครใหม่</button></div>
+   <div class="row"><button id="btnIn">เข้าสู่ระบบ</button><a class="auth-home-link" href="https://www.battlab.net/">สมัครที่ BATTLAB Home</a></div>
    <p class="small" id="loginMsg" role="status" aria-live="polite" style="min-height:1.4em"></p>
    <div class="row small"><button class="ghost" id="btnResend" style="padding:8px">ส่งอีเมลยืนยันอีกครั้ง</button><button class="ghost" id="btnForgot" style="padding:8px">ลืมรหัสผ่าน</button></div>
   </div>
@@ -557,7 +557,7 @@ table th,table td{padding:10px 12px}
 'use strict';
 const SB_URL='https://zpsxcdzkayqhzbdcdoed.supabase.co';
 const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpwc3hjZHprYXlxaHpiZGNkb2VkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM0NTMyODgsImV4cCI6MjEwOTAyOTI4OH0.aAXESY_MJ1IHlvF_8CVdVAGWdfz5ZM6ysoOki7kUv08';
-const sb=supabase.createClient(SB_URL,SB_KEY);
+const sb=supabase.createClient(SB_URL,SB_KEY,{auth:window.battlabAuthOptions});
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const num=x=>typeof x==='number'&&isFinite(x);
@@ -709,10 +709,9 @@ function thErr(e){const m=(e&&e.message)||String(e);
  if(/Failed to fetch|NetworkError/i.test(m))return 'เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ ตรวจอินเทอร์เน็ต';
  return m}
 function msg(t,ok){$('loginMsg').textContent=t;$('loginMsg').style.color=ok?'var(--good)':'var(--warn)'}
-async function busy(fn){const bs=['btnIn','btnUp','btnResend','btnForgot'].map($);bs.forEach(b=>b.disabled=true);try{await fn()}finally{setTimeout(()=>bs.forEach(b=>b.disabled=false),1500)}}
+async function busy(fn){const bs=['btnIn','btnResend','btnForgot'].map($);bs.forEach(b=>b.disabled=true);try{await fn()}finally{setTimeout(()=>bs.forEach(b=>b.disabled=false),1500)}}
 const email=()=>$('email').value.trim();
 $('btnIn').onclick=()=>busy(async()=>{msg('');if(!email()||!$('pass').value){msg('กรอกอีเมลและรหัสผ่าน');return}const {error}=await sb.auth.signInWithPassword({email:email(),password:$('pass').value});if(error)msg(thErr(error));else afterLogin()});
-$('btnUp').onclick=()=>busy(async()=>{const pw=$('pass').value;if(!email()){msg('กรอกอีเมล');return}if(pw.length<8){msg('รหัสผ่านต้องมีอย่างน้อย 8 ตัว');return}const {data,error}=await sb.auth.signUp({email:email(),password:pw,options:{emailRedirectTo:location.origin+location.pathname}});if(error)msg(thErr(error));else if(data.session)afterLogin();else if(data.user&&data.user.identities&&data.user.identities.length===0)msg('อีเมลนี้สมัครไว้แล้ว ให้กด "เข้าสู่ระบบ"');else{const r=await sb.auth.signInWithPassword({email:email(),password:pw});if(!r.error&&r.data.session)afterLogin();else msg('สมัครสำเร็จ! กด "เข้าสู่ระบบ" ได้เลย',true)}});
 $('btnResend').onclick=()=>busy(async()=>{if(!email()){msg('กรอกอีเมลก่อน');return}const {error}=await sb.auth.resend({type:'signup',email:email(),options:{emailRedirectTo:location.origin+location.pathname}});msg(error?thErr(error):'ส่งอีเมลยืนยันใหม่แล้ว',!error)});
 $('btnForgot').onclick=()=>busy(async()=>{if(!email()){msg('กรอกอีเมลก่อน');return}const {error}=await sb.auth.resetPasswordForEmail(email(),{redirectTo:location.origin+location.pathname});msg((error?thErr(error)+' · ':'ส่งลิงก์ตั้งรหัสผ่านใหม่ไปที่อีเมลแล้ว (ดูในสแปมด้วย) · ')+'ถ้าไม่ได้รับ ติดต่อผู้ดูแล BattLab ให้ตั้งรหัสใหม่ให้',!error)});
 $('btnDemo').onclick=()=>{demo=true;devs=[demoDev()];go('d/'+DEMO_ID+'/ov')};
