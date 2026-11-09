@@ -937,7 +937,7 @@ $('findBle').onclick=async ()=>{
      const list=await svc.getCharacteristic(bleService.slice(0,-1)+'5');
      const writer=await svc.getCharacteristic(bleService.slice(0,-1)+'2');
      await writer.writeValueWithResponse(Uint8Array.of(3));
-     for(let i=0;i<25;i++){
+     for(let i=0;i<45;i++){
        await new Promise(r=>setTimeout(r,350));
        const data=await list.readValue(), count=data.getUint8(0);
        if(count===119)continue;
