@@ -1,0 +1,22 @@
+DirectoryIndex home.html index.html
+
+# VOLTOL PRO v2.0 — Apache / Plesk Optimization
+<IfModule mod_headers.c>
+  Header set Access-Control-Allow-Origin "*"
+  Header set Access-Control-Allow-Methods "GET, POST, OPTIONS"
+  Header set Access-Control-Allow-Headers "Content-Type, Authorization"
+</IfModule>
+
+<IfModule mod_mime.c>
+  AddType application/json .json
+  AddType application/octet-stream .bin
+</IfModule>
+
+# Cache control for OTA manifest vs firmware
+<Files "version.json">
+  Header set Cache-Control "no-cache, no-store, must-revalidate"
+</Files>
+
+<Files "index.html">
+  Header set Cache-Control "no-cache, no-store, must-revalidate"
+</Files>

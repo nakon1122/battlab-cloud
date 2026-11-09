@@ -1,0 +1,54 @@
+<!doctype html><meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
+<script>
+'use strict';
+const origins = new Set(['https://voltol.battlab.net','https://batterycloud.battlab.net']);
+const key = 'sb-zpsxcdzkayqhzbdcdoed-auth-token';
+const held = new Map();
+const peers = new Map();
+function userId(value) { try { return JSON.parse(value)?.user?.id || null; } catch { return null; } }
+function notify(before, after, exclude) {
+  if (userId(before) === userId(after)) return;
+  for (const [peer, origin] of peers) {
+    if (peer !== exclude) peer.postMessage({ battlabAuth: 'changed' }, origin);
+  }
+}
+addEventListener('storage', e => {
+  if (e.key === key) notify(e.oldValue, e.newValue);
+});
+addEventListener('message', async e => {
+  if (!origins.has(e.origin) || e.source !== parent || !e.data || e.data.battlabAuth !== 'request') return;
+  const {id, op, value, wait, lease} = e.data;
+  if (typeof id !== 'string' || id.length > 80) return;
+  peers.set(e.source, e.origin);
+  const reply = (value, error) => e.source.postMessage({battlabAuth:'reply', id, value, error}, e.origin);
+  try {
+    if (op === 'lock') {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), wait > 0 ? Math.min(wait, 12000) : 12000);
+      const options = wait === 0 ? {ifAvailable:true} : {signal:controller.signal};
+      try {
+        await navigator.locks.request('lock:' + key, options, async lock => {
+          clearTimeout(timer);
+          if (!lock) { reply(null,'lock-timeout'); return; }
+          await new Promise(resolve => {
+            const watchdog = setTimeout(() => { held.delete(id); resolve(); }, 25000);
+            held.set(id, () => { clearTimeout(watchdog); held.delete(id); resolve(); });
+            reply(true);
+          });
+        });
+      } catch (err) { reply(null, err.name === 'AbortError' ? 'lock-timeout' : 'unavailable'); }
+      finally { clearTimeout(timer); }
+      return;
+    }
+    if (op === 'unlock') { held.get(lease)?.(); reply(true); return; }
+    if (op === 'get') { reply(localStorage.getItem(key)); return; }
+    const previous = localStorage.getItem(key);
+    if (op === 'set' && typeof value === 'string' && value.length <= 65536) {
+      localStorage.setItem(key, value); notify(previous, value, e.source); reply(true); return;
+    }
+    if (op === 'remove') { localStorage.removeItem(key); notify(previous, null, e.source); reply(true); return; }
+    reply(null,'invalid-operation');
+  } catch { reply(null,'unavailable'); }
+});
+</script>

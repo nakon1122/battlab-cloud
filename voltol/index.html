@@ -1,0 +1,892 @@
+<!doctype html><html lang="th"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="canonical" href="https://voltol.battlab.net/">
+<title>VOLTOL Cloud Pro · ข้อมูลจริง</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%23141619%27/%3E%3Cpath d=%27M36 6L15 36h15l-3 22 22-32H34z%27 fill=%27%23ffd45e%27/%3E%3C/svg%3E">
+<style>
+*{box-sizing:border-box}body{margin:0;background:#0b1422;color:#ebf3ff;font:16px system-ui,sans-serif}header{border-bottom:1px solid #293a51;padding:22px max(5vw,24px);display:flex;justify-content:space-between;align-items:center}b,.accent{color:#ffcd67}main{max-width:1140px;margin:auto;padding:40px 24px}h1{font-size:clamp(32px,6vw,60px);line-height:1.05;margin:12px 0}p,small{color:#a5b6ce}section,.metric{border:1px solid #30425a;background:#142236;border-radius:18px;padding:20px;margin:16px 0}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}.metric{margin:0}.metric strong{font-size:30px;display:block;margin-top:7px}.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}input,button,select{font:inherit;padding:10px 13px;border-radius:9px;border:1px solid #516884;background:#0c1929;color:#edf5ff;max-width:100%}button{background:#ffcd67;color:#152236;border:0;font-weight:700;cursor:pointer}button:disabled{opacity:.55}a{color:#79dbff}pre{white-space:pre-wrap;overflow-wrap:anywhere;color:#a8e8fc}li{margin:8px 0}img{width:100%;max-width:820px}[hidden]{display:none!important}
+
+body:has(#login:not([hidden])) main>h1,body:has(#login:not([hidden])) main>small,body:has(#login:not([hidden])) main>h1+p{display:none}
+.auth-shell{display:grid;grid-template-columns:1fr 1fr;padding:0;overflow:hidden;background:#101d2f;margin:24px 0;box-shadow:0 22px 70px #030a14a6}.auth-brand{display:flex;flex-direction:column;justify-content:center;padding:clamp(24px,5vw,64px);background:radial-gradient(ellipse at 0 0,#344352,transparent 75%),linear-gradient(145deg,#1b2b40,#101c2d);border-right:1px solid #30425a}.auth-kicker{letter-spacing:.16em;color:#ffcd67;font-size:13px;font-weight:750}.auth-brand h2{font-size:clamp(28px,4.1vw,49px);line-height:1.15;margin:16px 0 0}.auth-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.auth-tags span{border:1px solid #526782;border-radius:99px;padding:4px 11px;color:#c9daee;font-size:13px}.auth-panel{padding:clamp(20px,4vw,44px)}.auth-panel h2{margin-bottom:4px}.auth-panel h2+p{margin-top:0}.auth-switch{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;border:1px solid #344a65;background:#0a1625;border-radius:12px}.auth-switch button{background:transparent;color:#afc0d7}.auth-switch button[aria-pressed=true]{background:#263b54;color:#fff}.auth-form{display:grid;gap:12px}.auth-form label{display:grid;gap:6px;font-size:14px;color:#c7d7e9}.auth-form input{width:100%;min-height:44px}.auth-form button[type=submit]{min-height:46px}.auth-form .auth-show{justify-self:start;background:transparent;color:#ffcd67;padding:3px 0;font-size:13px}.auth-status{margin:12px 0 0}.auth-status:empty{display:none}.auth-status[data-error=true]{color:#ffb4ad}button:focus-visible,input:focus-visible{outline:2px solid #79dbff;outline-offset:3px}@media(max-width:680px){.auth-shell{grid-template-columns:1fr;margin-top:6px}.auth-brand{border-right:0;border-bottom:1px solid #30425a}.auth-brand h2 br{display:none}main{padding:20px 16px}}
+
+/* Interface rhythm adapted from the BattLab Cloud dashboard. */
+:root{--bg:#0b1117;--card:#18212a;--line:#2d3a46;--muted:#9baab5;--volt:#ffcd67;--signal:#36c4a8}
+body{background:var(--bg);color:#ecf1f4}header{position:sticky;top:0;z-index:20;background:#0b1117f5;border-color:var(--line)}
+section,.metric{background:var(--card);border-color:var(--line)}p,small{color:var(--muted)}
+button{transition:transform .16s ease,filter .16s ease}button:active:not(:disabled){transform:scale(.98)}button:hover:not(:disabled){filter:brightness(1.09)}
+.auth-form:not([hidden]){animation:cardIn .30s cubic-bezier(.2,.8,.2,1) both}
+#dashboard.enter>section,#dashboard.enter>.grid{animation:cardIn .44s cubic-bezier(.2,.8,.2,1) both}
+#dashboard.enter>:nth-child(2){animation-delay:.04s}#dashboard.enter>:nth-child(3){animation-delay:.08s}#dashboard.enter>:nth-child(4){animation-delay:.12s}
+.metric strong{font-variant-numeric:tabular-nums}.metric strong[data-changed]{animation:valueIn .34s cubic-bezier(.2,.8,.2,1)}
+@keyframes cardIn{from{opacity:0;transform:translateY(12px) scale(.987)}to{opacity:1;transform:none}}
+@keyframes valueIn{from{color:var(--signal);transform:translateY(3px)}to{color:inherit;transform:none}}
+.uart-flow{display:grid;grid-template-columns:auto minmax(45px,1fr) auto;gap:12px;align-items:center;max-width:500px;margin:12px 0 20px}
+.flow-node{border:1px solid var(--line);background:#111a22;padding:8px 12px;border-radius:12px;font-size:13px;font-weight:700}
+.flow-wire{display:grid;gap:5px}.flow-wire svg{width:100%;height:26px;display:block}.flow-wire path{stroke:#4b5b66;stroke-width:2;fill:none}
+.uart-flow[data-active=true] .flow-wire path{stroke:var(--signal);stroke-dasharray:9 7;animation:packets .8s linear infinite}.uart-flow[data-active=true] .flow-wire path+path{animation-direction:reverse}
+@keyframes packets{to{stroke-dashoffset:-32}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+:root{--bg:#0b1117;--card:#17212a;--line:#2b3b49;--volt:#ffd065;--signal:#41daa9}
+body{background:radial-gradient(ellipse at 60% 0,#172a35 0,transparent 440px),var(--bg)}
+header{background:#111a22ee;backdrop-filter:blur(12px)}main{padding-bottom:112px}
+body:has(#dashboard:not([hidden])) main>h1,body:has(#dashboard:not([hidden])) main>small,body:has(#dashboard:not([hidden])) main>h1+p{display:none}
+.cloud-head{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:18px}.cloud-head h1{margin:4px 0;font-size:clamp(28px,5vw,44px)}.cloud-head p{margin:5px 0}.cloud-tools{display:flex;gap:8px;flex-wrap:wrap}.cloud-tools button,.secondary{background:#243442;color:#edf5ff}.cloud-tools .primary{background:var(--volt);color:#152236}
+.module-select{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}.module-select p{margin:0}.module-select select{min-width:min(240px,100%)}
+.cloud-dock{position:fixed;bottom:calc(10px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);width:min(94vw,560px);padding:5px;display:grid;grid-template-columns:repeat(4,1fr);gap:4px;z-index:25;background:#111a22f4;backdrop-filter:blur(12px);border:1px solid #354758;border-radius:20px;box-shadow:0 10px 26px #0008}
+.cloud-dock button{min-height:49px;padding:5px;background:transparent;color:#b5c5d6;font-size:13px}.cloud-dock button[aria-pressed=true]{background:#ffd06522;color:var(--volt)}
+.health-pill{display:inline-block;margin-left:8px;padding:3px 8px;border:1px solid #526782;border-radius:99px;font-size:11px;white-space:nowrap}.health-pill[data-state=online]{color:#73e5ba;border-color:#2f8f72}.health-pill[data-state=offline]{color:#ffb4ad;border-color:#a95353}.health-pill[data-state=busy]{color:#ffd065;border-color:#94732b}.device-state{margin:0!important;font-size:13px;color:#73e5ba!important}.device-state[data-duplicate=true]{color:#ffd065!important}
+.cloud-view:not([hidden]){animation:cardIn .34s cubic-bezier(.2,.8,.2,1) both}.cloud-view h2{font-size:20px;margin:0 0 10px}
+#rpmChart{background:repeating-linear-gradient(0deg,#3e526430 0 1px,transparent 1px 24px);border-radius:10px}
+.cloud-dock{grid-template-columns:repeat(5,1fr)}
+.module-health{display:grid;gap:6px;padding:14px 16px;margin:0 0 12px;border-left:4px solid var(--muted)}.module-health[data-live=true]{border-left-color:var(--signal)}.module-health p{margin:0}.module-health strong{font-size:18px}.drag-progress{width:100%;accent-color:var(--signal)}.drag-run{border-top:1px solid var(--line);padding:10px 0}.drag-run summary{cursor:pointer}.drag-run p{margin:8px 0 0}.drag-live{font-size:clamp(18px,4vw,26px);font-variant-numeric:tabular-nums}
+.dash-status{padding:10px 0;color:var(--muted);font-size:14px}
+.pair-sheet{border:1px solid #354758;background:var(--card);color:#ebf3ff;border-radius:24px;width:min(94vw,540px);max-height:85dvh;overflow:auto;padding:20px}.pair-sheet[open]{animation:sheetIn .28s cubic-bezier(.2,.8,.2,1) both}.pair-sheet::backdrop{background:#04090dd0;backdrop-filter:blur(5px)}.pair-sheet h2{margin:4px 0}.pair-sheet input{width:100%;min-height:44px}.pair-sheet pre{background:#0b1117;border-radius:12px;padding:12px}.pair-sheet .row button{flex:none}.pair-sheet p[role=status]:empty{display:none}.pair-sheet .pair-head{justify-content:space-between}.pair-sheet details{margin-top:16px}.pair-sheet summary{cursor:pointer;color:var(--volt)}
+@keyframes sheetIn{from{opacity:.35;transform:translateY(24px)}to{opacity:1;transform:none}}
+@media(max-width:600px){.pair-sheet{margin:auto 0 0;width:100%;max-width:none;border-radius:24px 24px 0 0;padding-bottom:calc(20px + env(safe-area-inset-bottom))}.cloud-head{gap:8px}.cloud-tools button{padding:9px 12px}}
+.cloud-head{background:linear-gradient(125deg,#242119,#151b25 70%);border:1px solid #514329;border-radius:20px;padding:clamp(14px,4vw,26px)}.cloud-head h1{letter-spacing:-.035em}.cloud-dock button[aria-pressed=true]{background:#352a16;color:#ffda87}.module-health[data-live=true]{background:linear-gradient(120deg,#142b24,#171e26)}.drag-live{color:#ffda87;font-weight:750}.drag-progress{accent-color:#ffc857;min-height:14px}.module-select select{flex:1;min-width:0}.module-actions{display:flex;flex-wrap:wrap;gap:8px}.module-actions button{min-height:44px}.rename-form{display:grid;gap:12px}.rename-form input{width:100%}
+body{background:#0b0d10}.cloud-head{background:linear-gradient(120deg,#121418,#241d11);border-color:#594728}.module-select,.drag-console{background:linear-gradient(155deg,#212326,#121417);border-color:#45413a}.module-health[data-live=true]{border:1px solid #3e9365;background:#142c21}.module-actions button{min-width:120px}.drag-title{font-style:italic;font-size:clamp(28px,7vw,48px)!important;color:#ffcd67}.race-readings{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:#45413a;border:1px solid #45413a;border-radius:12px;overflow:hidden;margin:14px 0}.race-readings div{padding:12px;background:#181a1e}.race-readings strong{display:block;font-size:clamp(20px,5vw,36px);font-variant-numeric:tabular-nums}.drag-progress{height:14px}.module-select select{min-width:min(100%,220px)}
+.cloud-head{position:relative;overflow:hidden;background:radial-gradient(ellipse at 100% 0,#61431f 0,transparent 60%),#141416}.cloud-head::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 42%,#ffd06515 49%,transparent 56%);animation:dashSweep 6s ease-in-out infinite;pointer-events:none}.module-health strong::before{content:"";display:inline-block;width:.55em;height:.55em;border-radius:50%;margin-right:.55em;background:#83919e}.module-health[data-live=true] strong::before{background:#5bec9f;animation:livePulse 2.3s ease-out infinite}.cloud-view:not([hidden]){animation:panelIn .35s ease-out}.drag-track{height:14px;border:1px solid #4e432c;border-radius:99px;background:#24211c;overflow:hidden}.drag-track span{display:block;width:0;height:100%;background:linear-gradient(90deg,#b77820,#ffd065);box-shadow:0 0 16px #ffca62;transition:width .55s ease-out}.drag-markers{display:flex;justify-content:space-between;gap:4px;margin:8px 0 16px;color:var(--muted);font-size:12px}@keyframes dashSweep{0%,28%{transform:translateX(-100%)}70%,100%{transform:translateX(100%)}}@keyframes livePulse{0%{box-shadow:0 0 0 0 #5bec9f70}80%,100%{box-shadow:0 0 0 9px #5bec9f00}}@keyframes panelIn{from{opacity:.3;transform:translateY(7px)}to{opacity:1;transform:none}}@media(prefers-reduced-motion:reduce){.cloud-head::after,.module-health strong::before,.cloud-view:not([hidden]){animation:none}.drag-track span{transition:none}}
+.cloud-head{display:grid;grid-template-columns:1fr auto;align-items:center;border-radius:16px;margin-bottom:12px}.cloud-head h1{font-size:clamp(24px,5vw,39px)}.cloud-head p{margin:4px 0 0}.cloud-tools{justify-content:flex-end}.module-health{margin-bottom:10px}.module-select{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 14px;margin:0 0 16px;padding:14px}.module-select label,.module-select select{grid-column:1}.module-select select{width:100%;min-width:0}.module-actions{grid-column:2;grid-row:2}.module-actions button{min-width:0}.module-select p{grid-column:1/-1;font-size:13px}.metric{padding:12px 14px}.cloud-dock{border-color:#51432c}.cloud-view h2{letter-spacing:-.02em}@media(max-width:620px){.cloud-head{grid-template-columns:1fr;padding:14px}.cloud-tools{justify-content:flex-start}.cloud-tools button{font-size:13px}.module-select{grid-template-columns:1fr}.module-actions{grid-column:1;grid-row:auto}.module-actions button{flex:1}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.metric strong{font-size:clamp(18px,5vw,26px)}}
+</style><style>
+body{background:#0a0b0d}
+.track-cockpit{--gold:#ffd52e;--pulse:0;position:relative;isolation:isolate;overflow:hidden;display:grid;grid-template-columns:minmax(0,1.65fr) minmax(0,1fr);border:1px solid #594b25;border-radius:20px;margin:10px 0 14px;background:radial-gradient(ellipse at 18% 0%,#332810 0%,transparent 50%),repeating-linear-gradient(135deg,#ffffff05 0 1px,transparent 1px 6px),#111215;box-shadow:0 18px 50px #0008;color:#fff}
+.track-cockpit:before{content:"";position:absolute;z-index:-1;inset:0;background:linear-gradient(108deg,transparent 47%,#ffd52e18 48% 49%,transparent 50% 52%,#ffd52e0e 53% 54%,transparent 55%);pointer-events:none}
+.tc-instrument{min-width:0;padding:clamp(10px,2vw,24px)}
+.tc-kicker{display:flex;justify-content:space-between;align-items:center;gap:8px;color:var(--gold);font:800 .67rem system-ui;letter-spacing:.15em}
+.tc-source{color:#d6d3c9;letter-spacing:normal;font-weight:700}
+.tc-dial{position:relative;max-width:490px;margin:0 auto}
+.tc-dial svg{display:block;width:100%;height:auto}
+.tc-rail,.tc-fill{fill:none;stroke-width:13;stroke-linecap:round}
+.tc-rail{stroke:#3b3320}.tc-fill{stroke:var(--gold);filter:drop-shadow(0 0 7px #ffd52e80);stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset .42s cubic-bezier(.17,.77,.28,1)}
+.tc-tick{stroke:#b8ad88;stroke-width:2}
+.tc-needle{transform-origin:160px 151px;transform:rotate(-120deg);transition:transform .42s cubic-bezier(.17,.77,.28,1)}
+.tc-readout{position:absolute;top:53%;left:50%;transform:translate(-50%,-50%);min-width:35%;text-align:center;padding:4px 10px;border-radius:13px;background:#101114ed}
+.tc-readout strong{display:block;line-height:.95;font-size:clamp(36px,8vw,86px);font-weight:950;font-variant-numeric:tabular-nums;letter-spacing:-.07em}
+.tc-readout small{font-size:.66rem;color:var(--gold);font-weight:800;letter-spacing:.16em}
+.tc-side{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:clamp(9px,2vw,18px);align-content:center;border-left:1px solid #ffffff16;background:#0b0d10a8}
+.tc-tile{min-width:0;padding:12px 10px;border:1px solid #38342a;border-radius:10px;background:linear-gradient(140deg,#25241c,#141518 65%);box-shadow:inset 0 1px #ffffff0c}
+.tc-tile small{display:block;color:#d4c69d;font:800 .67rem system-ui;letter-spacing:.075em}
+.tc-tile strong{display:block;color:#fff;font-size:clamp(18px,3vw,34px);font-weight:850;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.tc-tile em{font-style:normal;font-size:.65rem;color:var(--gold)}
+.tc-tile[data-changed]{animation:tc-hit .42s ease-out}
+@keyframes tc-hit{from{border-color:#ffe085;box-shadow:inset 0 0 15px #ffd52e30}to{border-color:#38342a}}
+.track-cockpit[data-live="false"] .tc-needle{opacity:.4}
+.tc-status-rail{display:flex;gap:5px;margin-top:6px}.tc-status-rail i{flex:1;height:4px;transform:skewX(-20deg);background:#ffd52e30;transition:background .2s}
+.track-cockpit[data-live="true"] .tc-status-rail i{background:#ffd52e}
+@media(max-width:640px){.track-cockpit{grid-template-columns:1fr}.tc-side{border-left:0;border-top:1px solid #ffffff16;grid-template-columns:repeat(2,minmax(0,1fr))}.tc-dial{max-width:350px}}
+@media(prefers-reduced-motion:reduce){.tc-fill,.tc-needle,.tc-status-rail i{transition:none}.tc-tile[data-changed]{animation:none}}
+</style>
+<style>
+:root{--track-gold:#ffd52e;--track-panel:#15171b}
+.track-status{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;width:100%;padding:8px 0;font:inherit}
+.track-status article{min-width:0;border:1px solid #56503a;border-left:3px solid var(--track-gold);border-radius:8px;padding:7px 9px;background:repeating-linear-gradient(135deg,#ffffff06 0 2px,transparent 2px 7px),var(--track-panel);color:#f5f5f4}
+.track-status b{display:block;font-size:.69rem;color:var(--track-gold);letter-spacing:.06em}
+.track-status strong{display:block;font-size:.8rem;overflow-wrap:anywhere}
+.track-status small{display:block;color:#c6c7cb;font-size:.69rem;overflow-wrap:anywhere}
+.track-status strong::before{content:"";display:inline-block;width:.46em;height:.46em;margin-right:.35em;border-radius:50%;background:#aaa;vertical-align:middle}
+.track-status [data-state="on"]::before{background:#52ed95;box-shadow:0 0 8px #52ed9588}
+.track-status [data-state="off"]::before{background:#ff827a}
+@media(prefers-reduced-motion:no-preference){.track-status [data-state="on"]::before{animation:track-pulse 2.2s ease-in-out infinite}@keyframes track-pulse{50%{box-shadow:0 0 3px #52ed9522}}}
+@media(max-width:420px){.track-status{gap:4px}.track-status article{padding:5px}.track-status strong,.track-status small{font-size:.65rem}}
+</style>
+<style>
+.cyber-telemetry{margin:14px 0;background:repeating-linear-gradient(135deg,#ffffff05 0 1px,transparent 1px 7px),#121519;border:1px solid #544627;padding:clamp(10px,2vw,20px);border-radius:16px}
+.cyber-head{display:flex;justify-content:space-between;align-items:center;gap:12px}.cyber-head small,.cyber-head span{color:#ffd52e;letter-spacing:.06em}.cyber-head h2{margin:5px 0 12px}.cyber-head span{font-size:.72rem}
+.cyber-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.cyber-grid figure{margin:0;padding:10px;border:1px solid #3d4148;border-radius:10px;background:#0e1116}
+.cyber-grid figcaption{display:flex;justify-content:space-between;gap:8px;font-size:.8rem;color:#c6cbd1}.cyber-grid b{color:#ffe08b;font-variant-numeric:tabular-nums}
+.cyber-grid svg{display:block;width:100%;margin-top:6px;background:repeating-linear-gradient(0deg,#ffffff0c 0 1px,transparent 1px 18px)}
+@media(max-width:650px){.cyber-grid{grid-template-columns:1fr}.cyber-grid svg{max-height:72px}}
+</style>
+
+<style id="esp32-layout">
+:root{--gold:#ffd52e;--y:#ffd52e;--b:#00f0ff;--volt:#ffd52e;--track-gold:#ffd52e;--track-panel:#0f1622}
+html,body{background:radial-gradient(ellipse at 50% 0,#122438 0,transparent 520px),#06090f;color:#f0f6fc}
+body .module-header{position:sticky;top:0;z-index:20;display:flex;flex-wrap:wrap;gap:6px 14px;background:#0a1019eb;backdrop-filter:blur(14px);border-bottom:1px solid #1e2e42;padding:10px 14px;padding-top:max(10px,env(safe-area-inset-top))}
+.cloud-top-tools{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap;font-size:.77rem}
+body:not(:has(#dashboard:not([hidden]))) .module-header .track-status{display:none}
+main{max-width:1000px;padding:18px clamp(12px,3vw,24px) calc(116px + env(safe-area-inset-bottom))}
+#dashboard>.dashIntro{display:flex;justify-content:space-between;flex-wrap:wrap;align-items:center;gap:12px;margin-bottom:10px}
+.dash-label{font-size:11px;font-weight:700;letter-spacing:1px;color:var(--y)}
+.cloud-tools{justify-content:flex-start}.cloud-tools button,.module-actions button{font-size:.78rem;padding:7px 10px;min-width:0}
+.module-select{padding:10px 12px;margin-bottom:12px;background:#0b121d;border-color:#1e2e42;border-radius:12px}
+.module-select p{margin:0}.module-select p:empty{display:none}
+
+
+.cloud-dock{width:min(95vw,600px);border-radius:22px;background:#0c1420f0;border-color:#2a3f58;backdrop-filter:blur(16px)}
+.cloud-dock button{min-width:0;display:grid;align-content:center;justify-items:center;gap:3px;border:0;border-radius:16px;color:#889db5;font-size:clamp(9px,2.4vw,12px)}
+.cloud-dock button::before{content:attr(data-icon);font-size:18px;line-height:1}
+.cloud-dock button[aria-pressed=true]{color:var(--y);background:linear-gradient(180deg,#ffd52e22,#ffd52e08);box-shadow:inset 0 1px #ffd52e44}
+#login .auth-brand,#login .auth-panel,.drag-console,.cyber-telemetry{background:linear-gradient(165deg,#131e2e,#0d1520);border-color:#1e2e42}
+#login .auth-brand h2{color:#f0f6fc}
+@media(max-width:420px){body .module-header{gap:5px;padding-inline:8px}.cloud-top-tools{font-size:.68rem}.module-header .track-status article{padding:5px}.module-header .track-status strong,.module-header .track-status small{font-size:.65rem}}
+.brand{font-weight:900;letter-spacing:1.2px;white-space:nowrap;font-size:17px}.brand b{color:var(--y);text-shadow:0 0 12px #ffd52e66}.brand small{color:var(--b);font-weight:700;letter-spacing:.5px;margin-left:6px;font-size:11px;text-transform:uppercase;background:#00f0ff14;padding:2px 7px;border-radius:99px;border:1px solid #00f0ff33}
+.track-cockpit{position:relative;isolation:isolate;overflow:hidden;display:grid;grid-template-columns:minmax(0,1.65fr) minmax(0,1fr);border:1px solid #594B25;border-radius:20px;margin:10px 0 14px;background:radial-gradient(ellipse at 18% 0,#332810 0,transparent 52%),repeating-linear-gradient(135deg,#ffffff05 0 1px,transparent 1px 6px),#0E1117;box-shadow:0 18px 46px #0009;color:#fff}
+.tc-instrument{min-width:0;padding:clamp(10px,2vw,22px)}.tc-kicker{display:flex;justify-content:space-between;align-items:center;gap:8px;color:var(--gold);font:800 .68rem system-ui;letter-spacing:.14em}.tc-source{color:#d6d3c9;letter-spacing:normal;font-weight:700}
+.tc-dial{position:relative;max-width:480px;margin:0 auto}.tc-dial svg{display:block;width:100%;height:auto}.tc-rail,.tc-fill{fill:none;stroke-width:13;stroke-linecap:round}.tc-rail{stroke:#332C1C}.tc-fill{stroke:var(--gold);filter:drop-shadow(0 0 8px #ffd52e88);stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset .38s cubic-bezier(.17,.77,.28,1)}.tc-tick{stroke:#b8ad88;stroke-width:2}.tc-needle{transform-origin:160px 151px;transform:rotate(-120deg);transition:transform .38s cubic-bezier(.17,.77,.28,1)}
+.tc-readout{position:absolute;top:53%;left:50%;transform:translate(-50%,-50%);min-width:35%;text-align:center;padding:4px 10px;border-radius:13px;background:#0D0F14E8}.tc-readout strong{display:block;line-height:.95;font-size:clamp(36px,8vw,84px);font-weight:950;letter-spacing:-.06em}.tc-readout small{font-size:.66rem;color:var(--gold);font-weight:800;letter-spacing:.16em}
+.tc-side{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:clamp(9px,2vw,16px);align-content:center;border-left:1px solid #ffffff14;background:#090C10B0}
+.tc-tile{min-width:0;padding:11px 10px;border:1px solid #38342a;border-radius:12px;background:linear-gradient(145deg,#222018,#121419 68%)}.tc-tile small{display:block;color:#d4c69d;font:800 .66rem system-ui;letter-spacing:.07em}.tc-tile strong{display:block;color:#fff;font-size:clamp(18px,3vw,32px);font-weight:850}.tc-tile em{font-style:normal;font-size:.65rem;color:var(--gold)}
+.tc-status-rail{display:flex;gap:5px;margin-top:6px}.tc-status-rail i{flex:1;height:4px;transform:skewX(-20deg);background:#ffd52e2e}.track-cockpit[data-live="true"] .tc-status-rail i{background:#ffd52e}
+
+@media(max-width:680px){.track-cockpit{grid-template-columns:1fr}.tc-side{border-left:0;border-top:1px solid #ffffff14}}@media(prefers-reduced-motion:reduce){.tc-fill,.tc-needle{transition:none}}
+.track-status{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;width:100%;padding:6px 0 2px}.track-status article{min-width:0;border:1px solid #3A4659;border-left:3px solid var(--track-gold);border-radius:10px;padding:7px 9px;background:#0F1722;color:#f5f5f4}.track-status b{display:block;font-size:.68rem;color:var(--track-gold);letter-spacing:.05em}.track-status strong{display:block;font-size:.79rem;overflow-wrap:anywhere}.track-status small{display:block;color:#9FB0C2;font-size:.68rem;overflow-wrap:anywhere}.track-status strong::before{content:"";display:inline-block;width:.48em;height:.48em;margin-right:.35em;border-radius:50%;background:#64748B;vertical-align:middle}.track-status [data-state="on"]::before{background:#00E599;box-shadow:0 0 8px #00E599}.track-status [data-state="off"]::before{background:#FF5E57}
+.dashIntro{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}.dashIntro h1{font-size:clamp(22px,4.5vw,32px);margin:2px 0;line-height:1.1}.dashIntro .l{color:var(--y)}
+</style>
+<style id="race-flash-layout">
+.cloud-dock{grid-template-columns:repeat(6,minmax(0,1fr))}
+.race-target{border:1px solid #1e2e42;border-radius:14px;padding:9px 12px;background:#0b121d;display:flex;flex-wrap:wrap;gap:8px}.race-target legend{font-size:.8rem;color:#a5b6ce}.race-target label{cursor:pointer;display:flex;gap:6px;align-items:center;padding:6px 9px;border-radius:8px}.race-target label:has(:checked){background:#ffd52e;color:#06090f;font-weight:800}.race-target input{accent-color:#ffd52e}
+.race-clock{display:flex;justify-content:space-between;align-items:end;gap:12px;margin:14px 0}.race-clock>strong{font-size:clamp(36px,10vw,76px);line-height:1;color:#ffd52e;font-variant-numeric:tabular-nums}.race-clock div{text-align:right}.race-clock small{display:block}
+.race-splits{width:100%;border-collapse:collapse;margin:14px 0;font-variant-numeric:tabular-nums}.race-splits th,.race-splits td{text-align:left;border-bottom:1px solid #1e2e42;padding:8px 4px;font-size:clamp(10px,2.3vw,14px)}.race-splits [data-target=true]{background:#ffd52e16}
+.usb-install{padding:14px;margin:10px 0;background:#0b121d}.usb-install h3{margin-top:0}
+</style><style id="compact-dashboard">
+.temperatures{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.temperatures .metric{padding:8px 12px;border-radius:12px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:4px 8px}
+.temperatures .metric strong{font-size:1rem;margin:0}
+.dashboard-graphs{margin-top:10px;border:1px solid #1e2e42;border-radius:12px;background:#0b121d}
+.dashboard-graphs summary{cursor:pointer;padding:10px 12px;color:#c2d1e0;font-weight:700}
+.dashboard-graphs[open]{padding:0 8px}
+</style>
+<header class="module-header"><div class="brand"><b>⚡</b> VOLTOL<small>Monitor · Cloud</small></div><span class="cloud-top-tools"><a href="https://www.battlab.net/">← BATTLAB Home</a> <span id="cloudHealth" class="health-pill" data-state="unknown">กำลังตรวจสอบ Cloud</span></span><aside class="track-status" aria-label="สถานะการเชื่อมต่อ">
+<article><b><span aria-hidden="true">☁</span> ESP32 → CLOUD</b><strong id="tcCloud" data-state="unknown">รอตรวจสอบ</strong><small id="tcCloudDetail">—</small></article>
+<article><b><span aria-hidden="true">◉</span> WI-FI</b><strong id="tcWifi" data-state="unknown">รอตรวจสอบ</strong><small id="tcWifiDetail">—</small></article>
+<article><b><span aria-hidden="true">⇄</span> UART</b><strong id="tcUart" data-state="unknown">รอตรวจสอบ</strong><small id="tcUartDetail">—</small></article>
+</aside></header>
+<main>
+<p id="status" role="status"></p>
+<section id="login" class="auth-shell">
+  <aside class="auth-brand"><span class="auth-kicker">VOLTOL / CLOUD</span><h2>ข้อมูล Controller<br>ในที่เดียว</h2><p>ดูข้อมูลสด ตรวจการสื่อสาร UART และจัดการอุปกรณ์ VOLTOL ของคุณ</p><div class="auth-tags"><span>ข้อมูลสด</span><span>วินิจฉัย UART</span></div></aside>
+  <div class="auth-panel">
+    <h2 id="authTitle">เข้าสู่ระบบ</h2><p id="authHint">เข้าสู่บัญชีเพื่อดูอุปกรณ์ของคุณ</p>
+    <form method="post" id="auth" class="auth-form"><label>อีเมล<input name="email" type="email" autocomplete="username" required placeholder="you@example.com"></label><label>รหัสผ่าน<input name="password" type="password" autocomplete="current-password" required></label><button class="auth-show" type="button" aria-pressed="false">แสดงรหัสผ่าน</button><button type="submit">เข้าสู่ระบบ</button></form>
+    <p><a href="https://www.battlab.net/">สมัครบัญชีที่ BATTLAB Home</a></p><p id="authStatus" class="auth-status" role="status" aria-live="polite"></p>
+  </div>
+</section>
+<div id="dashboard" hidden>
+<div class="dashIntro"><div><div class="dash-label">VOLTOL / CLOUD</div><h1>Controller Dashboard</h1></div><div class="cloud-tools"><button class="primary" id="openPair" type="button">เชื่อมโมดูล Bluetooth</button><button id="refresh" type="button">รีเฟรช</button><button id="logout" type="button">ออกจากระบบ</button></div></div>
+
+
+<section class="module-select"><label for="devices">โมดูลที่กำลังดู</label><select id="devices"></select><div class="module-actions"><button id="renameDevice" type="button" disabled>เปลี่ยนชื่อ</button><button id="deleteDevice" type="button" class="secondary" disabled>ลบโมดูล</button></div><p id="deviceState" class="device-state" role="status"></p><p id="updated"></p></section>
+<dialog id="renameDialog" class="pair-sheet"><form method="post" id="renameForm" class="rename-form"><label for="moduleName">ชื่อที่แสดงของโมดูล</label><input id="moduleName" maxlength="100" required><div class="row"><button type="submit">บันทึกชื่อ</button><button type="button" id="cancelRename" class="secondary">ยกเลิก</button></div><p id="renameStatus" role="status"></p></form></dialog>
+<div id="cloud-overview" class="cloud-view"><section id="tcCockpit" class="track-cockpit" data-live="false" aria-label="Track Carbon">
+<div class="tc-instrument"><div class="tc-kicker"><span>01 / TRACK CARBON</span><span id="tcSource" class="tc-source">รอข้อมูล</span></div>
+<div class="tc-dial"><svg viewBox="0 0 320 223" aria-hidden="true"><path class="tc-rail" d="M60 209 A115.47 115.47 0 1 1 260 209"/><path id="tcDialArc" class="tc-fill" pathLength="1" d="M60 209 A115.47 115.47 0 1 1 260 209"/><line class="tc-tick" x1="76.9" y1="199.0" x2="69.9" y2="203.0"/><line class="tc-tick" x1="65.5" y1="167.7" x2="57.6" y2="169.1"/><line class="tc-tick" x1="65.5" y1="134.3" x2="57.6" y2="132.9"/><line class="tc-tick" x1="76.9" y1="103.0" x2="69.9" y2="99.0"/><line class="tc-tick" x1="98.3" y1="77.5" x2="93.2" y2="71.3"/><line class="tc-tick" x1="127.2" y1="60.8" x2="124.4" y2="53.3"/><line class="tc-tick" x1="160.0" y1="55.0" x2="160.0" y2="47.0"/><line class="tc-tick" x1="192.8" y1="60.8" x2="195.6" y2="53.3"/><line class="tc-tick" x1="221.7" y1="77.5" x2="226.8" y2="71.3"/><line class="tc-tick" x1="243.1" y1="103.0" x2="250.1" y2="99.0"/><line class="tc-tick" x1="254.5" y1="134.3" x2="262.4" y2="132.9"/><line class="tc-tick" x1="254.5" y1="167.7" x2="262.4" y2="169.1"/><line class="tc-tick" x1="243.1" y1="199.0" x2="250.1" y2="203.0"/><path id="tcNeedle" class="tc-needle" d="M160 40L156 117H164Z" fill="#fff0ad"/></svg>
+<div class="tc-readout"><strong id="tcSpeed">—</strong><small>KM/H</small></div></div>
+<div class="tc-status-rail" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+<div class="tc-side"><div class="tc-tile"><small>MOTOR SPEED</small><strong id="tcDashRpm">—</strong><em>RPM</em></div><div class="tc-tile"><small>PACK VOLTAGE</small><strong id="tcDashVolt">—</strong><em>V</em></div><div class="tc-tile"><small>BATTERY CURRENT</small><strong id="tcDashAmp">—</strong><em>A</em></div><div class="tc-tile"><small>LIVE POWER</small><strong id="tcDashPower">—</strong><em>kW</em></div></div></section>
+
+<div id="metrics" class="grid temperatures"></div><details class="dashboard-graphs"><summary>กราฟข้อมูลย้อนหลัง</summary><section id="cyberTelemetry" class="cyber-telemetry" aria-label="กราฟข้อมูลจริง">
+<div class="cyber-head"><div><small>CYBER-CARBON / TELEMETRY</small><h2>สัญญาณจากโมดูล</h2></div><span id="cyberSamples">รอข้อมูล</span></div>
+<div class="cyber-grid">
+<figure><figcaption>ความเร็ว <b id="cyberSpeed">—</b></figcaption><svg id="cyberSpeedChart" viewBox="0 0 300 72" role="img" aria-label="กราฟความเร็ว"></svg></figure>
+<figure><figcaption>กระแส <b id="cyberAmp">—</b></figcaption><svg id="cyberAmpChart" viewBox="0 0 300 72" role="img" aria-label="กราฟกระแส"></svg></figure>
+<figure><figcaption>แรงดัน <b id="cyberVolt">—</b></figcaption><svg id="cyberVoltChart" viewBox="0 0 300 72" role="img" aria-label="กราฟแรงดัน"></svg></figure>
+</div></section><section><h2>กราฟรอบมอเตอร์</h2><p id="chartLabel">รอข้อมูล RPM</p><svg id="rpmChart" viewBox="0 0 600 135" width="100%" role="img" aria-label="กราฟรอบมอเตอร์ย้อนหลัง"></svg></section></details>
+</div>
+<div id="cloud-link" class="cloud-view" hidden><section id="moduleHealth" class="module-health"><small>โมดูล · การเชื่อมต่อ Cloud</small><strong id="moduleOnline">รอข้อมูลจากโมดูล</strong><p id="dashboardLink"></p><p id="wifiHealth">Wi-Fi · ยังไม่ทราบสถานะ</p><p id="streamHealth"></p></section><section><h2>Controller · UART</h2><p id="controllerStatus"></p><div id="uartFlow" class="uart-flow" aria-label="สถานะการส่งข้อมูล UART"><span class="flow-node">โมดูล</span><div class="flow-wire"><svg viewBox="0 0 200 26" preserveAspectRatio="none" aria-hidden="true"><path d="M0 7H200"/><path d="M0 19H200"/></svg></div><span class="flow-node">Controller</span></div><div id="uartMetrics" class="grid"></div></section>
+</div>
+<div id="cloud-history" class="cloud-view" hidden><section><h2>เหตุขัดข้องล่าสุด</h2><ul id="events"></ul><button id="exportReadings" type="button" disabled>ดาวน์โหลดข้อมูลล่าสุด (CSV)</button></section>
+</div>
+<div id="cloud-firmware" class="cloud-view" hidden><section><p class="dash-label">VOLTOL / FIRMWARE</p><h2>เฟิร์มแวร์ ESP32-S3</h2><section class="usb-install"><h3>ติดตั้งผ่าน USB บนเว็บ</h3><p>สำหรับติดตั้งใหม่บน ESP32-S3 DevKitC-1 แฟลช 8 MB ใช้ Chrome หรือ Edge บนคอมพิวเตอร์</p><a href="/fw/gemini-flash/" target="_blank" rel="noopener">เปิดเครื่องมือแฟลชผ่านเว็บ</a></section><h3>อัปเดตผ่าน OTA</h3><p id="firmwareVersion"></p><p><a href="/fw/VOLTOL-S3-Gemini-ReadyToFlash.zip">ดาวน์โหลดเฟิร์มแวร์ Gemini สำหรับ ESP32-S3 ผ่าน USB</a><br><small>บิลด์ Gemini รายงานเวอร์ชัน 1.6.6 บอร์ด VOLTOL เดิมให้ใช้ UPDATE_S3_WINDOWS.bat เพื่อเก็บ Wi-Fi และโทเคน</small></p><p>ดาวน์โหลด <a href="/fw/VOLTOL-S3-v1.6.6-ReadyToFlash.zip">VOLTOL v1.6.6 รุ่นเดิม</a> สำหรับอัปเดตผ่าน USB หรือใช้เมนู Firmware บน <a href="http://192.168.4.1/">หน้าโมดูล</a></p><button id="remoteOta" type="button" disabled>สั่งอัปเดตผ่าน Cloud</button><p id="remoteOtaStatus" role="status"></p><a href="http://192.168.4.1/">เปิดเว็บตั้งค่าโมดูล</a> <a href="https://v.racexesc.chatgpt.site/version.json" target="_blank" rel="noreferrer">ดูเวอร์ชันล่าสุด</a></section>
+</div>
+<div id="cloud-drag" class="cloud-view" hidden>
+<section class="drag-console">
+  <p class="dash-label">VOLTOL / DRAG TIMER</p>
+  <h2 class="drag-title" id="dragTargetTitle">402 m</h2>
+  <fieldset class="race-target"><legend>ระยะที่ต้องการดู</legend><label><input type="radio" name="raceTarget" value="201.168">201 m</label><label><input type="radio" name="raceTarget" value="402.336" checked>402 m</label><label><input type="radio" name="raceTarget" value="1000">1,000 m</label></fieldset>
+  <small>เลือกระยะที่แสดงบน Cloud ส่วน RPM / GPS / Hybrid ตั้งจากหน้าโมดูล</small>
+  <p id="dragCloudResult" class="drag-live">รอข้อมูลจับเวลาจากโมดูล</p>
+  <div class="race-clock"><strong id="raceTime">—</strong><div><small>ความเร็ว</small><strong id="raceSpeed">—</strong></div></div>
+  <progress id="dragProgress" class="drag-progress" max="402.336" value="0" aria-label="ระยะทางที่บันทึก"></progress>
+  <div class="race-readings"><div><small>ระยะทาง</small><strong id="raceDistance">—</strong></div><div><small>แรงดันแบตเตอรี่</small><strong id="raceVolt">—</strong></div><div><small>กระแสแบตเตอรี่</small><strong id="raceAmp">—</strong></div><div><small>รอบมอเตอร์</small><strong id="raceRpm">—</strong></div></div>
+  <div id="dragSplitPanel"></div>
+  <div class="row"><button id="dragArm" disabled>ARM</button><button id="dragCancel" class="secondary" disabled>ยกเลิก</button></div>
+  <p id="dragCommandStatus" role="status"></p>
+</section><section><h2>ผลการวิ่งล่าสุด</h2><div id="dragHistory"></div></section></div>
+<div id="cloud-tune" class="cloud-view" hidden><section><p class="dash-label">VOLTOL / TUNE</p><h2>จูนพารามิเตอร์คอนโทรลเลอร์</h2><p>เชื่อม Wi-Fi ของโมดูล เปิดหน้า ESP32 แล้วเลือก TUNE เพื่ออ่านค่า สำรอง กู้คืน และเขียนค่าผ่าน UART</p><a href="http://192.168.4.1/" target="_blank" rel="noopener">เปิดหน้าจูนบนโมดูล</a><p>การอ่านและเขียนพารามิเตอร์จาก Cloud ยังต้องใช้เฟิร์มแวร์และช่องทางคำสั่งที่รองรับ</p></section></div>
+<nav class="cloud-dock" aria-label="เมนู Cloud"><button data-cloud="overview" data-icon="◴" aria-pressed="true">หน้าปัด</button><button data-cloud="drag" data-icon="⚑" aria-pressed="false">จับเวลา</button><button data-cloud="history" data-icon="≋" aria-pressed="false">ประวัติ</button><button data-cloud="link" data-icon="⇄" aria-pressed="false">การเชื่อมต่อ</button><button data-cloud="tune" data-icon="≛" aria-pressed="false">จูน</button><button data-cloud="firmware" data-icon="⚙" aria-pressed="false">เฟิร์มแวร์</button></nav>
+</div>
+<dialog class="pair-sheet" id="pairSheet" aria-labelledby="pairTitle">
+<div class="row pair-head"><h2 id="pairTitle">เชื่อมโมดูลผ่าน Bluetooth</h2><button type="button" class="secondary" id="closePair" aria-label="ปิด">✕</button></div>
+<p>เปิดโมดูลที่ยังไม่ได้ผูกบัญชี ระบบจะเปิดโหมดจับคู่อัตโนมัติ 3 นาที กดค้นหา Bluetooth แล้วเลือก <b>VOLTOL Setup</b></p>
+<p>ถ้าโมดูลเคยผูกบัญชี ให้เปิดเมนู Bluetooth บน <a href="http://192.168.4.1/">หน้าโมดูล</a> แล้วใช้ลิงก์จับคู่ที่สร้างจากบอร์ด</p><p id="grantStatus" role="status"></p><form method="post" id="bleForm" class="auth-form"><button type="button" id="findBle">ค้นหาโมดูล Bluetooth</button><div id="bleWifi" hidden><label id="scanLabel" hidden>เลือก Wi-Fi ที่โมดูลพบ<select id="bleNetworks"></select></label>
+
+<label>ชื่อ Wi-Fi 2.4 GHz<input name="ssid" required maxlength="32"></label>
+<label>รหัสผ่าน Wi-Fi<input name="pass" type="password" maxlength="64" autocomplete="off"></label>
+<label>ชื่อโมดูล (เว้นว่างเพื่อใช้ชื่ออัตโนมัติ)<input name="label" maxlength="100"></label><button type="submit">บันทึกและเชื่อม Wi-Fi</button></div><p id="bleResult" role="status"></p>
+</form>
+<details id="usbPair" hidden><summary>ตั้งค่าผ่าน USB Serial</summary><form method="post" id="register" class="row"><input name="label" maxlength="100" required placeholder="ชื่อโมดูล" aria-label="ชื่อโมดูล"><button>สร้างรหัสโมดูล</button></form><pre id="token" hidden></pre><p id="pairStatus" role="status"></p></details>
+</dialog>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script><script src="https://www.battlab.net/session-client.js?v=2"></script><script src="https://www.battlab.net/battlab-nav.js?v=2" defer></script><script type="module">
+const base='https://zpsxcdzkayqhzbdcdoed.supabase.co', key='sb_publishable_roXek86Fm64tr_vEG2pYRw_4onX6cBJ';
+const $=id=>document.getElementById(id);
+function renderTrackCockpit({speed,rpm,volt,amp,max=120}={}){
+  const live=[speed,rpm,volt,amp].some(Number.isFinite);
+  const box=$('tcCockpit');
+  if(box.dataset.live!==String(live))box.dataset.live=String(live);
+  const value=(id,v,digits)=>{
+    const el=$(id), next=Number.isFinite(v)?v.toFixed(digits):'—';
+    if(el.textContent===next)return;
+    el.textContent=next;
+    const tile=el.closest('.tc-tile');
+    if(tile&&Number.isFinite(v)&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
+      tile.getAnimations().forEach(animation=>animation.cancel());
+      tile.animate([{borderColor:'#ffe085',boxShadow:'inset 0 0 15px #ffd52e30'},{borderColor:'#38342a',boxShadow:'none'}],{duration:420});
+    }
+  };
+  const source=live?'ข้อมูลสด':'รอข้อมูล';
+  if($('tcSource').textContent!==source)$('tcSource').textContent=source;
+  value('tcSpeed',speed,0);
+  value('tcDashRpm',rpm,0);value('tcDashVolt',volt,1);value('tcDashAmp',amp,1);
+  value('tcDashPower',Number.isFinite(volt)&&Number.isFinite(amp)?volt*amp/1000:null,2);
+  const ratio=Number.isFinite(speed)?Math.min(1,Math.max(0,speed/(max>0?max:120))):0;
+  $('tcDialArc').style.strokeDashoffset=String(1-ratio);
+  $('tcNeedle').style.transform='rotate('+(-120+240*ratio)+'deg)';
+}
+let session=null, refreshBusy=false, refreshQueued=false, deviceRows=[];
+let shownDevice=null, lastReading=null;
+let cachedRows=[], cachedEvents=[], cachedAt=0;
+let dragHistoryKey='';
+const formatNumber=(value,digits,unit)=>Number.isFinite(value)?value.toFixed(digits)+unit:'—';
+const receivedAgo=reading=>reading?Date.now()-Date.parse(reading.received_at):Infinity;
+const inBangkok=timestamp=>new Date(timestamp).toLocaleString('th-TH',{timeZone:'Asia/Bangkok'});
+function dragSplits(drag){
+  const splits=Array.isArray(drag?.splits)?drag.splits:[];
+  return !splits.length||splits.some(Array.isArray)
+    ? [[18.288,'60 ft'],[201.168,'201 m'],[402.336,'402 m'],[1000,'1,000 m']]
+    : [[18.288,'60 ft'],[100,'100 m'],[201.168,'201 m'],[402.336,'402 m']];
+}
+function readDragSplit(drag,index){
+  const raw=drag?.splits?.[index];
+  return Array.isArray(raw)?{done:Number.isFinite(raw[0])&&raw[0]>0,t:raw[0],v:raw[1]}:raw;
+}
+function splitDetails(drag){
+  const table=document.createElement('table');
+  table.className='race-splits';
+  const head=table.createTHead().insertRow();
+  for(const label of ['ระยะ','เวลา','ความเร็ว','RPM','A','V']){
+    const cell=document.createElement('th');cell.scope='col';cell.textContent=label;head.append(cell);
+  }
+  const body=table.createTBody();
+  for(const [index,[distance,label]] of dragSplits(drag).entries()){
+    const split=readDragSplit(drag,index), row=body.insertRow();
+    if(distance===Number($('dragProgress').max))row.dataset.target='true';
+    const values=split?.done?[formatNumber(split.t,3,' s'),formatNumber(split.v,1,' km/h'),formatNumber(split.rpm,0,''),formatNumber(split.amp,1,''),formatNumber(split.voltage,1,'')]:Array(5).fill('—');
+    for(const value of [label,...values])row.insertCell().textContent=value;
+  }
+  return table;
+}
+function renderDragTarget(drag){
+  const target=document.querySelector('input[name="raceTarget"]:checked');
+  const distance=Number(target.value);
+  $('dragTargetTitle').textContent=target.parentElement.textContent.trim();
+  const progress=$('dragProgress');
+  progress.max=distance;
+  progress.value=Number.isFinite(drag?.distance_m)?Math.min(distance,Math.max(0,drag.distance_m)):0;
+  const index=dragSplits(drag).findIndex(([meters])=>meters===distance);
+  const split=readDragSplit(drag,index);
+  const reached=Number.isFinite(drag?.distance_m)&&drag.distance_m>=distance;
+  $('raceTime').textContent=split?.done?formatNumber(split.t,3,' s'):reached?'—':formatNumber(drag?.elapsed_s,3,' s');
+  $('raceSpeed').textContent=split?.done?formatNumber(split.v,1,' km/h'):reached||receivedAgo(lastReading)>=6000?'—':formatNumber(lastReading?.payload?.speed_kmh,1,' km/h');
+  $('dragSplitPanel').replaceChildren(splitDetails(drag));
+}
+for(const radio of document.querySelectorAll('input[name="raceTarget"]'))radio.onchange=()=>renderDragTarget(lastReading?.payload?.drag);
+
+let cyberKey='';
+function renderCyberTelemetry(history,live){
+  const newest=history[0];
+  const key=String(newest?.id??newest?.received_at??'')+'|'+history.length+'|'+live;
+  if(key===cyberKey)return;
+  cyberKey=key;
+  const points=history.slice(0,60).reverse().map(row=>({at:Date.parse(row.received_at),p:row.payload??{}})).filter(row=>Number.isFinite(row.at));
+  $('cyberSamples').textContent=points.length?(live?'ข้อมูลสด · ':'ย้อนหลัง · ')+points.length+' ชุด':'รอข้อมูล';
+  for(const [id,field,unit,color] of [['Speed','speed_kmh','km/h','#ffd52e'],['Amp','current','A','#65e9f0'],['Volt','voltage','V','#a3ed89']]){
+    const el=$('cyber'+id+'Chart');
+    el.replaceChildren();
+    const latest=newest?.payload?.[field];
+    $('cyber'+id).textContent=live&&Number.isFinite(latest)?latest.toFixed(1)+' '+unit:'—';
+    const valid=points.map(row=>row.p[field]).filter(Number.isFinite);
+    if(!valid.length)continue;
+    const low=Math.min(...valid), high=Math.max(...valid);
+    const first=points[0].at, span=Math.max(1,points.at(-1).at-first);
+    let path='', gap=true;
+    for(const row of points){
+      const value=row.p[field];
+      if(!Number.isFinite(value)){gap=true;continue;}
+      const x=5+(row.at-first)*290/span;
+      const y=high===low?36:66-(value-low)*60/(high-low);
+      path+=(gap?'M':'L')+x.toFixed(1)+' '+y.toFixed(1)+' ';gap=false;
+    }
+    const line=document.createElementNS('http://www.w3.org/2000/svg','path');
+    line.setAttribute('d',path);line.setAttribute('fill','none');line.setAttribute('stroke',color);
+    line.setAttribute('stroke-width','2');el.append(line);
+  }
+}
+function renderDragHistory(history,device){
+  const runs=[];
+  let previous=null;
+  for(const row of history){
+    const drag=row.payload?.drag;
+    if(drag?.state!=='DONE'||!Number.isFinite(drag.elapsed_s)||!Number.isFinite(drag.distance_m)){previous=null;continue;}
+    const signature=drag.run_id||drag.elapsed_s+'|'+drag.distance_m;
+    if(previous!==signature)runs.push(row);
+    else runs[runs.length-1]=row;
+    previous=signature;
+  }
+  const key=device+'|'+runs.map(row=>row.received_at).join('|');
+  if(key===dragHistoryKey)return;
+  dragHistoryKey=key;
+  const list=$('dragHistory');
+  const openRuns=new Set(Array.from(list.querySelectorAll('details[open]'),row=>row.dataset.run));
+  list.replaceChildren();
+  if(!runs.length){list.textContent='ยังไม่มีผลจบการวิ่งในข้อมูลล่าสุดของโมดูลนี้';return;}
+  for(const row of runs){
+    const drag=row.payload.drag;
+    const details=document.createElement('details'), summary=document.createElement('summary'), body=document.createElement('p');
+    details.className='drag-run';
+    details.dataset.run=device+'|'+(drag.run_id||row.received_at);
+    details.open=openRuns.has(details.dataset.run);
+    const recordedAt=new Date(row.received_at).toLocaleString('th-TH',{
+      timeZone:'Asia/Bangkok',year:'numeric',month:'2-digit',day:'2-digit',
+      hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'
+    });
+    summary.textContent=recordedAt+' · '+drag.distance_m.toFixed(0)+' ม. · '+drag.elapsed_s.toFixed(3)+' วิ';
+    body.textContent='จบการวิ่ง · ระยะที่รายงาน '+drag.distance_m.toFixed(1)+' ม. · เวลา '+drag.elapsed_s.toFixed(3)+' วิ';
+    details.append(summary,body,splitDetails(drag));list.append(details);
+  }
+}
+let dragRequestBusy=false;
+async function sendDragCommand(command){
+  const device=$('devices').value;
+  if(!session||!device||dragRequestBusy||shownDevice!==device||!navigator.onLine||
+    receivedAgo(lastReading)>=6000||$(command==='A'?'dragArm':'dragCancel').disabled)return;
+  dragRequestBusy=true;
+  const status=$('dragCommandStatus');
+  try{
+    await api('/rest/v1/voltol_drag_commands',{body:{device_id:device,command}});
+    status.textContent='ส่งคำสั่งแล้ว · ตรวจสถานะตัวจับเวลาที่โมดูลรายงานด้านบน';
+  }catch(error){status.textContent=error.message||'ส่งคำสั่งไม่สำเร็จ';}
+  finally{dragRequestBusy=false;}
+}
+$('dragArm').onclick=()=>sendDragCommand('A');
+$('dragCancel').onclick=()=>sendDragCommand('C');
+$('remoteOta').onclick=async ()=>{
+  const button=$('remoteOta'), device=$('devices').value, status=$('remoteOtaStatus');
+  if(!session||!device||button.disabled||!confirm('ยืนยันว่ารถจอดนิ่ง โมดูลอาจรีสตาร์ตระหว่างอัปเดต'))return;
+  button.disabled=true;
+  try{
+    await api('/rest/v1/voltol_drag_commands',{body:{device_id:device,command:'U'}});
+    status.textContent='ส่งคำสั่งแล้ว · รอให้โมดูลรายงานเวอร์ชันใหม่';
+  }catch(error){status.textContent=error.message||'ส่งคำสั่งอัปเดตไม่สำเร็จ';}
+};
+const authClient=window.supabase.createClient(base,key,{auth:window.battlabAuthOptions});
+let renewing=null, accountGeneration=0;
+function rememberSession(data){ session=data; }
+async function renewSession(force=false){
+  if(!session)return;
+  if(!force&&session.expires_at>Date.now()/1000+60)return;
+  if(renewing)return renewing;
+  const current=session, generation=accountGeneration;
+  const request=(async()=>{
+    const result=await authClient.auth.getSession();
+    if(generation!==accountGeneration)throw Error('เซสชันเปลี่ยนแล้ว');
+    if(result.error)throw result.error;
+    if(!result.data.session){ clear();message('เซสชันหมดอายุ กรุณาเข้าสู่ระบบอีกครั้ง');throw Error('เซสชันหมดอายุ'); }
+    const latest=result.data.session;
+    if(!force||latest.access_token!==current.access_token){ rememberSession(latest);return; }
+    const refreshed=await authClient.auth.refreshSession();
+    if(generation!==accountGeneration)throw Error('เซสชันเปลี่ยนแล้ว');
+    if(refreshed.error||!refreshed.data.session)throw refreshed.error||Error('ต่ออายุเซสชันไม่สำเร็จ');
+    rememberSession(refreshed.data.session);
+  })();
+  renewing=request;
+  try{await request;}finally{if(renewing===request)renewing=null;}
+}
+let readingsForExport=[];
+$('exportReadings').onclick=()=>{
+  if(!session||$('metrics').dataset.device!==$('devices').value||!readingsForExport.length)return;
+  const numeric=value=>Number.isFinite(value)?value:'';
+  const lines=readingsForExport.map(row=>[
+    new Date(row.received_at).toISOString(),numeric(row.rpm),
+    numeric(row.payload?.voltage),numeric(row.payload?.current),
+    numeric(row.payload?.controller_temp_c),numeric(row.payload?.motor_temp_c)
+  ].join(','));
+  const url=URL.createObjectURL(new Blob(['timestamp,rpm,voltage,current,controller_temp_c,motor_temp_c\n'+lines.join('\n')],{type:'text/csv'}));
+  const link=document.createElement('a');
+  link.href=url;link.download='voltol-readings.csv';link.click();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+};
+const message=s=>{$('status').textContent=s};
+const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+class ApiError extends Error{constructor(message,status,code,payload){super(message);this.status=status;this.code=code;this.payload=payload;}}
+function setCloudHealth(state,text){const el=$('cloudHealth');if(el){el.dataset.state=state;el.textContent=text;}}
+async function api(path, options={}) {
+  const generation=accountGeneration;
+  if(!options.refreshed)await renewSession();
+  if(generation!==accountGeneration)throw Error('เซสชันเปลี่ยนแล้ว');
+  const method=options.method??(options.body?'POST':'GET');
+  const isGet=method==='GET', attempts=isGet?3:1;
+  let last;
+  for(let attempt=0;attempt<attempts;attempt++){
+    if(generation!==accountGeneration)throw Error('เซสชันเปลี่ยนแล้ว');
+    const headers={apikey:key};
+    if(method==='DELETE'||method==='PATCH') headers.Prefer='return=representation';
+    if(session) headers.Authorization='Bearer '+session.access_token;
+    if(options.body) headers['Content-Type']='application/json';
+    const controller=new AbortController(), timer=setTimeout(()=>controller.abort(),12000);
+    try{
+      const res=await fetch(base+path,{headers,method,body:options.body?JSON.stringify(options.body):undefined,signal:controller.signal});
+      const raw=await res.text();let data=null;try{data=raw?JSON.parse(raw):null;}catch{}
+      if(!res.ok){
+        if(res.status===401&&!options.refreshed&&session?.refresh_token&&generation===accountGeneration){
+          await renewSession(true);
+          return api(path,{...options,refreshed:true});
+        }
+        const code=data?.error??data?.error_code??data?.code??'';
+        const msg=res.status===401?'เข้าสู่ระบบใหม่เพื่อทำรายการ':code==='device_already_exists'?'โมดูลนี้มีอยู่แล้วในระบบ':code==='label_exists'?'ชื่อโมดูลนี้มีอยู่แล้วในระบบ':'เชื่อมต่อ Supabase ไม่สำเร็จ ('+res.status+')';
+        throw new ApiError(msg,res.status,code,data);
+      }
+      if(generation!==accountGeneration)throw Error('เซสชันเปลี่ยนแล้ว');
+      return data;
+    }catch(error){
+      last=error.name==='AbortError'?new ApiError('Cloud ตอบสนองช้า ลองใหม่อีกครั้ง',408,'timeout'):error;
+      const retryable=generation===accountGeneration&&isGet&&(!(last instanceof ApiError)||[408,429,500,502,503,504].includes(last.status));
+      if(!retryable||attempt===attempts-1)throw last;
+      setCloudHealth('busy','กำลังเชื่อมต่อ Cloud…');await sleep(350*(attempt+1));
+    }finally{clearTimeout(timer);}
+  }
+  throw last;
+}
+for(const button of document.querySelectorAll('[data-cloud]')){
+ button.onclick=()=>{for(const tab of document.querySelectorAll('[data-cloud]')){const selected=tab===button;tab.setAttribute('aria-pressed',String(selected));$('cloud-'+tab.dataset.cloud).hidden=!selected;}};
+}
+function openCloudPair(){
+ if(!session||$('pairSheet').open)return;
+ const ready=!!navigator.bluetooth;
+ $('bleForm').hidden=!ready; $('usbPair').hidden=false;
+ $('grantStatus').textContent=ready?'':'เบราว์เซอร์นี้ไม่รองรับ Bluetooth สำหรับเว็บ ใช้ทางเลือก USB Serial ด้านล่างได้';
+ $('pairSheet').showModal();
+}
+$('openPair').onclick=openCloudPair;
+$('closePair').onclick=()=>$('pairSheet').close();
+$('pairSheet').addEventListener('close',()=>{$('bleForm').elements.pass.value='';});
+function clear() {
+  accountGeneration++;renewing=null;
+  shownDevice=null; lastReading=null; session=null; deviceRows=[]; pairingToken=''; bleDraft=null; setupGrant=null; setCloudHealth('unknown','กำลังตรวจสอบ Cloud'); $('pairSheet').close(); $('pairStatus').textContent=''; $('bleForm').reset(); $('bleResult').textContent='';
+  $('renameDialog').close();
+  $('login').hidden=false;$('dashboard').hidden=true;$('dashboard').classList.remove('enter');$('token').hidden=true;$('token').textContent='';
+}
+function resetModuleView(){
+  shownDevice=null;
+  lastReading=null;
+  cachedRows=[]; cachedEvents=[]; cachedAt=0;
+  readingsForExport=[];
+  $('exportReadings').disabled=true;
+  for(const id of ['metrics','events','uartMetrics','rpmChart','dragHistory'])$(id).replaceChildren();
+  for(const id of ['chartLabel','firmwareVersion','dragCommandStatus','dashboardLink','controllerStatus'])$(id).textContent='';
+  for(const id of ['raceDistance','raceTime','raceAmp','raceRpm'])$(id).textContent='—';
+  $('dragProgress').value=0;
+  renderDragTarget();
+  $('raceVolt').textContent='—';
+  dragHistoryKey='';
+  $('metrics').dataset.device='';
+  $('dragCloudResult').textContent='รอข้อมูลจับเวลาจากโมดูล';
+  $('moduleOnline').textContent=$('devices').value?'กำลังโหลดข้อมูลโมดูล':'ยังไม่มีโมดูลที่ผูกกับบัญชี';
+  $('updated').textContent='';
+  markModuleNotLive();
+}
+function trackStatus(id,state,label,detail='—'){
+ const status=$(id);
+ if(status.dataset.state!==state)status.dataset.state=state;
+ if(status.textContent!==label)status.textContent=label;
+ const info=$(id+'Detail');
+ if(info.textContent!==detail)info.textContent=detail;
+}
+function markModuleNotLive(){
+  renderCyberTelemetry([],false);
+  renderTrackCockpit();
+  for(const id of ['tcCloud','tcWifi','tcUart'])trackStatus(id,'unknown','ยังไม่ทราบ');
+  $('moduleHealth').dataset.live='false';
+  $('wifiHealth').textContent='Wi-Fi · ยังไม่ทราบสถานะ';
+  $('streamHealth').textContent='';
+  $('uartFlow').dataset.active='false';
+  $('dragArm').disabled=true;
+  $('dragCancel').disabled=true;
+  $('raceAmp').textContent='—';
+  $('raceRpm').textContent='—';
+}
+function markCloudUnavailable(label){
+  setCloudHealth('offline',label);
+  markModuleNotLive();
+  $('moduleOnline').textContent='ตรวจสอบสถานะโมดูลไม่ได้';
+  $('dashboardLink').textContent='Controller · ยังไม่ทราบสถานะ';
+  $('controllerStatus').textContent='ตรวจสอบสถานะ Controller ไม่ได้';
+  $('updated').textContent=lastReading?'ข้อมูลย้อนหลัง · '+inBangkok(lastReading.received_at):'ยังโหลดข้อมูลโมดูลไม่ได้';
+}
+async function refresh(queue=false){
+  if(!session)return;
+  if(refreshBusy){refreshQueued||=queue;return;}
+  refreshBusy=true;
+  const generation=accountGeneration, id=$('devices').value;
+  try{await refreshData(generation,id);}
+  catch(error){
+    if(generation!==accountGeneration||id!==$('devices').value)return;
+    markCloudUnavailable(navigator.onLine?'อ่านข้อมูล Cloud ไม่สำเร็จ':'เบราว์เซอร์ออฟไลน์');
+    $('updated').textContent+=' · '+(error.message||'เชื่อมต่อ Cloud ไม่ได้');
+  }finally{
+    refreshBusy=false;
+    if(refreshQueued){refreshQueued=false;void refresh();}
+  }
+}
+async function refreshData(generation,id) {
+  const metrics=$('metrics'), events=$('events');
+  const previous=metrics.dataset.device===id?Array.from(metrics.querySelectorAll('strong'), el=>el.textContent):[];
+  let reading, log=[], history=[];
+  if(id){
+    const filter='device_id=eq.'+encodeURIComponent(id)+'&order=received_at.desc';
+    const reload=shownDevice!==id||Date.now()-cachedAt>=15000;
+    const [rows,events]=await Promise.all([
+      api('/rest/v1/voltol_telemetry?select=rpm,payload,received_at&limit='+(reload?180:8)+'&'+filter),
+      reload?api('/rest/v1/voltol_events?select=code,received_at,detail&limit=15&'+filter):cachedEvents
+    ]);
+    if(generation!==accountGeneration||id!==$('devices').value)return;
+    cachedRows=reload?rows:[...new Map([...rows,...cachedRows].map(row=>[row.received_at,row])).values()].slice(0,180);
+    cachedEvents=events;
+    if(reload)cachedAt=Date.now();
+    history=cachedRows;
+    log=cachedEvents;
+    reading=history[0];
+  }
+  if(generation!==accountGeneration||id!==$('devices').value)return;
+  if(id)setCloudHealth('online','ติดต่อ Cloud ได้');
+  shownDevice=id;
+  lastReading=reading;
+  readingsForExport=history;
+  $('exportReadings').disabled=!history.length;
+  const age=receivedAgo(reading), board=age<8000;
+  $('updated').textContent=reading?(board?'รับข้อมูลล่าสุด ':'ข้อมูลย้อนหลัง · รับล่าสุด ')+inBangkok(reading.received_at):id?'ยังไม่มีข้อมูลจากโมดูลนี้':'ยังไม่มีโมดูลให้แสดง';
+  metrics.replaceChildren();metrics.dataset.device=id;events.replaceChildren();
+  const p=reading?.payload??{};
+  const drag=p.drag;
+  $('raceDistance').textContent=Number.isFinite(drag?.distance_m)?drag.distance_m.toFixed(1)+' ม.':'—';
+  const liveReading=age<6000;
+  renderCyberTelemetry(history,liveReading&&p.controller_online!==false);
+  $('raceAmp').textContent=liveReading&&Number.isFinite(p.current)?p.current.toFixed(1)+' A':'—';
+  $('raceRpm').textContent=liveReading&&Number.isFinite(reading.rpm)?reading.rpm+' RPM':'—';
+  $('raceVolt').textContent=liveReading?formatNumber(p.voltage,1,' V'):'—';
+  renderDragTarget(drag);
+  renderDragHistory(history,id);
+  const dragFresh=!!drag&&liveReading;
+  const dragActive=['ARMED','READY','RUN'].includes(drag?.state);
+  $('dragArm').disabled=!dragFresh||dragActive;
+  $('dragCancel').disabled=!dragFresh||!dragActive;
+  $('dragCloudResult').textContent=drag&&Number.isFinite(drag.elapsed_s)&&Number.isFinite(drag.distance_m)
+    ? (!liveReading?'ข้อมูลล่าสุด · ':'')+drag.state+' · '+drag.elapsed_s.toFixed(3)+' วินาที · '+drag.distance_m.toFixed(1)+' เมตร'
+    : 'รอข้อมูลจับเวลาจากโมดูล';
+  for(const [label,value,unit] of [['อุณหภูมิกล่อง',p.controller_temp_c,'°C'],['อุณหภูมิมอเตอร์',p.motor_temp_c,'°C']]){
+    const card=document.createElement('div'), title=document.createElement('small'), number=document.createElement('strong');
+    card.className='metric'; title.textContent=label; number.textContent=receivedAgo(reading)<6000&&Number.isFinite(value)?value+' '+unit:'—'; if(previous[metrics.children.length]!==undefined&&previous[metrics.children.length]!==number.textContent)number.dataset.changed='';card.append(title,number);metrics.append(card);
+  }
+  const uartReported=p.controller_online;
+  trackStatus('tcCloud',board?'on':reading?'off':'unknown',board?'เชื่อม Cloud แล้ว':reading?'ข้อมูลหยุดอัปเดต':'รอข้อมูล ESP32',
+    reading?'รับล่าสุด '+inBangkok(reading.received_at):'—');
+  const wifi=board?p.wifi_online:undefined;
+  trackStatus('tcWifi',wifi===true?'on':wifi===false?'off':'unknown',wifi===true?'เชื่อมต่อแล้ว':wifi===false?'ไม่เชื่อมต่อ':'ยังไม่ทราบ',
+    wifi===true&&Number.isFinite(p.wifi_rssi)?p.wifi_rssi+' dBm':'—');
+  trackStatus('tcUart',board&&typeof uartReported==='boolean'?(uartReported?'on':'off'):'unknown',
+    board&&typeof uartReported==='boolean'?(uartReported?'Controller ตอบ':'Controller ไม่ตอบ'):'ยังไม่ทราบ',
+    board?'TX '+(p.tx??'—')+' · RX '+(p.rx_bytes??'—')+' B':'—');
+  const controller=board && (p.controller_online===true || (p.controller_online===undefined && typeof reading?.rpm==='number'));
+  $('dashboardLink').textContent=(board?'โมดูลออนไลน์':'รอข้อมูลสดจากโมดูล')+' · Controller '+(controller?'Online':board?'Offline':'—')+' · TX '+(p.tx??'—')+' · RX '+(p.rx_bytes??'—')+' ไบต์';
+  $('wifiHealth').textContent=board
+    ? 'Wi-Fi · '+(p.wifi_online===true?'ออนไลน์'+(Number.isFinite(p.wifi_rssi)?' · '+p.wifi_rssi+' dBm':''):'รับข้อมูลผ่าน Wi-Fi · เฟิร์มแวร์เดิม')
+    : 'Wi-Fi · ยังไม่ทราบสถานะปัจจุบัน';
+  const frames=Array.isArray(p.frames)?p.frames.filter(frame=>Array.isArray(frame)&&frame.length===5&&frame.every(Number.isFinite)):[];
+  $('streamHealth').textContent=board&&frames.length
+    ? 'ข้อมูลชุดล่าสุด '+frames.length+' เฟรม'+(frames.length>1?' · ห่างเฉลี่ย '+((frames.at(-1)[0]-frames[0][0])/(frames.length-1)).toFixed(0)+' ms':'')
+    : '';
+  $('moduleHealth').dataset.live=String(board);
+  $('moduleOnline').textContent=board?'โมดูลเชื่อมต่อ Cloud อยู่':reading?'Cloud ยังไม่ได้รับข้อมูลใหม่จากโมดูล':id?'ยังไม่มีข้อมูลจากโมดูล':'ยังไม่มีโมดูลที่ผูกกับบัญชี';
+  renderTrackCockpit({speed:board?p.speed_kmh:null,rpm:controller?reading?.rpm:null,
+    volt:controller?p.voltage:null,amp:controller?p.current:null});
+  $('controllerStatus').textContent=(board?'โมดูลออนไลน์':'โมดูลออฟไลน์ / ยังไม่มีข้อมูล')+' · '+(controller?'Controller Online':board?'Controller Offline':'Controller ยังไม่ทราบสถานะ');
+  $('uartFlow').dataset.active=String(controller);
+  $('firmwareVersion').textContent=p.firmware?'เวอร์ชันที่โมดูลรายงาน '+p.firmware:'ยังไม่มีรายงานเวอร์ชัน';
+  $('remoteOta').disabled=true; // Enable after the firmware and server command are released together.
+  $('remoteOtaStatus').textContent='การสั่ง OTA จาก Cloud อยู่ระหว่างเตรียมสำหรับรุ่นถัดไป';
+  const uart=$('uartMetrics');uart.replaceChildren();
+  for(const [label,value] of [['UART baud',p.uart_baud],['เฟรม/วินาที',p.uart_hz],['TX requests',p.tx],['RX bytes',p.rx_bytes],['เฟรมผ่าน',p.valid_frames],['เฟรมผิด',p.bad_frames],['Timeout',p.timeouts],['ตอบล่าสุด',p.reply_age_ms>=0?(p.reply_age_ms/1000).toFixed(2)+' s':null]]){
+    const card=document.createElement('div'),title=document.createElement('small'),val=document.createElement('strong');
+    card.className='metric';title.textContent=label;val.textContent=value??'—';card.append(title,val);uart.append(card);
+  }
+  const points=history.slice().reverse().flatMap(row=>{
+    const frames=row.payload?.frames;
+    if(!Array.isArray(frames)||!frames.length)return [row];
+    const valid=frames.filter(f=>Array.isArray(f)&&f.length===5&&f.every(Number.isFinite));
+    if(!valid.length)return [row];
+    const end=valid.at(-1)[0], arrival=Date.parse(row.received_at);
+    return valid.map(([uptime,rpm])=>({rpm,received_at:new Date(arrival-(end-uptime)).toISOString()}));
+  }).sort((a,b)=>Date.parse(a.received_at)-Date.parse(b.received_at)), chart=$('rpmChart');chart.replaceChildren();
+  const values=points.map(x=>x.rpm).filter(Number.isFinite);
+  $('chartLabel').textContent=values.length?'RPM · ค่าสูงสุด '+Math.max(...values)+' · '+values.length+' จุด':'รอข้อมูล RPM';
+  if(values.length){
+    const min=Math.min(0,...values), max=Math.max(1,...values), first=Date.parse(points[0].received_at), last=Date.parse(points.at(-1).received_at);
+    let path='', disconnected=true;
+    for(const point of points){
+      if(!Number.isFinite(point.rpm)){disconnected=true;continue;}
+      const x=12+(Date.parse(point.received_at)-first)*576/Math.max(1,last-first), y=124-(point.rpm-min)*112/(max-min);
+      path+=(disconnected?' M':' L')+x+','+y;disconnected=false;
+    }
+    const line=document.createElementNS('http://www.w3.org/2000/svg','path');
+    line.setAttribute('d',path);line.setAttribute('stroke','#69e7e1');line.setAttribute('stroke-width','3');line.setAttribute('fill','none');chart.append(line);
+  }
+  for(const e of log){
+    const li=document.createElement('li');
+    li.textContent=new Date(e.received_at).toLocaleString('th-TH')+' · '+e.code+(e.detail?.fault_mask?' · '+e.detail.fault_mask:'');events.append(li);
+  }
+  if(!log.length){const li=document.createElement('li');li.textContent='ยังไม่มีเหตุขัดข้อง';events.append(li);}
+}
+async function loadDevices(){
+  const generation=accountGeneration;
+  try{
+    const selected=$('devices').value;
+    const rows=await api('/rest/v1/voltol_devices?select=id,label,display_name,created_at&order=created_at.desc');
+    if(!session||generation!==accountGeneration)return;
+    setCloudHealth('online','ติดต่อ Cloud ได้');
+    deviceRows=rows;
+    const counts=new Map();
+    for(const row of rows){const k=String(row.label||'').trim().toLocaleLowerCase();counts.set(k,(counts.get(k)||0)+1);}
+    $('devices').replaceChildren(...rows.map(row=>{
+      const duplicate=(counts.get(String(row.label||'').trim().toLocaleLowerCase())||0)>1;
+      return new Option((row.display_name||row.label)+(duplicate?' · '+row.id.slice(-8):''),row.id);
+    }));
+    if(rows.some(row=>row.id===selected))$('devices').value=selected;
+    updateDeviceState();
+    if(shownDevice!==$('devices').value)resetModuleView();
+    await refresh(true);
+  }catch(error){if(generation===accountGeneration){markCloudUnavailable('โหลดรายการโมดูลไม่สำเร็จ');message(error.message||'โหลดรายการโมดูลไม่สำเร็จ');}}
+}
+let deletingDevice=false;
+function updateDeviceState(){
+  const row=deviceRows.find(item=>item.id===$('devices').value), state=$('deviceState');
+  $('deleteDevice').disabled=!row||deletingDevice;
+  $('renameDevice').disabled=!row;
+  if(!state)return;
+  if(!row){state.textContent='ยังไม่มีโมดูลที่ผูกกับบัญชีนี้';state.dataset.duplicate='false';return;}
+  const same=deviceRows.filter(item=>String(item.label||'').trim().toLocaleLowerCase()===String(row.label||'').trim().toLocaleLowerCase());
+  state.dataset.duplicate=String(same.length>1);
+  state.textContent=same.length>1?'ชื่อซ้ำในระบบ · รายการนี้มีโมดูลชื่อเดียวกันแล้ว '+same.length+' รายการ':'โมดูลนี้มีอยู่แล้วในระบบ · ใช้ข้อมูลเดิมได้';
+}
+let renameId='';
+$('renameDevice').onclick=()=>{
+  const row=deviceRows.find(item=>item.id===$('devices').value);
+  if(!row||!session)return;
+  renameId=row.id;
+  $('moduleName').value=row.display_name||row.label;
+  $('renameStatus').textContent='';
+  $('renameDialog').showModal();
+};
+$('cancelRename').onclick=()=>$('renameDialog').close();
+$('renameForm').onsubmit=async event=>{
+  event.preventDefault();
+  const button=event.currentTarget.querySelector('[type=submit]');
+  const name=$('moduleName').value.trim(), id=renameId;
+  if(button.disabled||!session||!id)return;
+  if(!name){$('renameStatus').textContent='กรุณาใส่ชื่อโมดูล';return;}
+  button.disabled=true;
+  try{
+    const rows=await api('/rest/v1/voltol_devices?id=eq.'+encodeURIComponent(id)+'&select=id,display_name',{method:'PATCH',body:{display_name:name}});
+    if(!rows?.some(row=>row.id===id))throw Error('บันทึกชื่อไม่สำเร็จ');
+    $('renameDialog').close();
+    await loadDevices();
+    message('บันทึกชื่อโมดูลแล้ว');
+  }catch(error){$('renameStatus').textContent=error.message;}
+  finally{button.disabled=false;}
+};
+$('deleteDevice').onclick=async ()=>{
+  const row=deviceRows.find(item=>item.id===$('devices').value);
+  const current=session;
+  if(!row||!current||deletingDevice)return;
+  if(!confirm('ลบ '+row.label+' (รหัสท้าย '+row.id.slice(-8)+')? ข้อมูลย้อนหลังและสิทธิ์เชื่อม Cloud ของโมดูลนี้จะถูกลบถาวร'))return;
+  deletingDevice=true;
+  updateDeviceState();
+  try{
+    const removed=await api('/rest/v1/voltol_devices?id=eq.'+encodeURIComponent(row.id)+'&select=id',{method:'DELETE'});
+    if(session!==current)return;
+    if(!removed?.some(item=>item.id===row.id))throw Error('ไม่พบรายการหรือไม่มีสิทธิ์ลบ');
+    resetModuleView();
+    deviceRows=deviceRows.filter(item=>item.id!==row.id);
+    for(const option of $('devices').options)if(option.value===row.id){option.remove();break;}
+    await loadDevices();
+    message('ลบโมดูล '+row.label+' แล้ว');
+  }catch(error){if(session===current)message(error.message||'ลบโมดูลไม่สำเร็จ');}
+  finally{deletingDevice=false;updateDeviceState();}
+};
+const normalizedLabel=value=>String(value||'').trim().toLocaleLowerCase();
+const existingDeviceByLabel=label=>deviceRows.find(row=>normalizedLabel(row.label)===normalizedLabel(label));
+const run=fn=>fn().catch(e=>message(e.message));
+const authStatus=(text='',error=false)=>{const status=$('authStatus');status.textContent=text;status.dataset.error=String(error);};
+let authPending=false;
+for(const button of document.querySelectorAll('.auth-show')){
+  button.onclick=()=>{
+    const visible=button.getAttribute('aria-pressed')==='true';
+    for(const field of button.form.querySelectorAll('[name=password],[name=confirm]')) field.type=visible?'password':'text';
+    button.setAttribute('aria-pressed',String(!visible));button.textContent=visible?'แสดงรหัสผ่าน':'ซ่อนรหัสผ่าน';
+  };
+}
+const authErrors={
+  invalid_credentials:'อีเมลหรือรหัสผ่านไม่ถูกต้อง',
+  email_not_confirmed:'บัญชีนี้ยังต้องยืนยันอีเมลก่อนเข้าสู่ระบบ',
+  user_already_exists:'อีเมลนี้มีบัญชีแล้ว ลองเข้าสู่ระบบ',
+  email_exists:'อีเมลนี้มีบัญชีแล้ว ลองเข้าสู่ระบบ',
+  weak_password:'รหัสผ่านไม่ผ่านเงื่อนไข ลองใช้รหัสผ่านที่ยาวและเดายากขึ้น',
+  signup_disabled:'ขณะนี้ระบบปิดการสมัครสมาชิก'
+};
+async function submitAuth(event){
+  event.preventDefault();if(authPending)return;
+  const form=event.currentTarget,{email,password}=Object.fromEntries(new FormData(form));
+  const button=form.querySelector('button[type=submit]'), original=button.textContent;
+  authPending=true;button.disabled=true;button.textContent='กำลังดำเนินการ…';authStatus();
+  try{
+    const result=await authClient.auth.signInWithPassword({email:email.trim(),password});
+    if(result.error){
+      const error=result.error;
+      authStatus(authErrors[error.code]??'เข้าสู่ระบบไม่สำเร็จ กรุณาลองใหม่',true);
+      return;
+    }
+    const data=result.data.session;
+    form.reset();
+    if(!data?.access_token){authStatus('กรุณาตรวจอีเมลเพื่อยืนยันบัญชีตามการตั้งค่าของระบบ');return;}
+    accountGeneration++;rememberSession(data);$('login').hidden=true;$('dashboard').hidden=false;$('dashboard').classList.add('enter');message('เข้าสู่ระบบสำเร็จ');
+    await run(loadDevices);if(setupGrant&&setupGrant.until>Date.now())openCloudPair();
+  }catch{authStatus('เชื่อมต่อไม่ได้ กรุณาลองใหม่',true);}
+  finally{authPending=false;button.disabled=false;button.textContent=original;}
+}
+$('auth').onsubmit=submitAuth;
+$('logout').onclick=async()=>{try{const {error}=await authClient.auth.signOut({scope:'local'});if(error)throw error;clear();authStatus();message('ออกจากระบบแล้ว');}catch{message('ออกจากระบบไม่สำเร็จ กรุณาลองอีกครั้ง');}};
+$('devices').onchange=()=>{resetModuleView();updateDeviceState();void refresh(true);};
+$('refresh').onclick=()=>void loadDevices();
+let pairingToken='', bleDraft=null, setupGrant=null;
+if(location.hash.startsWith('#pair=')){
+ const value=location.hash.slice(6);
+ if(/^[0-9a-f]{32}$/i.test(value))setupGrant={value,until:Date.now()+180000};
+ history.replaceState(null,'',location.pathname+location.search);
+}
+
+const bleService='648b7040-33c9-4a41-a133-83c009df0001';
+let picked=null;
+$('bleNetworks').onchange=()=>{$('bleForm').elements.ssid.value=$('bleNetworks').value;};
+$('pairSheet').addEventListener('close',()=>{picked?.gatt.disconnect();picked=null;$('bleWifi').hidden=true;$('scanLabel').hidden=true;});
+$('findBle').onclick=async ()=>{
+ const out=$('bleResult'), button=$('findBle');
+ if(!navigator.bluetooth||!session)return;
+ button.disabled=true;out.textContent='เลือก VOLTOL Setup…';
+ try{
+   if(picked?.gatt.connected)picked.gatt.disconnect();
+   picked=await navigator.bluetooth.requestDevice({filters:[{services:[bleService]}]});
+   const gatt=await picked.gatt.connect(), svc=await gatt.getPrimaryService(bleService);
+   $('bleWifi').hidden=false;$('scanLabel').hidden=true;
+   out.textContent='พบโมดูลแล้ว · กำลังค้นหา Wi-Fi';
+   try{
+     const list=await svc.getCharacteristic(bleService.slice(0,-1)+'5');
+     const writer=await svc.getCharacteristic(bleService.slice(0,-1)+'2');
+     await writer.writeValueWithResponse(Uint8Array.of(3));
+     for(let i=0;i<25;i++){
+       await new Promise(r=>setTimeout(r,350));
+       const data=await list.readValue(), count=data.getUint8(0);
+       if(count===119)continue;
+       if(count>12)break;
+       const select=$('bleNetworks'), seen=new Set();
+       select.replaceChildren(new Option('เลือกเครือข่าย',''));
+       let pos=1;
+       for(let n=0;n<count&&pos+3<=data.byteLength;n++){
+         const len=data.getUint8(pos), lock=data.getUint8(pos+1), rssi=data.getInt8(pos+2);pos+=3;
+         if(pos+len>data.byteLength)break;
+         const ssid=new TextDecoder().decode(new Uint8Array(data.buffer,data.byteOffset+pos,len));pos+=len;
+         if(ssid&&!seen.has(ssid)){seen.add(ssid);select.add(new Option((lock?'🔒 ':'')+ssid+' · '+rssi+' dBm',ssid));}
+       }
+       if(seen.size){$('scanLabel').hidden=false;out.textContent='เลือกเครือข่ายแล้วกรอกรหัสผ่าน';return;}
+       break;
+     }
+   }catch{}
+   out.textContent='พบโมดูลแล้ว · กรอกชื่อ Wi-Fi 2.4 GHz ที่จะใช้';
+ }catch{out.textContent='ยังเชื่อม Bluetooth ไม่ได้ ลองเปิดโมดูลใหม่แล้วค้นหาอีกครั้ง';}
+ finally{button.disabled=false;}
+};
+$('bleForm').onsubmit=async e=>{
+ e.preventDefault();
+ const form=e.currentTarget,out=$('bleResult'),button=form.querySelector('[type=submit]'), fields=new FormData(form);
+ if(!navigator.bluetooth){out.textContent='เบราว์เซอร์นี้ยังไม่รองรับ Bluetooth สำหรับเว็บ';return;}
+ if(!session||button.disabled)return;
+ const generation=accountGeneration, grant=setupGrant?.until>Date.now()?setupGrant.value:null;
+ const enc=new TextEncoder(),ssid=enc.encode(fields.get('ssid')),pass=enc.encode(fields.get('pass'));
+ if(!ssid.length||ssid.length>32||pass.length>64){out.textContent='ชื่อหรือรหัสผ่าน Wi-Fi ยาวเกินที่โมดูลรองรับ';return;}
+ let device;
+ button.disabled=true;out.textContent='เลือก VOLTOL Setup…';
+ try{
+   device=picked;if(!device)throw Error('ค้นหาและเลือกโมดูลก่อน');
+   if(generation!==accountGeneration)throw Error('กรุณาเข้าสู่ระบบใหม่');
+   const server=device.gatt.connected?device.gatt:await device.gatt.connect(), service=await server.getPrimaryService(bleService);
+   const write=await service.getCharacteristic(bleService.slice(0,-1)+'2'), status=await service.getCharacteristic(bleService.slice(0,-1)+'3');
+   const ready=new TextDecoder().decode(await status.readValue());
+      const physical=ready==='boot-ready';
+   if(!physical&&(!grant||!['ready','invalid-code','invalid-data'].includes(ready)))throw Error('เปิดโหมดจับคู่บนโมดูลใหม่แล้วลองอีกครั้ง');
+   let prefix=new Uint8Array(0), raw;
+   if(physical){
+     const pub=await service.getCharacteristic(bleService.slice(0,-1)+'4');
+     const peer=await crypto.subtle.importKey('raw',await pub.readValue(),{name:'ECDH',namedCurve:'P-256'},false,[]);
+     const keys=await crypto.subtle.generateKey({name:'ECDH',namedCurve:'P-256'},false,['deriveBits']);
+     prefix=new Uint8Array(await crypto.subtle.exportKey('raw',keys.publicKey));
+     raw=new Uint8Array(await crypto.subtle.deriveBits({name:'ECDH',public:peer},keys.privateKey,256)).slice(0,16);
+   }else raw=Uint8Array.from(grant.match(/../g),x=>parseInt(x,16));
+   if(generation!==accountGeneration)throw Error('กรุณาเข้าสู่ระบบใหม่');
+   const label=String(fields.get('label')||'').trim()||'VOLTOL '+device.id.slice(-6).toUpperCase();
+   const existing=existingDeviceByLabel(label);
+   if(existing&&!confirm('ออกโทเคนใหม่ให้ '+(existing.display_name||existing.label)+'? โทเคนเก่าจะหยุดใช้ทันที'))return;
+   if(existing){out.textContent='โมดูลนี้มีอยู่แล้วในระบบ · กำลังเชื่อมข้อมูลเดิมและออกโทเคนใหม่';}
+   if(!bleDraft||bleDraft.deviceId!==device.id||bleDraft.label!==label){
+     const registration=await api('/functions/v1/voltol-device/register',{body:{label,reconnect:!!existing}});
+     if(generation!==accountGeneration)throw Error('กรุณาเข้าสู่ระบบใหม่');
+     bleDraft={deviceId:device.id,label,token:registration.device_token};
+   }
+   const token=bleDraft.token;
+   const key=await crypto.subtle.importKey('raw',raw,'AES-GCM',false,['encrypt']);
+   const nonce=crypto.getRandomValues(new Uint8Array(12));
+   const plain=new Uint8Array(66+ssid.length+pass.length);
+   plain.set([ssid.length,pass.length]);plain.set(ssid,2);plain.set(pass,2+ssid.length);plain.set(enc.encode(token),2+ssid.length+pass.length);
+   const encrypted=new Uint8Array(await crypto.subtle.encrypt({name:'AES-GCM',iv:nonce},key,plain));
+   const packet=new Uint8Array(prefix.length+12+encrypted.length);packet.set(prefix);packet.set(nonce,prefix.length);packet.set(encrypted,prefix.length+12);
+   const send=bytes=>write.writeValueWithResponse(bytes);
+   await send(Uint8Array.of(0));
+   for(let offset=0;offset<packet.length;offset+=19)await send(Uint8Array.of(1,...packet.slice(offset,offset+19)));
+   await send(Uint8Array.of(2));
+   for(let i=0;i<15;i++){
+     await new Promise(resolve=>setTimeout(resolve,300));
+     const value=new TextDecoder().decode(await status.readValue());
+     if(value==='accepted'){out.textContent='โมดูลรับค่าตั้งแล้ว รอสถานะออนไลน์บน Dashboard';form.elements.pass.value='';setupGrant=null;bleDraft=null;await run(loadDevices);return;}
+     if(value==='invalid-code'||value==='expired')throw Error('รหัสจับคู่ผิดหรือหมดอายุ เปิดรหัสใหม่บนโมดูลแล้วลองอีกครั้ง');
+     if(value==='invalid-data')throw Error('โมดูลปฏิเสธค่าตั้ง กรุณาตรวจแล้วลองอีกครั้ง');
+   }
+   throw Error('โมดูลยังไม่ยืนยันการรับค่าตั้ง ลองเปิดโหมดจับคู่ใหม่');
+ }catch(error){out.textContent=error.name==='NotFoundError'?'ไม่พบโมดูลหรือยกเลิกการเลือก':error.message||'จับคู่ไม่สำเร็จ';}
+ finally{if(device?.gatt.connected)device.gatt.disconnect();button.disabled=false;}
+};
+$('register').onsubmit=e=>{e.preventDefault();run(async()=>{
+  const generation=accountGeneration, form=e.currentTarget, button=form.querySelector('button');button.disabled=true;
+  try{const data=await api('/functions/v1/voltol-device/register',{body:Object.fromEntries(new FormData(form))});
+  if(generation!==accountGeneration)return;
+  pairingToken=data.device_token;$('pairStatus').textContent='สร้างรหัสแล้ว ส่งคำสั่งผ่าน USB Serial Monitor ที่ 115200 พร้อม newline';$('token').textContent='CLOUD_TOKEN '+data.device_token;$('token').hidden=false;form.reset();await loadDevices();}catch(error){$('pairStatus').textContent=error.code==='device_already_exists'||error.code==='label_exists'?'ชื่อโมดูลนี้มีอยู่แล้วในระบบ · เลือกโมดูลเดิมจากรายการด้านบน':error.message||'สร้างรหัสไม่สำเร็จ';}finally{button.disabled=false;}
+});};
+window.addEventListener('online',()=>{setCloudHealth('busy','กำลังเชื่อมต่อ Cloud…');if(session)run(loadDevices)});
+window.addEventListener('offline',()=>markCloudUnavailable('เบราว์เซอร์ออฟไลน์'));
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&session)run(loadDevices)});
+setInterval(()=>{if(session&&navigator.onLine&&!document.hidden&&$('devices').value&&$('cloud-drag').hidden)void refresh()},1000);
+setInterval(()=>{if(session&&navigator.onLine&&!document.hidden&&$('devices').value&&!$('cloud-drag').hidden)void refresh()},1000);
+try{
+  const {data,error}=await authClient.auth.getSession();
+  if(error)throw error;
+  if(data.session){
+    rememberSession(data.session);$('login').hidden=true;$('dashboard').hidden=false;
+    await run(loadDevices);if(setupGrant&&setupGrant.until>Date.now())openCloudPair();
+  }
+}catch{authStatus('เชื่อมต่อเซสชัน BATTLAB ไม่สำเร็จ กรุณารีเฟรชหน้า',true);}
+</script></html>
