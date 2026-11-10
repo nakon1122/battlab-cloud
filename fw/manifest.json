@@ -1,52 +1,75 @@
 {
-  "updated": "2026-11-04T20:11:19+07:00",
-  "notes": "จับคู่บลูทูธ RS485 ไม่พึ่งชื่อ (รองรับลูกเปลี่ยนชื่อ) + ยืนยันลูกด้วยข้อมูล RS485 — เฉพาะบอร์ด S3",
+  "updated": "2026-11-11T03:38:14+07:00",
+  "notes": "อ่านอินเวอร์เตอร์ยี่ห้ออื่นผ่านดองเกิลในบ้าน (Deye, Sofar, Solis, PowMr/SmartESS) + ย้ายเว็บไป batterycloud.battlab.net — บอร์ด S3 และจอ CYD",
   "boards": {
     "s3": {
-      "version": "2.9.2",
-      "url": "fw/2.9.2/BATTLAB_S3_APP_UPDATE.bin",
-      "size": 1466048,
-      "sha256": "e1cfeaeb885f71cbe383d64cabca68cdbd8e1a3faad036ba75e1f76f1e938d74",
+      "version": "2.10.0",
+      "url": "fw/2.10.0/BATTLAB_S3_APP_UPDATE.bin",
+      "size": 1493072,
+      "sha256": "4a2327631b70adc0c21177adcc50171f9d762520960311da2655ef10b953bb9e",
       "install": {
-        "url": "fw/2.9.2/BATTLAB_S3_BLEFIX_INSTALL.bin",
-        "size": 1531584,
-        "sha256": "36ca7d23baf373bebf2c74b7d585df3d56a4fefa25fc88d43888779555ab2a14"
+        "url": "fw/2.10.0/BATTLAB_S3_BLEFIX_INSTALL.bin",
+        "size": 1558608,
+        "sha256": "d973444bd93ffb7a39e36c119ae38ac2e27d9a5b181a2f9e15337f1dc6964532"
       },
-      "webtools": "fw/2.9.2/webtools-s3.json",
+      "webtools": "fw/2.10.0/webtools-s3.json",
       "title": "ESP32-S3 (BMS board)"
     },
     "cyd35": {
-      "version": "2.9.1",
-      "url": "fw/2.9.1/BATTLAB_CYD35_APP_UPDATE.bin",
-      "size": 1782624,
-      "sha256": "c6667727c90b9f4fe2488c02b564ed4afcca87a0429251ae183768abe1dfa8ff",
+      "version": "2.10.0",
+      "url": "fw/2.10.0/BATTLAB_CYD35_APP_UPDATE.bin",
+      "size": 1809728,
+      "sha256": "4308fd2e909568b61e6dc4b0dae1f86b761d3e56ff758530378a02bf8ef7d87f",
       "install": {
-        "url": "fw/2.9.1/BATTLAB_CYD35_INSTALL.bin",
-        "size": 1848160,
-        "sha256": "7058c78d5282154ce8587989eb0caf485509ca2b15e4881feaebd37cd17cd210"
+        "url": "fw/2.10.0/BATTLAB_CYD35_INSTALL.bin",
+        "size": 1875264,
+        "sha256": "3b7350eff05e9fcb32f93bf3c9f32a645d7ba9fe65ec7f4679ffd7d3d660f1f6"
       },
-      "webtools": "fw/2.9.1/webtools-cyd35.json",
+      "webtools": "fw/2.10.0/webtools-cyd35.json",
       "title": "CYD 3.5\" (BMS screen)"
     },
     "cloudscreen": {
-      "version": "2.8.8",
-      "url": "fw/2.8.8/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
-      "size": 1360224,
-      "sha256": "168a0114163504da8030ea42e9366b2035297940259685692d71416899b8b538",
+      "version": "2.9.3",
+      "url": "fw/2.9.3/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
+      "size": 1360464,
+      "sha256": "8531df721d518e85fa2fea1ddf3c7abf59089d795614a972add94678fca31fc1",
       "install": {
-        "url": "fw/2.8.8/BATTLAB_CLOUDSCREEN_INSTALL.bin",
-        "size": 1425760,
-        "sha256": "8881c23d849f906220d66c13470a49ebc2af78555fad5d8222f46f1994346359"
+        "url": "fw/2.9.3/BATTLAB_CLOUDSCREEN_INSTALL.bin",
+        "size": 1426000,
+        "sha256": "dca194d0ad2614fba2fe5e1bc26ca590130091acd98f628514e003ee3be2be10"
       },
-      "webtools": "fw/2.8.8/webtools-cloudscreen.json",
+      "webtools": "fw/2.9.3/webtools-cloudscreen.json",
       "title": "Cloud Screen (CYD 3.5\")"
     }
   },
   "zip": {
-    "url": "fw/2.9.2/BATTLAB_v2.9.2_READY_TO_FLASH.zip",
-    "size": 17013782
+    "url": "fw/2.10.0/BATTLAB_v2.10.0_READY_TO_FLASH.zip",
+    "size": 15912675
   },
   "history": [
+    {
+      "version": "2.10.0",
+      "date": "2026-11-11",
+      "notes": "อ่านอินเวอร์เตอร์ยี่ห้ออื่นผ่านดองเกิลในบ้าน (Deye, Sofar, Solis, PowMr/SmartESS) + ย้ายเว็บไป batterycloud.battlab.net — บอร์ด S3 และจอ CYD",
+      "zip": {
+        "url": "fw/2.10.0/BATTLAB_v2.10.0_READY_TO_FLASH.zip",
+        "size": 15912675
+      },
+      "boards": {
+        "s3": {
+          "app": "fw/2.10.0/BATTLAB_S3_APP_UPDATE.bin",
+          "install": "fw/2.10.0/BATTLAB_S3_BLEFIX_INSTALL.bin"
+        },
+        "cyd35": {
+          "app": "fw/2.10.0/BATTLAB_CYD35_APP_UPDATE.bin",
+          "install": "fw/2.10.0/BATTLAB_CYD35_INSTALL.bin"
+        },
+        "cloudscreen": {
+          "app": "fw/2.9.3/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
+          "install": "fw/2.9.3/BATTLAB_CLOUDSCREEN_INSTALL.bin"
+        }
+      }
+    },
     {
       "version": "2.9.2",
       "date": "2026-11-04",
@@ -109,52 +132,6 @@
         "cyd35": {
           "app": "fw/2.9.0/BATTLAB_CYD35_APP_UPDATE.bin",
           "install": "fw/2.9.0/BATTLAB_CYD35_INSTALL.bin"
-        },
-        "cloudscreen": {
-          "app": "fw/2.8.8/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
-          "install": "fw/2.8.8/BATTLAB_CLOUDSCREEN_INSTALL.bin"
-        }
-      }
-    },
-    {
-      "version": "2.8.9",
-      "date": "2026-11-04",
-      "notes": "2.8.9: RS485 ไม่ทำให้บอร์ดหลุด (แก้ตัวอ่านเฟรม, โหมดปลอดภัย, watchdog) + ข้อมูลวินิจฉัย RS485 บนเว็บ",
-      "zip": {
-        "url": "fw/2.8.9/BATTLAB_v2.8.9_READY_TO_FLASH.zip",
-        "size": 17003055
-      },
-      "boards": {
-        "s3": {
-          "app": "fw/2.8.9/BATTLAB_S3_APP_UPDATE.bin",
-          "install": "fw/2.8.9/BATTLAB_S3_BLEFIX_INSTALL.bin"
-        },
-        "cyd35": {
-          "app": "fw/2.8.9/BATTLAB_CYD35_APP_UPDATE.bin",
-          "install": "fw/2.8.9/BATTLAB_CYD35_INSTALL.bin"
-        },
-        "cloudscreen": {
-          "app": "fw/2.8.8/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
-          "install": "fw/2.8.8/BATTLAB_CLOUDSCREEN_INSTALL.bin"
-        }
-      }
-    },
-    {
-      "version": "2.8.8",
-      "date": "2026-11-03",
-      "notes": "2.8.8: อ่านอินเวอร์เตอร์ LuxPower ตรงจากดองเกิล · จอ Cloud Screen มีปุ่มประหยัดเน็ต (NORMAL / ECO / ECO MAX)",
-      "zip": {
-        "url": "fw/2.8.8/BATTLAB_v2.8.8_READY_TO_FLASH.zip",
-        "size": 16930103
-      },
-      "boards": {
-        "s3": {
-          "app": "fw/2.8.8/BATTLAB_S3_APP_UPDATE.bin",
-          "install": "fw/2.8.8/BATTLAB_S3_BLEFIX_INSTALL.bin"
-        },
-        "cyd35": {
-          "app": "fw/2.8.8/BATTLAB_CYD35_APP_UPDATE.bin",
-          "install": "fw/2.8.8/BATTLAB_CYD35_INSTALL.bin"
         },
         "cloudscreen": {
           "app": "fw/2.8.8/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
