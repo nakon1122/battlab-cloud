@@ -395,7 +395,7 @@ html[data-tpl="pitwall"] body .cloud-dock button[aria-pressed=true]{background:r
 </div>
 <div id="cloud-history" class="cloud-view" hidden><section><h2>เหตุขัดข้องล่าสุด</h2><ul id="events"></ul><button id="exportReadings" type="button" disabled>ดาวน์โหลดข้อมูลล่าสุด (CSV)</button></section>
 </div>
-<div id="cloud-firmware" class="cloud-view" hidden><section><p class="dash-label">VOLTOL / FIRMWARE</p><h2>เฟิร์มแวร์สำหรับโมดูล VOLTOL</h2><section class="usb-install"><h3>ติดตั้งผ่าน USB บนเว็บ</h3><p>สำหรับโมดูลใหม่ ESP32-S3 DevKitC-1 แฟลช 8 MB ใช้ Chrome หรือ Edge บนคอมพิวเตอร์ (ล้างข้อมูลทั้งบอร์ด)</p><a href="/fw/flash/" target="_blank" rel="noopener">เปิดเครื่องมือแฟลชผ่านเว็บ</a></section><h3>อัปเดตผ่าน OTA</h3><p id="firmwareVersion"></p><p id="firmwareLatest">เวอร์ชันล่าสุด —</p><p><a href="/fw/VOLTOL-v1.7.5-ReadyToFlash.zip">ดาวน์โหลดเฟิร์มแวร์โมดูล VOLTOL v1.7.5 (ติดตั้งผ่าน USB)</a><br><small>บอร์ดที่ใช้อยู่แล้วให้ใช้ UPDATE_S3_WINDOWS.bat เพื่อเก็บ Wi-Fi โทเคน และค่าตั้งไว้ครบ</small></p><button id="remoteOta" type="button" disabled>สั่งอัปเดตผ่าน Cloud</button><p id="remoteOtaStatus" role="status"></p><a href="http://192.168.4.1/">เปิดเว็บตั้งค่าโมดูล</a> <a href="/fw/version.json" target="_blank" rel="noreferrer">ดูเวอร์ชันล่าสุด</a></section>
+<div id="cloud-firmware" class="cloud-view" hidden><section><p class="dash-label">VOLTOL / FIRMWARE</p><h2>เฟิร์มแวร์สำหรับโมดูล VOLTOL</h2><section class="usb-install"><h3>ติดตั้งผ่าน USB บนเว็บ</h3><p>สำหรับโมดูลใหม่ ESP32-S3 DevKitC-1 แฟลช 8 MB ใช้ Chrome หรือ Edge บนคอมพิวเตอร์ (ล้างข้อมูลทั้งบอร์ด)</p><a href="/fw/flash/" target="_blank" rel="noopener">เปิดเครื่องมือแฟลชผ่านเว็บ</a></section><h3>อัปเดตผ่าน OTA</h3><p id="firmwareVersion"></p><p id="firmwareLatest">เวอร์ชันล่าสุด —</p><p><a id="fwZip" href="/fw/VOLTOL-v1.8.0-ReadyToFlash.zip">ดาวน์โหลดเฟิร์มแวร์โมดูล VOLTOL v<span id="fwZipVer">1.8.0</span> (ติดตั้งผ่าน USB)</a><br><small>บอร์ดที่ใช้อยู่แล้วให้ใช้ UPDATE_S3_WINDOWS.bat เพื่อเก็บ Wi-Fi โทเคน และค่าตั้งไว้ครบ</small></p><button id="remoteOta" type="button" disabled>สั่งอัปเดตผ่าน Cloud</button><p id="remoteOtaStatus" role="status"></p><a href="http://192.168.4.1/">เปิดเว็บตั้งค่าโมดูล</a> <a href="/fw/version.json" target="_blank" rel="noreferrer">ดูเวอร์ชันล่าสุด</a></section>
 </div>
 <div id="cloud-drag" class="cloud-view" hidden>
 <section class="drag-console">
@@ -591,7 +591,7 @@ $('remoteOta').onclick=async ()=>{
   }catch(error){status.textContent=error.message||'ส่งคำสั่งอัปเดตไม่สำเร็จ';button.disabled=false;}
 };
 let fwLatest='', otaSentAt=0;
-fetch('/fw/version.json',{cache:'no-store'}).then(r=>r.json()).then(v=>{fwLatest=v.version||'';$('firmwareLatest').textContent='เวอร์ชันล่าสุด '+fwLatest;}).catch(()=>{});
+fetch('/fw/version.json',{cache:'no-store'}).then(r=>r.json()).then(v=>{fwLatest=v.version||'';$('firmwareLatest').textContent='เวอร์ชันล่าสุด '+fwLatest;if(fwLatest){$('fwZip').href='/fw/VOLTOL-v'+fwLatest+'-ReadyToFlash.zip';$('fwZipVer').textContent=fwLatest;}}).catch(()=>{});
 const authClient=window.supabase.createClient(base,key,{auth:window.battlabAuthOptions});
 let renewing=null, accountGeneration=0;
 function rememberSession(data){ session=data; }
