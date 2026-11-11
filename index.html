@@ -626,7 +626,7 @@ function dur(s){if(!num(s))return '--';const d=Math.floor(s/86400),h=Math.floor(
 // ---------- preferences (per user: saved in the account + this browser)
 const ACCENTS={cyan:'#3ee6ff',teal:'#36c4a8',blue:'#4f8ff0',violet:'#8b7cf0',orange:'#f08a3c',pink:'#ec6fa5',lime:'#8fcf3c'};
 const PREF_DEF={theme:'auto',accent:'cyan',tempUnit:'C',refresh:5,upd:'B',notify:false,metrics:['soc','v','i','p','t','d'],range:24};
-let P={...PREF_DEF,...ls.get('bl_prefs',{})};if(!P.thA){if(P.accent==='teal')P.accent='cyan';P.thA=1;try{ls.set('bl_prefs',P)}catch(e){}}
+let P={...PREF_DEF,...ls.get('bl_prefs',{})};if(!P.thA){P.accent='cyan';P.thA=1;try{ls.set('bl_prefs',P)}catch(e){}}
 const dark=()=>P.theme==='dark'||(P.theme==='auto'&&matchMedia('(prefers-color-scheme: dark)').matches);
 function applyTheme(){const d=dark();document.documentElement.dataset.theme=d?'dark':'light';document.documentElement.style.setProperty('--accent',ACCENTS[P.accent]||ACCENTS.cyan);document.documentElement.style.setProperty('--on-accent','#041218');document.querySelector('meta[name=theme-color]').content=d?'#05080d':'#eef2f5'}
 $('btnThemeQuick').onclick=()=>{P.theme=dark()?'light':'dark';ls.set('bl_prefs',P);applyTheme()};
