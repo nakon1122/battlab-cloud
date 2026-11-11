@@ -860,7 +860,11 @@ function liveTick(){if(document.visibilityState==='hidden'&&Date.now()-fetchOkAt
  if(share){shareLoad(true).then(()=>{if(!$('vList').classList.contains('hide'))renderList();else if(!$('vGrp').classList.contains('hide'))renderGroup();else if(cur)renderDev()});return}
  if(demo)return;if(cur){if(Date.now()-fetchOkAt>12000)refresh()}else if(!$('vList').classList.contains('hide')&&Date.now()-fetchOkAt>12000)loadDevices().then(renderList)}
 function startTicker(){if(tickW)return;try{const src='setInterval(()=>postMessage(1),10000)';tickW=new Worker(URL.createObjectURL(new Blob([src],{type:'text/javascript'})));tickW.onmessage=liveTick}catch(e){setInterval(liveTick,10000)}}
-function subListRT(){if(demo||share||listRT)return;listRT=sb.channel('latest-all').on('postgres_changes',{event:'*',schema:'public',table:'latest'},p=>{const n=p.new;if(!n||!n.device_id||!devs.some(d=>d.id===n.device_id))return;latest[n.device_id]={ts:n.ts,data:n.data};fetchOkAt=Date.now();
+// each board upload writes the latest row twice (ingest: slim row, then ingest2: full row), so realtime sends a slim copy first.
+// Keep the heavy parts (settings, BMS params, packs…) from the previous row until the full copy arrives, so pages do not flash and rebuild.
+const RT_HEAVY=['cfg','jk','packs','pa','bd','devs','wscan'];
+function rtMerge(id,n){const o=latest[id],d=n.data||{};if(o&&o.data&&o.data.cfg&&!d.cfg&&!d.inv){const m={...d};for(const k of RT_HEAVY)if(!(k in m)&&k in o.data)m[k]=o.data[k];return {ts:n.ts,data:m}}return {ts:n.ts,data:d}}
+function subListRT(){if(demo||share||listRT)return;listRT=sb.channel('latest-all').on('postgres_changes',{event:'*',schema:'public',table:'latest'},p=>{const n=p.new;if(!n||!n.device_id||!devs.some(d=>d.id===n.device_id))return;latest[n.device_id]=rtMerge(n.device_id,n);fetchOkAt=Date.now();
   if(!listDirty){listDirty=setTimeout(()=>{listDirty=0;if(!$('vList').classList.contains('hide'))renderList();else if(!$('vGrp').classList.contains('hide'))renderGroup()},1000)}})
  .subscribe(st=>{if(st==='CHANNEL_ERROR'||st==='TIMED_OUT'||st==='CLOSED'){const c=listRT;listRT=null;try{sb.removeChannel(c)}catch(e){}setTimeout(subListRT,5000)}})}
 function showList(){show('vList');startTicker();subListRT();renderViewers();$('addCard').classList.toggle('hide',demo);if(demo)latest[DEMO_ID]={ts:new Date().toISOString(),data:demoAt(Date.now()/1000)};renderList();clearInterval(listT);listT=setInterval(async()=>{if(demo){latest[DEMO_ID]={ts:new Date().toISOString(),data:demoAt(Date.now()/1000)}}else await loadDevices();renderList()},15000)}
@@ -1047,7 +1051,7 @@ function openDev(dev,t){startTicker();const isInv=dev.kind==='inverter'||((lates
  document.querySelectorAll('#dTabs .chip').forEach(c=>c.classList.toggle('on',c.dataset.t===t));['ov','cells','hist','ctl','alert','set'].forEach(k=>$('tab_'+k).classList.toggle('hide',k!==t));
  ctlKey='';renderDev(true);if(t==='hist')loadHistory();else destroyCharts();if(t==='ctl'){ctlTouch(true);loadCmds()}
  if(!same){refresh();subRT();}clearInterval(pollT);pollT=setInterval(refresh,Math.max(3,P.refresh)*1000);window.scrollTo(0,0)}
-function subRT(){if(cur.demo||cur.ble||cur.shared)return;rt=sb.channel('l-'+cur.id).on('postgres_changes',{event:'*',schema:'public',table:'latest',filter:'device_id=eq.'+cur.id},p=>{if(p.new&&p.new.data&&cur){latest[cur.id]={ts:p.new.ts,data:p.new.data};fetchOkAt=Date.now();renderDev()}}).subscribe(st=>{rtOn=st==='SUBSCRIBED'})}
+function subRT(){if(cur.demo||cur.ble||cur.shared)return;rt=sb.channel('l-'+cur.id).on('postgres_changes',{event:'*',schema:'public',table:'latest',filter:'device_id=eq.'+cur.id},p=>{if(p.new&&p.new.data&&cur){latest[cur.id]=rtMerge(cur.id,p.new);fetchOkAt=Date.now();renderDev()}}).subscribe(st=>{rtOn=st==='SUBSCRIBED'})}
 async function refresh(){if(!cur)return;const dev=cur;const l=await fetchLatest(dev).catch(()=>null);if(cur!==dev)return;if(l){latest[dev.id]=l;fetchOkAt=Date.now()}
  if(l&&l.data&&l.data.fw){if(fwSeen[dev.id]&&fwSeen[dev.id]!==l.data.fw)toast('✓ บอร์ดใช้เฟิร์มแวร์ '+l.data.fw+' แล้ว');fwSeen[dev.id]=l.data.fw}
  if(!dev.ble&&Date.now()-energyAt>300000){energyAt=Date.now();const m=new Date();m.setHours(0,0,0,0);fetchHist(dev,m.getTime(),Date.now(),dev.demo?600:3600).then(r=>{energyToday=energyOf(r);if(tab==='ov')renderDev()}).catch(()=>{})}
