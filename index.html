@@ -772,7 +772,7 @@ $('btnDemo').onclick=()=>{demo=true;devs=[demoDev()];go('d/'+DEMO_ID+'/ov')};
 sb.auth.onAuthStateChange(async(e,s)=>{
  if(e==='PASSWORD_RECOVERY'){const np=prompt('ตั้งรหัสผ่านใหม่ (อย่างน้อย 8 ตัว)');if(np&&np.length>=8){const {error}=await sb.auth.updateUser({password:np});toast(error?thErr(error):'เปลี่ยนรหัสผ่านแล้ว')}afterLogin()}
  else if(e==='SIGNED_OUT'&&!demo){stopAll();show('vLogin')}});
-async function afterLogin(){demo=false;await adminProbe();const {data}=await sb.auth.getUser();const up=data&&data.user&&data.user.user_metadata&&data.user.user_metadata.prefs;if(up){P={...PREF_DEF,...up};ls.set('bl_prefs',P);applyTheme()}await loadDevices();if(ls.get('bl_claim',null)){history.replaceState(null,'','#');if(await claimPending())return}route()}
+async function afterLogin(){demo=false;await adminProbe();const {data}=await sb.auth.getUser();const up=data&&data.user&&data.user.user_metadata&&data.user.user_metadata.prefs;if(up){P={...PREF_DEF,...up};if(!P.thA){P.accent='cyan';P.thA=1;sb.auth.updateUser({data:{prefs:P}}).catch(()=>{})}ls.set('bl_prefs',P);applyTheme()}await loadDevices();if(ls.get('bl_claim',null)){history.replaceState(null,'','#');if(await claimPending())return}route()}
 async function boot(){updInstall();if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});const {data}=await sb.auth.getSession();if(data.session)afterLogin();else if(ROUTE()[0]==='fw'||ROUTE()[0]==='claim'||ROUTE()[0]==='claimv'||ROUTE()[0]==='s')route();else if(ROUTE()[1]===DEMO_ID){demo=true;devs=[demoDev()];route()}else show('vLogin')}
 
 // ---------- routing
