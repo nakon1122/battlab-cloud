@@ -1,5 +1,10 @@
 <!doctype html><html lang="th"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="canonical" href="https://voltol.battlab.net/">
 <title>VOLTOL Cloud Pro · ข้อมูลจริง</title>
+<script>
+/* template chosen before first paint: ?tpl= preview > last value seen from the server > carbon (A) */
+(function(){var ok={carbon:1,pitwall:1},t='carbon',q=null;try{q=new URLSearchParams(location.search).get('tpl')}catch(e){}
+try{var c=localStorage.getItem('voltol_tpl');if(ok[c])t=c}catch(e){}if(ok[q])t=q;document.documentElement.setAttribute('data-tpl',t);window.__tplPreview=ok[q]?q:null})();
+</script>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%23141619%27/%3E%3Cpath d=%27M36 6L15 36h15l-3 22 22-32H34z%27 fill=%27%23ffd45e%27/%3E%3C/svg%3E">
 <style>
 *{box-sizing:border-box}body{margin:0;background:#0b1422;color:#ebf3ff;font:16px system-ui,sans-serif}header{border-bottom:1px solid #293a51;padding:22px max(5vw,24px);display:flex;justify-content:space-between;align-items:center}b,.accent{color:#ffcd67}main{max-width:1140px;margin:auto;padding:40px 24px}h1{font-size:clamp(32px,6vw,60px);line-height:1.05;margin:12px 0}p,small{color:#a5b6ce}section,.metric{border:1px solid #30425a;background:#142236;border-radius:18px;padding:20px;margin:16px 0}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}.metric{margin:0}.metric strong{font-size:30px;display:block;margin-top:7px}.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}input,button,select{font:inherit;padding:10px 13px;border-radius:9px;border:1px solid #516884;background:#0c1929;color:#edf5ff;max-width:100%}button{background:#ffcd67;color:#152236;border:0;font-weight:700;cursor:pointer}button:disabled{opacity:.55}a{color:#79dbff}pre{white-space:pre-wrap;overflow-wrap:anywhere;color:#a8e8fc}li{margin:8px 0}img{width:100%;max-width:820px}[hidden]{display:none!important}
@@ -279,6 +284,68 @@ body .track-cockpit::before{background:linear-gradient(105deg,transparent 42%,rg
 })();
 </script>
 <!-- ===== end Carbon Pro ===== -->
+<!-- ===== Pit Wall (template B, backup) — only active when <html data-tpl="pitwall">. Chosen in the BATTLAB back office. ===== -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&display=swap">
+<style id="pitWall">
+html[data-tpl="pitwall"]{--cp-bg:#0c0e10;--cp-card:#121417;--cp-line:#23272d;--cp-text:#e9edf1;--cp-muted:#8a939e;--cp-y:#ff6a1a;--cp-ok:#3ee08f;--pw-cy:#3cc8f0;--card:#121417;--line:#23272d;--muted:#8a939e;--volt:#ff6a1a;--signal:#3cc8f0}
+html[data-tpl="pitwall"] body{background-color:var(--cp-bg);background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:32px 32px;font-family:"Chakra Petch","IBM Plex Sans Thai",system-ui,sans-serif}
+html[data-tpl="pitwall"] body section,html[data-tpl="pitwall"] body .metric{border-radius:6px;background:var(--cp-card);border-color:var(--cp-line)}
+html[data-tpl="pitwall"] body .module-header{background:#0c0e10f2}
+html[data-tpl="pitwall"] body .module-header .brand{font-style:normal;letter-spacing:.24em}
+html[data-tpl="pitwall"] #dashboard .module-select,html[data-tpl="pitwall"] #dashboard select#devices{border-radius:6px}
+html[data-tpl="pitwall"] body .track-cockpit{border-radius:8px;background:#101215;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:24px 24px;box-shadow:none;animation:pwIn .5s ease-out both}
+html[data-tpl="pitwall"] body .track-cockpit::before{background:linear-gradient(90deg,transparent 0,rgba(60,200,240,.10) 1px,transparent 3px)!important;background-size:100% 100%!important;animation:pwScan 3.2s linear infinite}
+html[data-tpl="pitwall"] body .tc-kicker{color:var(--cp-y);letter-spacing:.2em}
+html[data-tpl="pitwall"] body .tc-source{border-radius:4px;font-family:"JetBrains Mono",monospace;font-size:11px}
+html[data-tpl="pitwall"] body .tc-source::before{border-radius:2px}
+html[data-tpl="pitwall"] body .tc-fill{stroke:var(--cp-y);filter:none}
+html[data-tpl="pitwall"] body .tc-tick.cp-on{stroke:var(--cp-y)}
+html[data-tpl="pitwall"] body .tc-needle{fill:var(--cp-y);filter:none;transition:transform .2s linear}
+html[data-tpl="pitwall"] body #tcSpeed{font-family:"JetBrains Mono",monospace;font-weight:700;letter-spacing:-.04em}
+html[data-tpl="pitwall"] body .tc-readout small{font-family:"JetBrains Mono",monospace;letter-spacing:.3em}
+html[data-tpl="pitwall"] .cp-power-head b{font-family:"JetBrains Mono",monospace}
+html[data-tpl="pitwall"] .cp-power-track{border-radius:2px;height:8px}
+html[data-tpl="pitwall"] .cp-power-fill{border-radius:2px;background:repeating-linear-gradient(90deg,var(--cp-y) 0 6px,#ff8a3d 6px 8px)}
+html[data-tpl="pitwall"] .cp-power-track::after{display:none}
+html[data-tpl="pitwall"] body .tc-tile{border-radius:6px;background:#121417;animation:pwIn .45s ease-out both}
+html[data-tpl="pitwall"] body .tc-tile::before{content:"";position:absolute;left:0;top:0;height:2px;width:36%;background:var(--pw-cy)}
+html[data-tpl="pitwall"] body .tc-tile small{font-family:"JetBrains Mono",monospace;letter-spacing:.14em;font-size:11px}
+html[data-tpl="pitwall"] body .tc-tile strong{font-family:"JetBrains Mono",monospace;font-weight:700}
+html[data-tpl="pitwall"] .cp-spark polyline{stroke:var(--pw-cy)}
+html[data-tpl="pitwall"] body .track-status article{border-radius:6px}
+html[data-tpl="pitwall"] .remote-net,html[data-tpl="pitwall"] .rn-list li{border-radius:6px}
+html[data-tpl="pitwall"] .rn-head small{color:var(--pw-cy)}
+html[data-tpl="pitwall"] body button{border-radius:4px}
+html[data-tpl="pitwall"] body .cloud-dock{border-radius:8px;background:#0c0e10f5;box-shadow:0 10px 26px #000a}
+html[data-tpl="pitwall"] body .cloud-dock button{border-radius:4px;font-family:"Chakra Petch",sans-serif;letter-spacing:.06em}
+html[data-tpl="pitwall"] body .cloud-dock button[aria-pressed=true]{background:rgba(255,106,26,.14);color:var(--cp-text);box-shadow:inset 0 0 0 1px var(--cp-y)}
+@media(min-width:1024px){
+  html[data-tpl="pitwall"] body{padding-left:208px}
+  html[data-tpl="pitwall"] body .cloud-dock{top:0;bottom:0;left:0;right:auto;transform:none;width:200px;border-radius:0;border-width:0 1px 0 0;display:flex;flex-direction:column;justify-content:flex-start;gap:6px;padding:92px 12px 16px;box-shadow:none}
+  html[data-tpl="pitwall"] body .cloud-dock::before{content:"VOLTOL · PIT WALL";position:absolute;top:30px;left:18px;font:700 13px "Chakra Petch",sans-serif;letter-spacing:.22em;color:var(--cp-text)}
+  html[data-tpl="pitwall"] body .cloud-dock button{display:flex;justify-content:flex-start;align-items:center;gap:12px;min-height:46px;padding:0 14px;font-size:15px}
+  html[data-tpl="pitwall"] main{padding-bottom:40px}
+}
+@keyframes pwIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes pwScan{from{background-position:-10% 0}to{background-position:110% 0}}
+@media (prefers-reduced-motion:reduce){html[data-tpl="pitwall"] body .track-cockpit,html[data-tpl="pitwall"] body .track-cockpit::before,html[data-tpl="pitwall"] body .tc-tile{animation:none!important}}
+</style>
+<script>
+/* Web template switch: the active template is stored in Supabase (site_settings.voltol_template, public read).
+   Only a super admin can change it, from the BATTLAB back office. ?tpl=pitwall or ?tpl=carbon previews without changing it. */
+(() => {
+  const OK = { carbon: 1, pitwall: 1 };
+  if (window.__tplPreview) return;
+  fetch('https://zpsxcdzkayqhzbdcdoed.supabase.co/rest/v1/site_settings?key=eq.voltol_template&select=value', { headers: { apikey: 'sb_publishable_roXek86Fm64tr_vEG2pYRw_4onX6cBJ' }, cache: 'no-store' })
+    .then(r => r.ok ? r.json() : []).then(rows => {
+      const t = rows && rows[0] && rows[0].value && rows[0].value.active;
+      if (!OK[t]) return;
+      document.documentElement.setAttribute('data-tpl', t);
+      try { localStorage.setItem('voltol_tpl', t); } catch (e) {}
+    }).catch(() => {});
+})();
+</script>
+<!-- ===== end Pit Wall ===== -->
 
 <header class="module-header"><div class="brand"><b>⚡</b> VOLTOL<small>Monitor · Cloud</small></div><span class="cloud-top-tools"><a href="https://www.battlab.net/">← BATTLAB Home</a> <span id="cloudHealth" class="health-pill" data-state="unknown">กำลังตรวจสอบ Cloud</span></span><aside class="track-status" aria-label="สถานะการเชื่อมต่อ">
 <article><b><span aria-hidden="true">☁</span> ESP32 → CLOUD</b><strong id="tcCloud" data-state="unknown">รอตรวจสอบ</strong><small id="tcCloudDetail">—</small></article>

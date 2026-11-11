@@ -109,7 +109,7 @@ a{color:var(--y)}a.btn{color:var(--text)}
       <button type="button" data-tab="ov" aria-pressed="true">ภาพรวม</button>
       <button type="button" data-tab="mem" aria-pressed="false">สมาชิก <span class="cnt num" id="cMem">–</span></button>
       <button type="button" data-tab="esp" aria-pressed="false">ESP32 / อุปกรณ์ <span class="cnt num" id="cEsp">–</span></button>
-      <button type="button" data-tab="ota" aria-pressed="false">อัปเดตเฟิร์มแวร์</button><button type="button" data-tab="log" aria-pressed="false">บันทึกการแก้ไข</button>
+      <button type="button" data-tab="ota" aria-pressed="false">อัปเดตเฟิร์มแวร์</button><button type="button" data-tab="web" aria-pressed="false">เทมเพลตเว็บ</button><button type="button" data-tab="log" aria-pressed="false">บันทึกการแก้ไข</button>
     </nav>
     <main id="view"></main>
   </div>
@@ -199,13 +199,48 @@ async function render() {
     paint();
   } else if (S.tab === 'ota') {
     renderOta(v);
+  } else if (S.tab === 'web') {
+    renderWeb(v);
   } else {
     v.innerHTML = skel(6);
-    const A = {update_device:'แก้ไขอุปกรณ์',transfer_device:'ย้ายเจ้าของบอร์ด',release_device:'ปลดบอร์ดจากบัญชี',command:'ส่งคำสั่ง',update_screen:'แก้ไขจอ',release_screen:'ปลดจอ',transfer_screen:'ย้ายเจ้าของจอ',set_role:'ตั้งสิทธิ์',set_password:'ตั้งรหัสผ่านใหม่',confirm_email:'ยืนยันอีเมล',suspend_user:'ระงับบัญชี',restore_user:'เปิดบัญชีคืน',delete_user:'ลบบัญชี',voltol_set_owner:'ย้ายเจ้าของ VOLTOL',voltol_rename:'เปลี่ยนชื่อ VOLTOL',voltol_delete:'ลบโมดูล VOLTOL',delete_device:'ลบอุปกรณ์',bulk_ota:'สั่งอัปเดตเฟิร์มแวร์หลายเครื่อง'};
+    const A = {site_setting:'เปลี่ยนเทมเพลตเว็บ VOLTOL',update_device:'แก้ไขอุปกรณ์',transfer_device:'ย้ายเจ้าของบอร์ด',release_device:'ปลดบอร์ดจากบัญชี',command:'ส่งคำสั่ง',update_screen:'แก้ไขจอ',release_screen:'ปลดจอ',transfer_screen:'ย้ายเจ้าของจอ',set_role:'ตั้งสิทธิ์',set_password:'ตั้งรหัสผ่านใหม่',confirm_email:'ยืนยันอีเมล',suspend_user:'ระงับบัญชี',restore_user:'เปิดบัญชีคืน',delete_user:'ลบบัญชี',voltol_set_owner:'ย้ายเจ้าของ VOLTOL',voltol_rename:'เปลี่ยนชื่อ VOLTOL',voltol_delete:'ลบโมดูล VOLTOL',delete_device:'ลบอุปกรณ์',bulk_ota:'สั่งอัปเดตเฟิร์มแวร์หลายเครื่อง'};
     try { const L = await rpc('admin_log_list', {p_limit: 200});
       v.innerHTML = '<div class="list log">' + (L.length ? L.map(g => `<div class="row"><span class="main"><span class="t">${esc(A[g.action] || g.action)}</span><span class="m">${dt(g.at)} · ${esc(g.by || '')} · ${esc(JSON.stringify(g.detail || {}).slice(0, 160))}</span></span></div>`).join('') : '<div class="card empty">ยังไม่มีบันทึก</div>') + '</div>';
     } catch (e) { v.innerHTML = `<div class="card empty">${esc(thErr(e))}</div>`; }
   }
+}
+
+// ---------- VOLTOL web template (voltol.battlab.net): A Carbon Pro (main) / B Pit Wall (backup)
+// Stored in site_settings.voltol_template; admin_set_site_setting checks super admin on the server.
+const TPL = [
+  {k:'carbon', n:'A · Carbon Pro', d:'พื้นคาร์บอน สีเหลือง BATTLAB เกจมีเข็ม กราฟเล็กในการ์ด เมนูแคปซูลลอย', bg:'#07090c', ac:'#ffcf22', rx:10},
+  {k:'pitwall', n:'B · Pit Wall', d:'สไตล์ทีมแข่ง ตารางกริด สีส้ม-ฟ้า ตัวเลขโมโน เมนูด้านซ้ายบนคอมพ์', bg:'#0c0e10', ac:'#ff6a1a', rx:2}];
+function tplThumb(t) {
+  const pw = t.k === 'pitwall', x0 = pw ? 36 : 8, gx = pw ? 50 : 22;
+  return `<svg viewBox="0 0 160 90" style="width:100%;display:block;border-radius:10px" aria-hidden="true"><rect width="160" height="90" fill="${t.bg}"/>` +
+    (pw ? `<path d="M0 22H160M0 44H160M0 66H160M32 0V90M64 0V90M96 0V90M128 0V90" stroke="#1c2025"/><rect width="30" height="90" fill="#121417"/><rect x="4" y="10" width="22" height="6" rx="1" fill="${t.ac}"/>`
+        : `<rect x="40" y="76" width="80" height="9" rx="4.5" fill="#1c1f24"/><rect x="42" y="78" width="20" height="5" rx="2.5" fill="${t.ac}"/>`) +
+    `<rect x="${x0}" y="10" width="62" height="58" rx="${t.rx}" fill="#11161c" stroke="#2a2e35"/><path d="M${gx} 52A18 18 0 1 1 ${gx + 34} 52" stroke="#2a2e35" stroke-width="5" fill="none"/><path d="M${gx} 52A18 18 0 0 1 ${gx + 17} 34" stroke="${t.ac}" stroke-width="5" fill="none"/>` +
+    [0, 1].map(i => `<rect x="${pw ? 104 : 76}" y="${10 + i * 30}" width="${pw ? 50 : 76}" height="26" rx="${t.rx}" fill="#11161c" stroke="#2a2e35"/><polyline points="${[0,1,2,3,4,5].map(j => ((pw ? 108 : 80) + j * (pw ? 8 : 13)) + ',' + (30 + i * 30 - ((j * 7 + i * 3) % 9))).join(' ')}" fill="none" stroke="${i ? '#3cc8f0' : t.ac}" stroke-width="1.5"/>`).join('') + '</svg>';
+}
+async function renderWeb(v) {
+  v.innerHTML = skel(2);
+  let cur = 'carbon';
+  try { const { data } = await sb.from('site_settings').select('value').eq('key', 'voltol_template').maybeSingle(); cur = data?.value?.active || 'carbon'; } catch (e) {}
+  const sup = isSuper();
+  v.innerHTML = `<div class="card"><h2 style="margin:0 0 4px;font:700 20px 'Chakra Petch'">เทมเพลตหน้าเว็บ VOLTOL</h2>
+    <p style="margin:0 0 14px;color:var(--muted)">หน้าที่ลูกค้าเห็นที่ <a href="https://voltol.battlab.net/" target="_blank" rel="noopener">voltol.battlab.net</a> · เปลี่ยนแล้วมีผลกับทุกคนทันที ไม่ต้องอัปไฟล์ใหม่${sup ? '' : ' · <b>เฉพาะ Super admin เปลี่ยนได้</b>'}</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px">` +
+    TPL.map(t => { const on = t.k === cur; return `<div class="card" style="background:var(--card2);border-color:${on ? t.ac : 'var(--line)'}">${tplThumb(t)}
+      <div style="display:flex;align-items:center;gap:8px;margin-top:10px"><b style="font:700 16px 'Chakra Petch'">${t.n}</b>${on ? `<span class="role" style="background:${t.ac};color:#111">ใช้งานอยู่</span>` : '<span style="color:var(--dim);font-size:13px">สำรอง</span>'}</div>
+      <p style="margin:6px 0 12px;color:var(--muted);font-size:14px">${t.d}</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn" href="https://voltol.battlab.net/?tpl=${t.k}" target="_blank" rel="noopener" style="text-decoration:none">ดูตัวอย่าง</a>${sup && !on ? `<button type="button" class="btn y" data-tpl="${t.k}">ตั้งเป็นหน้าหลัก</button>` : ''}</div></div>`; }).join('') + '</div></div>';
+  v.querySelectorAll('[data-tpl]').forEach(b => b.onclick = async () => {
+    const t = TPL.find(x => x.k === b.dataset.tpl); if (!t || !confirm('เปลี่ยนหน้าเว็บ VOLTOL ของลูกค้าทุกคนเป็น ' + t.n + ' ?')) return;
+    b.disabled = true;
+    try { await rpc('admin_set_site_setting', {p_key: 'voltol_template', p_value: {active: t.k}}); toast('เปลี่ยนเป็น ' + t.n + ' แล้ว'); renderWeb(v); }
+    catch (e) { toast(thErr(e), 1); b.disabled = false; }
+  });
 }
 
 // ---------- bulk firmware update
