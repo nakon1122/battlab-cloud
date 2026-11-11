@@ -1,6 +1,6 @@
 {
   "name": "BATTLAB ESP32-S3 (BMS board)",
-  "version": "2.9.0",
+  "version": "2.10.1",
   "new_install_prompt_erase": true,
   "builds": [
     {

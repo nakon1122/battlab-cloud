@@ -1,31 +1,31 @@
 {
-  "updated": "2026-11-11T03:38:14+07:00",
-  "notes": "อ่านอินเวอร์เตอร์ยี่ห้ออื่นผ่านดองเกิลในบ้าน (Deye, Sofar, Solis, PowMr/SmartESS) + ย้ายเว็บไป batterycloud.battlab.net — บอร์ด S3 และจอ CYD",
+  "updated": "2026-11-12T06:23:54+07:00",
+  "notes": "v2.10.1: ค้นหาดองเกิล LuxPower ไม่ทำให้บอร์ดค้างแล้ว · ถ้า IP ดองเกิลเปลี่ยน บอร์ดค้นหาและตั้ง IP ใหม่ให้เอง · จอ CYD บอกสถานะการค้นหา",
   "boards": {
     "s3": {
-      "version": "2.10.0",
-      "url": "fw/2.10.0/BATTLAB_S3_APP_UPDATE.bin",
-      "size": 1493072,
-      "sha256": "4a2327631b70adc0c21177adcc50171f9d762520960311da2655ef10b953bb9e",
+      "version": "2.10.1",
+      "url": "fw/2.10.1/BATTLAB_S3_APP_UPDATE.bin",
+      "size": 1496192,
+      "sha256": "fffd2c17b3b2d8ed6fbe338a902d98a812bd40ac8de4de4bff8e97b969ac8999",
       "install": {
-        "url": "fw/2.10.0/BATTLAB_S3_BLEFIX_INSTALL.bin",
-        "size": 1558608,
-        "sha256": "d973444bd93ffb7a39e36c119ae38ac2e27d9a5b181a2f9e15337f1dc6964532"
+        "url": "fw/2.10.1/BATTLAB_S3_BLEFIX_INSTALL.bin",
+        "size": 1561728,
+        "sha256": "9d7c0c775d8fa10d413d838cb5edc05630e9a7814df5a28e275149ec035fa2e1"
       },
-      "webtools": "fw/2.10.0/webtools-s3.json",
+      "webtools": "fw/2.10.1/webtools-s3.json",
       "title": "ESP32-S3 (BMS board)"
     },
     "cyd35": {
-      "version": "2.10.0",
-      "url": "fw/2.10.0/BATTLAB_CYD35_APP_UPDATE.bin",
-      "size": 1809728,
-      "sha256": "4308fd2e909568b61e6dc4b0dae1f86b761d3e56ff758530378a02bf8ef7d87f",
+      "version": "2.10.1",
+      "url": "fw/2.10.1/BATTLAB_CYD35_APP_UPDATE.bin",
+      "size": 1813488,
+      "sha256": "e485c55394741088edb9ef37c1f7bcf0ed7c4a76037d62864a4c8ef4315b9bfb",
       "install": {
-        "url": "fw/2.10.0/BATTLAB_CYD35_INSTALL.bin",
-        "size": 1875264,
-        "sha256": "3b7350eff05e9fcb32f93bf3c9f32a645d7ba9fe65ec7f4679ffd7d3d660f1f6"
+        "url": "fw/2.10.1/BATTLAB_CYD35_INSTALL.bin",
+        "size": 1879024,
+        "sha256": "c61e8676a1ae4344eb904340bc9f3fb4713f0039860897e047ed6229bd345dbb"
       },
-      "webtools": "fw/2.10.0/webtools-cyd35.json",
+      "webtools": "fw/2.10.1/webtools-cyd35.json",
       "title": "CYD 3.5\" (BMS screen)"
     },
     "cloudscreen": {
@@ -42,11 +42,27 @@
       "title": "Cloud Screen (CYD 3.5\")"
     }
   },
-  "zip": {
-    "url": "fw/2.10.0/BATTLAB_v2.10.0_READY_TO_FLASH.zip",
-    "size": 15912675
-  },
   "history": [
+    {
+      "version": "2.10.1",
+      "date": "2026-11-12",
+      "notes": "v2.10.1: ค้นหาดองเกิล LuxPower ไม่ทำให้บอร์ดค้างแล้ว · ถ้า IP ดองเกิลเปลี่ยน บอร์ดค้นหาและตั้ง IP ใหม่ให้เอง · จอ CYD บอกสถานะการค้นหา",
+      "zip": null,
+      "boards": {
+        "s3": {
+          "app": "fw/2.10.1/BATTLAB_S3_APP_UPDATE.bin",
+          "install": "fw/2.10.1/BATTLAB_S3_BLEFIX_INSTALL.bin"
+        },
+        "cyd35": {
+          "app": "fw/2.10.1/BATTLAB_CYD35_APP_UPDATE.bin",
+          "install": "fw/2.10.1/BATTLAB_CYD35_INSTALL.bin"
+        },
+        "cloudscreen": {
+          "app": "fw/2.9.3/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
+          "install": "fw/2.9.3/BATTLAB_CLOUDSCREEN_INSTALL.bin"
+        }
+      }
+    },
     {
       "version": "2.10.0",
       "date": "2026-11-11",
@@ -109,29 +125,6 @@
         "cyd35": {
           "app": "fw/2.9.1/BATTLAB_CYD35_APP_UPDATE.bin",
           "install": "fw/2.9.1/BATTLAB_CYD35_INSTALL.bin"
-        },
-        "cloudscreen": {
-          "app": "fw/2.8.8/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
-          "install": "fw/2.8.8/BATTLAB_CLOUDSCREEN_INSTALL.bin"
-        }
-      }
-    },
-    {
-      "version": "2.9.0",
-      "date": "2026-11-04",
-      "notes": "2.9.0: ล้างเวลาทำงาน BMS ผ่าน RS485 (เฉพาะ super admin)",
-      "zip": {
-        "url": "fw/2.9.0/BATTLAB_v2.9.0_READY_TO_FLASH.zip",
-        "size": 17006215
-      },
-      "boards": {
-        "s3": {
-          "app": "fw/2.9.0/BATTLAB_S3_APP_UPDATE.bin",
-          "install": "fw/2.9.0/BATTLAB_S3_BLEFIX_INSTALL.bin"
-        },
-        "cyd35": {
-          "app": "fw/2.9.0/BATTLAB_CYD35_APP_UPDATE.bin",
-          "install": "fw/2.9.0/BATTLAB_CYD35_INSTALL.bin"
         },
         "cloudscreen": {
           "app": "fw/2.8.8/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
