@@ -10,7 +10,7 @@
 <meta name="apple-mobile-web-app-title" content="BattLab">
 <meta name="description" content="BattLab Cloud - ดูและควบคุมแบตเตอรี่ลิเธียมของคุณจากทุกที่">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&family=Noto+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2213%22%20fill%3D%22%23101820%22%2F%3E%3Cpath%20fill%3D%22%23FFD326%22%20d%3D%22M38%205%2013%2035h16l-4%2024%2026-32H35z%22%2F%3E%3C%2Fsvg%3E">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uplot@1.6.30/dist/uPlot.min.css">
@@ -471,7 +471,59 @@ table th,table td{padding:10px 12px}
 }
 @media(max-width:380px){header .battlab-logo{width:94px}header{gap:4px}.landing h1{font-size:29px}.auth-card{padding:18px!important}header .badge{font-size:10px;padding:3px 6px}}
 @media(prefers-reduced-motion:reduce){.hero-batt .lvl{animation:none;width:65%}.enter>.card,.enter>.alerts,.enter>.grid>.card{animation:none}.arc,.roll .rd span{transition:none}}
-.auth-home-link{display:inline-flex;align-items:center;padding:8px 10px;border:1px solid currentColor;border-radius:8px;color:inherit;text-decoration:none;font-weight:700}.auth-home-link:hover{text-decoration:underline}</style></head>
+.auth-home-link{display:inline-flex;align-items:center;padding:8px 10px;border:1px solid currentColor;border-radius:8px;color:inherit;text-decoration:none;font-weight:700}.auth-home-link:hover{text-decoration:underline}
+/* ===== Theme A · Energy Flow (2026-11-11) ===== */
+:root:not([data-theme=light]){--bg:#05080d;--card:#0a141c;--card2:#08121a;--line:#172630;--text:#eef6fa;--muted:#8aa0ae;--grid:#13222c;--good:#3ef08a;--warn:#ffb36b;--glass:none}
+:root:not([data-theme=light]) body{background:radial-gradient(1100px 620px at 50% -6%,#0c1a24 0%,rgba(5,8,13,0) 70%),radial-gradient(700px 420px at 100% 30%,rgba(62,230,255,.05),transparent 70%),#05080d;background-attachment:fixed}
+html,body{font-family:"IBM Plex Sans Thai","Noto Sans Thai",system-ui,-apple-system,"Segoe UI",sans-serif}
+.big,.status,.tile b,.ring .v b,.kv b,.dcard .big,.hl,#fleet b,.invline b,.fh .v{font-family:"Space Grotesk","IBM Plex Sans Thai",sans-serif;font-variant-numeric:tabular-nums;letter-spacing:0}
+:root:not([data-theme=light]) header{background:rgba(5,8,13,.82);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+:root:not([data-theme=light]) .card{background:var(--card);border:1px solid var(--line);border-radius:20px;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none}
+:root:not([data-theme=light]) .dcard:hover{box-shadow:0 14px 34px -14px rgba(62,230,255,.25);border-color:#22404f}
+.dcard:before{display:none}
+:root:not([data-theme=light]) .chip{border-radius:999px;background:#0c161e;border-color:#1a2a35;color:#b6cad6}
+:root:not([data-theme=light]) .chip.on,:root:not([data-theme=light]) .dtabs .chip.on{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+:root:not([data-theme=light]) .dtabs .chip.on svg{color:var(--on-accent)}
+:root:not([data-theme=light]) input,:root:not([data-theme=light]) select{background:#08121a;border-color:#1d2c37}
+:root:not([data-theme=light]) .socbar{background:#12303a}
+:root:not([data-theme=light]) .grp span{color:var(--muted)}
+.sring{flex:none;display:block}.sring .sarc{transition:stroke-dasharray 1.2s cubic-bezier(.3,.8,.3,1),stroke .4s}
+.sring.chg .sarc{animation:sGlow 1.8s ease-in-out infinite}
+@keyframes sGlow{0%,100%{filter:drop-shadow(0 0 0 transparent)}50%{filter:drop-shadow(0 0 5px currentColor)}}
+/* energy-flow hero */
+.fh{cursor:pointer;padding:14px 14px 12px!important;margin-bottom:14px}
+.fh-top{display:flex;justify-content:space-between;align-items:flex-end;gap:10px}
+.fh-k{font-size:12px;letter-spacing:.12em;color:var(--muted);font-weight:600}
+.fh-t{font-size:20px;font-weight:700;line-height:1.3}
+.fh-ago{font-size:12px;color:var(--muted);white-space:nowrap}
+.fh-map{position:relative;width:min(350px,100%);aspect-ratio:350/300;margin:4px auto 0}
+.fh-map>svg{position:absolute;inset:0;width:100%;height:100%}
+.fh-n{position:absolute;width:118px;display:flex;flex-direction:column;align-items:center;gap:3px;transform:translate(-50%,-28px);text-align:center}
+.fh-c{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--line);background:var(--card2);transition:box-shadow .4s,border-color .4s}
+.fh-c svg{width:27px;height:27px}
+.fh .v{font-size:18px;font-weight:700;line-height:1.1}
+.fh .l{font-size:12px;color:var(--muted)}
+.fh-n.off .fh-c{opacity:.55;border-style:dashed}.fh-n.off .v{color:var(--muted)}
+.fh-sun .fh-c{border-color:#ffc53d;color:#ffc53d;box-shadow:0 0 26px -6px #ffc53d}.fh-sun .v{color:#ffd76a}
+.fh-sun.off .fh-c{box-shadow:none}
+.fh-bat .fh-c{border-color:#3ee6ff;color:#c9f8ff;font:700 16px "Space Grotesk",sans-serif;animation:fhHalo 3s ease-in-out infinite}.fh-bat .v{color:#9ef3ff}
+.fh-bat.dsg .v{color:#ffb36b}
+.fh-home .fh-c{border-color:#b49bff;color:#cdbfff;box-shadow:0 0 26px -8px #b49bff}.fh-home .v{color:#d8ccff}
+.fh-grid .fh-c{color:#8ea3b1}.fh-grid.on .fh-c{border-color:#ff7a7a;color:#ffb0b0;border-style:solid;opacity:1}
+.fh-inv{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:74px;height:74px;border-radius:22px;background:linear-gradient(160deg,#13232e,#0a1219);border:1.5px solid #2c4757;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:#d4e6ef;box-shadow:0 16px 40px -14px #000}
+.fh-inv svg{width:24px;height:24px}.fh-inv span{font-size:10.5px;font-weight:600;color:#b6cad6;max-width:70px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fh-today{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;border-radius:16px;overflow:hidden;background:var(--line);border:1px solid var(--line);margin-top:6px}
+.fh-today>div{background:var(--card2);padding:9px 11px}.fh-today span{display:block;font-size:11.5px;color:var(--muted)}.fh-today b{font:700 16px "Space Grotesk","IBM Plex Sans Thai",sans-serif}
+.fh-flow{fill:none;stroke-width:2.5;stroke-linecap:round;stroke-dasharray:3 9;animation:fhFlow 1.1s linear infinite}
+.fh-flow.rev{animation-direction:reverse}
+.fh-base{fill:none;stroke-width:6;stroke-linecap:round}
+@keyframes fhFlow{to{stroke-dashoffset:-24}}
+@keyframes fhHalo{0%,100%{box-shadow:0 0 0 0 rgba(62,230,255,.25),0 0 28px -6px rgba(62,230,255,.5)}50%{box-shadow:0 0 0 8px rgba(62,230,255,0),0 0 42px -2px rgba(62,230,255,.7)}}
+:root[data-theme=light] .fh-inv{background:#f3f6f8;border-color:#d9e0e6;color:#10181f}:root[data-theme=light] .fh-inv span{color:#5d6b76}
+:root[data-theme=light] .fh-sun .v{color:#9a6a00}:root[data-theme=light] .fh-bat .v{color:#0a7f99}:root[data-theme=light] .fh-home .v{color:#6b4fd8}:root[data-theme=light] .fh-bat .fh-c{color:#0a7f99}
+@media (min-width:900px){.fh{display:grid;grid-template-columns:1fr 360px;grid-template-rows:auto 1fr;column-gap:24px}.fh-top{grid-column:1}.fh-map{grid-column:2;grid-row:1/3}.fh-today{grid-column:1;align-self:end;grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){.fh-flow,.fh-bat .fh-c,.sring.chg .sarc{animation:none}}
+</style></head>
 <body>
 <header>
  <svg id="logo" class="battlab-logo" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 360 109" role="img" aria-label="BattLab" tabindex="0">
@@ -518,7 +570,7 @@ table th,table td{padding:10px 12px}
 </section>
 <!-- device list -->
 <section id="vList" class="hide">
- <div class="card" id="fleet"></div>
+ <div class="card fh hide" id="flowHero" role="button" tabindex="0" aria-label="แผนผังพลังงาน แตะเพื่อเปิดอินเวอร์เตอร์"></div><div class="card" id="fleet"></div>
  <div class="grid" id="devList"></div>
   <details class="card hide" id="invCard"><summary style="cursor:pointer;font-weight:700">☀️ เชื่อมอินเวอร์เตอร์ · LuxPower · PowMr · Deye · Solis · Sofar <span class="tiny muted" id="invSum"></span></summary><div id="invBox" style="margin-top:8px"></div></details>
   <details class="card hide" id="shareAll"><summary style="cursor:pointer;font-weight:700">🔗 แชร์หน้านี้ทั้งหมดแบบดูอย่างเดียว</summary><div class="small muted" style="margin-top:6px">ส่งลิงก์เดียวให้คนที่ไม่มีบัญชีดูแบตทุกเครื่องในบัญชีนี้แบบสด ๆ (แยกตามกรุ๊ป · ยอดรวม · กดดูรายเครื่องได้) ควบคุมหรือแก้ค่าอะไรไม่ได้ · บอร์ดที่เพิ่มทีหลังจะขึ้นในลิงก์เดิมเอง · กดยกเลิกเมื่อไหร่ลิงก์ใช้ไม่ได้ทันที</div><div id="shareAllBox" style="margin-top:8px"></div></details>
@@ -572,11 +624,11 @@ function hm(h){if(!num(h)||h<0||h>999)return '--';const m=Math.round(h*60);retur
 function dur(s){if(!num(s))return '--';const d=Math.floor(s/86400),h=Math.floor(s%86400/3600),m=Math.floor(s%3600/60);return d?d+' วัน '+h+' ชม.':h?h+' ชม. '+m+' นาที':m+' นาที'}
 
 // ---------- preferences (per user: saved in the account + this browser)
-const ACCENTS={teal:'#36c4a8',blue:'#4f8ff0',violet:'#8b7cf0',orange:'#f08a3c',pink:'#ec6fa5',lime:'#8fcf3c'};
-const PREF_DEF={theme:'auto',accent:'teal',tempUnit:'C',refresh:5,upd:'B',notify:false,metrics:['soc','v','i','p','t','d'],range:24};
-let P={...PREF_DEF,...ls.get('bl_prefs',{})};
+const ACCENTS={cyan:'#3ee6ff',teal:'#36c4a8',blue:'#4f8ff0',violet:'#8b7cf0',orange:'#f08a3c',pink:'#ec6fa5',lime:'#8fcf3c'};
+const PREF_DEF={theme:'auto',accent:'cyan',tempUnit:'C',refresh:5,upd:'B',notify:false,metrics:['soc','v','i','p','t','d'],range:24};
+let P={...PREF_DEF,...ls.get('bl_prefs',{})};if(!P.thA){P.accent='cyan';P.thA=1;try{ls.set('bl_prefs',P)}catch(e){}}
 const dark=()=>P.theme==='dark'||(P.theme==='auto'&&matchMedia('(prefers-color-scheme: dark)').matches);
-function applyTheme(){const d=dark();document.documentElement.dataset.theme=d?'dark':'light';document.documentElement.style.setProperty('--accent',ACCENTS[P.accent]||ACCENTS.teal);document.querySelector('meta[name=theme-color]').content=d?'#0b1117':'#eef2f5'}
+function applyTheme(){const d=dark();document.documentElement.dataset.theme=d?'dark':'light';document.documentElement.style.setProperty('--accent',ACCENTS[P.accent]||ACCENTS.cyan);document.documentElement.style.setProperty('--on-accent','#041218');document.querySelector('meta[name=theme-color]').content=d?'#05080d':'#eef2f5'}
 $('btnThemeQuick').onclick=()=>{P.theme=dark()?'light':'dark';ls.set('bl_prefs',P);applyTheme()};
 $('btnShowPass').onclick=()=>{const show=$('pass').type==='password';$('pass').type=show?'text':'password';$('btnShowPass').textContent=show?'ซ่อน':'แสดง';$('btnShowPass').setAttribute('aria-pressed',String(show));$('btnShowPass').setAttribute('aria-label',show?'ซ่อนรหัสผ่าน':'แสดงรหัสผ่าน')};
 function savePrefs(){ls.set('bl_prefs',P);applyTheme();if(!demo)sb.auth.updateUser({data:{prefs:P}}).catch(()=>{});if(cur&&tab==='hist')loadHistory();else if(cur)renderDev()}
@@ -922,15 +974,45 @@ function flashNum(e,ov,nv){const M=P.upd||'B';if(M==='A')return;const x=parseFlo
  if(!e||!isFinite(x)||!isFinite(y)||x===y)return;const tg=e.closest('b,.big');if(!tg)return;const c=M==='C'?(y>x?'rlU':'rlD'):(y>x?'flU':'flD');
  tg.classList.remove('flU','flD','rlU','rlD');void tg.offsetWidth;tg.classList.add(c);clearTimeout(tg._fl);tg._fl=setTimeout(()=>tg.classList.remove(c),900);
  if(M==='C')return;const dc=tg.closest('.dcard');const d=dc&&dc.querySelector('.dot.on');if(d&&!d._pg){d._pg=1;d.classList.remove('ping');void d.offsetWidth;d.classList.add('ping');setTimeout(()=>{d._pg=0;d.classList.remove('ping')},800)}}
+
+// ---- theme A: SOC ring + energy-flow hero ----
+function ringHtml(soc,mode){const s=Math.max(0,Math.min(100,+soc||0)),c=socColor(soc),L=113.1;return '<svg class="sring'+(mode==='chg'?' chg':'')+'" width="46" height="46" viewBox="0 0 44 44" aria-hidden="true" style="color:'+c+'"><circle cx="22" cy="22" r="18" fill="none" stroke="var(--grid)" stroke-width="5"/><circle class="sarc" cx="22" cy="22" r="18" fill="none" stroke="'+c+'" stroke-width="5" stroke-linecap="round" stroke-dasharray="'+(s/100*L).toFixed(1)+' '+L+'" transform="rotate(-90 22 22)"/></svg>'}
+const FH_P={s:'M80 44 C140 44 175 70 175 112',g:'M270 44 C220 44 200 80 195 112',b:'M175 188 C175 222 130 228 80 228',h:'M213 150 C270 150 298 160 298 200'};
+const FH_IC={sun:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>',grid:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 22 12 2l4 20M6 9h12M5 15h14"/></svg>',home:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-5h4v5"/></svg>',inv:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 8h8M8 12h3M13 12l-1 4h3l-1 3"/></svg>'};
+function fhW(n){return Math.round(Math.abs(n)).toLocaleString('en-US')+' W'}
+function renderFlowHero(){const h=$('flowHero');if(!h)return;
+ const c=devs.map(d=>({d,l:latest[d.id]})).filter(o=>o.l&&o.l.data&&o.l.data.inv&&num(o.l.data.ppv)&&statusOf(o.l)[0]==='on');
+ c.sort((a,b)=>((b.l.data.par||0)-(a.l.data.par||0))||(((b.l.data.ppv||0)+(b.l.data.pload||0))-((a.l.data.ppv||0)+(a.l.data.pload||0))));
+ const o=c[0];h.classList.toggle('hide',!o);if(!o){h.dataset.k='';return}
+ const x=o.l.data,TH=20,sOn=+x.ppv>TH,hOn=num(x.pload)&&+x.pload>TH,bp=num(x.p)?+x.p:0,bm=bp>TH?'chg':bp<-TH?'dsg':'idle',gp=num(x.pgrid)?+x.pgrid:0,gm=gp>TH?'in':gp<-TH?'out':'idle';
+ const k=o.d.id+'|'+sOn+hOn+bm+gm;
+ if(h.dataset.k!==k){h.dataset.k=k;h.dataset.id=o.d.id;
+  const flow=(id,on,col,base,rev)=>'<path class="fh-base" d="'+FH_P[id]+'" stroke="'+(on?base:'var(--line)')+'"/>'+(on?'<path class="fh-flow'+(rev?' rev':'')+'" d="'+FH_P[id]+'" stroke="'+col+'"/>'+[0,1].map(i=>'<circle r="4.5" fill="'+col+'" style="filter:drop-shadow(0 0 5px '+col+')"><animateMotion dur="2.4s" begin="-'+(i*1.2)+'s" repeatCount="indefinite" path="'+FH_P[id]+'"'+(rev?' keyPoints="1;0" keyTimes="0;1" calcMode="linear"':'')+'/></circle>').join(''):'');
+  h.innerHTML='<div class="fh-top"><div><div class="fh-k" id="fhG"></div><div class="fh-t">พลังงานตอนนี้</div></div><div class="fh-ago" id="fhA"></div></div>'+
+  '<div class="fh-map"><svg viewBox="0 0 350 300" aria-hidden="true">'+flow('g',gm!=='idle','#ff7a7a','rgba(255,122,122,.18)',gm==='out')+flow('s',sOn,'#ffc53d','rgba(255,197,61,.16)',false)+flow('b',bm!=='idle',bm==='dsg'?'#ffb36b':'#3ee6ff',bm==='dsg'?'rgba(255,179,107,.16)':'rgba(62,230,255,.16)',bm==='dsg')+flow('h',hOn,'#b49bff','rgba(180,155,255,.16)',false)+'</svg>'+
+  '<div class="fh-n fh-sun'+(sOn?'':' off')+'" style="left:14.86%;top:14.67%"><div class="fh-c">'+FH_IC.sun+'</div><div class="v" id="fhS"></div><div class="l">โซลาร์</div></div>'+
+  '<div class="fh-n fh-grid'+(gm==='idle'?' off':' on')+'" style="left:85.14%;top:14.67%"><div class="fh-c">'+FH_IC.grid+'</div><div class="v" id="fhGr"></div><div class="l">'+(gm==='out'?'ขายไฟคืน':'การไฟฟ้า')+'</div></div>'+
+  '<div class="fh-inv">'+FH_IC.inv+'<span id="fhI"></span></div>'+
+  '<div class="fh-n fh-bat '+bm+'" style="left:14.86%;top:76%"><div class="fh-c" id="fhSoc"></div><div class="v" id="fhB"></div><div class="l">'+(bm==='chg'?'แบตกำลังชาร์จ':bm==='dsg'?'แบตกำลังจ่าย':'แบตพัก')+'</div></div>'+
+  '<div class="fh-n fh-home'+(hOn?'':' off')+'" style="left:85.14%;top:76%"><div class="fh-c">'+FH_IC.home+'</div><div class="v" id="fhH"></div><div class="l">บ้านใช้ไฟ</div></div></div>'+
+  '<div class="fh-today" id="fhT"></div>';
+  if(!h.dataset.w){h.dataset.w=1;const open=()=>{if(h.dataset.id)go('d/'+h.dataset.id+'/ov')};h.addEventListener('click',open);h.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open()}})}}
+ const g=dset(o.d).group,set=(id,v)=>{const e=$(id);if(e&&e.textContent!==v)e.textContent=v};
+ set('fhG',g?'ระบบ '+g:o.d.name);set('fhA','อัปเดต '+ago(o.l.ts));set('fhI',x.model||o.d.name);
+ set('fhS',fhW(x.ppv));set('fhGr',fhW(gp));set('fhH',num(x.pload)?fhW(x.pload):'--');
+ set('fhB',(bm==='chg'?'+':bm==='dsg'?'−':'')+fhW(bp));set('fhSoc',num(x.soc)?Math.round(x.soc)+'%':'--');
+ const T=[['โซลาร์วันนี้',x.epv],['บ้านใช้วันนี้',x.eload],['ซื้อไฟวันนี้',x.egrid]].filter(r=>num(r[1]));
+ const th=T.map(r=>'<div><span>'+r[0]+'</span><b>'+(+r[1]).toFixed(1)+' <small class="muted">kWh</small></b></div>').join('');
+ const te=$('fhT');if(te){te.classList.toggle('hide',!T.length);if(te.innerHTML!==th)te.innerHTML=th}}
 function renderList(){
  const on=devs.filter(d=>statusOf(latest[d.id])[0]!=='off').length;let pw=0,socs=[];const invOf=d=>d.kind==='inverter'||!!((latest[d.id]||{}).data||{}).inv,anyBoard=devs.some(d=>!invOf(d));
  const updList=share||demo?[]:devs.filter(d=>{const x=(latest[d.id]||{}).data||{};return fwUpdate(x)&&statusOf(latest[d.id])[0]==='on'&&!(updPend[d.id]&&Date.now()-updPend[d.id]<300000)});
  devs.forEach(d=>{const l=latest[d.id];if(anyBoard&&invOf(d))return;if(l&&statusOf(l)[0]==='on'){if(num(l.data.p))pw+=l.data.p;if(num(l.data.soc))socs.push(l.data.soc)}});
  {const ic=$('invCard');if(ic){ic.classList.toggle('hide',!!share||demo);if(!ic.dataset.w){ic.dataset.w=1;invLoad();luxLoad();ic.addEventListener('toggle',()=>{if(ic.open){invLoad();luxLoad()}})}}}
  {const sa=$('shareAll');if(sa){sa.classList.toggle('hide',!!share||demo||!devs.length);if(!sa.dataset.w){sa.dataset.w=1;sa.addEventListener('toggle',()=>{if(sa.open)shareCard($('shareAllBox'),{all:true})})}}}
- morph($('fleet'),'<div class="row wrap"><div><div class="big">'+(share?'แบตเตอรี่ที่แชร์ให้ดู':'อุปกรณ์ของฉัน')+(share||demo||devs.length<2?'':' <button class="ghost sortbtn'+(sortMode?' on':'')+'" id="btnSort">'+(sortMode?'✓ เสร็จ':'↕ จัดเรียง')+'</button>')+'</div><div class="small muted">'+devs.length+' เครื่อง · ออนไลน์ '+on+'</div>'+(updList.length?'<button class="updall" id="btnUpdAll">⬆ อัปเดตทั้งหมด ('+updList.length+' เครื่อง)</button>':'')+'</div>'+(socs.length?'<div class="nf" style="text-align:right"><div class="small muted">กำลังรวม / SOC เฉลี่ย</div><b style="font-size:20px">'+Math.round(pw)+' W · '+Math.round(socs.reduce((a,b)=>a+b,0)/socs.length)+'%</b>'+(()=>{const T=groupTotals(devs);return T.hasE||T.kwh?'<div class="tiny muted">'+(T.kwh?'คงเหลือ '+T.kwh.toFixed(1)+' kWh':'')+(T.hasE?' · วันนี้ +'+T.ei.toFixed(1)+' / −'+T.eo.toFixed(1)+' kWh':'')+'</div>':''})()+'</div>':'')+'</div>');
+ renderFlowHero();morph($('fleet'),'<div class="row wrap"><div><div class="big">'+(share?'แบตเตอรี่ที่แชร์ให้ดู':'อุปกรณ์ของฉัน')+(share||demo||devs.length<2?'':' <button class="ghost sortbtn'+(sortMode?' on':'')+'" id="btnSort">'+(sortMode?'✓ เสร็จ':'↕ จัดเรียง')+'</button>')+'</div><div class="small muted">'+devs.length+' เครื่อง · ออนไลน์ '+on+'</div>'+(updList.length?'<button class="updall" id="btnUpdAll">⬆ อัปเดตทั้งหมด ('+updList.length+' เครื่อง)</button>':'')+'</div>'+(socs.length?'<div class="nf" style="text-align:right"><div class="small muted">กำลังรวม / SOC เฉลี่ย</div><b style="font-size:20px">'+Math.round(pw)+' W · '+Math.round(socs.reduce((a,b)=>a+b,0)/socs.length)+'%</b>'+(()=>{const T=groupTotals(devs);return T.hasE||T.kwh?'<div class="tiny muted">'+(T.kwh?'คงเหลือ '+T.kwh.toFixed(1)+' kWh':'')+(T.hasE?' · วันนี้ +'+T.ei.toFixed(1)+' / −'+T.eo.toFixed(1)+' kWh':'')+'</div>':''})()+'</div>':'')+'</div>');
  const card=d=>{const l=latest[d.id],s=dset(d),[st,txt]=statusOf(l),al=evalAlerts(d,l);trackAlerts(d,al);const x=l&&l.data||{};const live=st==='on';const rk=live?evRange(x,s):null;
-  return '<div class="card dcard" data-id="'+esc(d.id)+'" data-gk="'+esc(dset(d).group||'_')+'" style="--dc:'+(live?socColor(x.soc):st==='wait'?'var(--warn)':'var(--line)')+'"><div class="row">'+(sortMode?'<span class="drag" data-dd="'+esc(d.id)+'" title="ลากเพื่อจัดลำดับ">⠿</span>':'')+'<span class="ic nf">'+esc(s.icon)+'</span><div><b>'+esc(d.name)+(x.par?' <span class="abadge" style="background:var(--s1)">ขนาน ×'+x.par+'</span>':'')+(x.inv&&live?' <span class="abadge srcb'+(x.src==='dongle'?' dg':'')+'" title="'+(x.src==='dongle'?'อ่านตรงจากดองเกิลในบ้าน ทุก 10 วินาที':'ดึงจากคลาวด์ '+esc(x.bms||'LuxPower')+(x.fw&&x.fw!=='luxpower'?' ทุก 2-5 นาที':' ทุก 1 นาที'))+'">'+(x.src==='dongle'?'📡 ดองเกิล':'☁️ คลาวด์')+'</span>':'')+'</b>'+(al.length?'<span class="abadge">'+al.length+'</span>':'')+(fwUpdate(x)&&!share?(updPend[d.id]&&Date.now()-updPend[d.id]<300000?'<span class="abadge upd busy">⏳ กำลังอัปเดต…</span>':'<button class="abadge upd" data-upd="'+esc(d.id)+'"'+(st==='off'?' disabled title="บอร์ดต้องออนไลน์ก่อน"':'')+'>⬆ อัปเดต '+esc(fwUpdate(x).version)+'</button>'):'')+(live&&x.bank>1?'<span class="abadge" style="background:var(--good)">🔋×'+x.bank+'</span>':'')+'<div class="small muted"><span class="dot '+st+'"></span> '+esc(txt)+'</div></div><div class="nf row" style="gap:10px">'+(live&&num(x.soc)?liqHtml(d.id,x.soc,!num(x.i)?'idle':x.i>0.3?'chg':x.i<-0.3?'dsg':'idle')+'<span class="big">'+Math.round(x.soc)+'%</span>':'')+'</div></div>'+
+  return '<div class="card dcard" data-id="'+esc(d.id)+'" data-gk="'+esc(dset(d).group||'_')+'" style="--dc:'+(live?socColor(x.soc):st==='wait'?'var(--warn)':'var(--line)')+'"><div class="row">'+(sortMode?'<span class="drag" data-dd="'+esc(d.id)+'" title="ลากเพื่อจัดลำดับ">⠿</span>':'')+'<span class="ic nf">'+esc(s.icon)+'</span><div><b>'+esc(d.name)+(x.par?' <span class="abadge" style="background:var(--s1)">ขนาน ×'+x.par+'</span>':'')+(x.inv&&live?' <span class="abadge srcb'+(x.src==='dongle'?' dg':'')+'" title="'+(x.src==='dongle'?'อ่านตรงจากดองเกิลในบ้าน ทุก 10 วินาที':'ดึงจากคลาวด์ '+esc(x.bms||'LuxPower')+(x.fw&&x.fw!=='luxpower'?' ทุก 2-5 นาที':' ทุก 1 นาที'))+'">'+(x.src==='dongle'?'📡 ดองเกิล':'☁️ คลาวด์')+'</span>':'')+'</b>'+(al.length?'<span class="abadge">'+al.length+'</span>':'')+(fwUpdate(x)&&!share?(updPend[d.id]&&Date.now()-updPend[d.id]<300000?'<span class="abadge upd busy">⏳ กำลังอัปเดต…</span>':'<button class="abadge upd" data-upd="'+esc(d.id)+'"'+(st==='off'?' disabled title="บอร์ดต้องออนไลน์ก่อน"':'')+'>⬆ อัปเดต '+esc(fwUpdate(x).version)+'</button>'):'')+(live&&x.bank>1?'<span class="abadge" style="background:var(--good)">🔋×'+x.bank+'</span>':'')+'<div class="small muted"><span class="dot '+st+'"></span> '+esc(txt)+'</div></div><div class="nf row" style="gap:10px">'+(live&&num(x.soc)?ringHtml(x.soc,!num(x.i)?'idle':x.i>0.3?'chg':x.i<-0.3?'dsg':'idle')+'<span class="big">'+Math.round(x.soc)+'%</span>':'')+'</div></div>'+
   (live&&x.inv?'<div class="invline"><span>☀️ <b>'+fmt(x.ppv,0)+'</b> W</span><span>🏠 <b>'+fmt(x.pload,0)+'</b> W</span><span>🔌 <b>'+fmt(x.pgrid,0)+'</b> W</span>'+(num(x.epv)?'<span class="muted">วันนี้ ☀️ '+(+x.epv).toFixed(1)+' kWh</span>':'')+'</div>':'')+(live?'<div class="socbar"><i style="width:'+Math.max(0,Math.min(100,x.soc))+'%;background:'+socColor(x.soc)+'"></i></div><div class="kv"><span><b>'+fmt(x.v,1)+'</b> V</span><span><b>'+fmt(x.i,1)+'</b> A</span><span>'+(rk!=null?'<b>'+Math.round(rk)+'</b> กม.':'<b>'+fmt(x.p,0)+'</b> W')+'</span><span><b>'+fmtT(x.t1)+'</b> '+tU()+'</span></div>':'')+'</div>'};
  const grpOf=d=>dset(d).group||'',anyG=devs.some(d=>grpOf(d));let closed=new Set();try{closed=new Set(JSON.parse(localStorage.getItem('bl_grp_closed')||'[]'))}catch(e){}
  const dOrd=P.dOrder||[],gOrd=P.gOrder||[],oi=(arr,k)=>{const i=arr.indexOf(k);return i<0?1e6:i},byD=(a,b)=>oi(dOrd,a.id)-oi(dOrd,b.id);
