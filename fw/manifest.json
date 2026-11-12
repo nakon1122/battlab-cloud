@@ -1,6 +1,6 @@
 {
-  "updated": "2026-11-13T00:43:23+07:00",
-  "notes": "2.10.1: new board ES3C40P 4.0\" (ESP32-S3, capacitive touch) - BMS screen with RS485 + Cloud Screen",
+  "updated": "2026-11-13T04:16:05+07:00",
+  "notes": "2.11.0: Cloud Screen new look - day / night / auto colours, smooth Inter fonts, icon dock, battery cards",
   "boards": {
     "s3": {
       "version": "2.10.1",
@@ -29,16 +29,16 @@
       "title": "CYD 3.5\" (BMS screen)"
     },
     "cloudscreen": {
-      "version": "2.9.3",
-      "url": "fw/2.9.3/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
-      "size": 1362272,
-      "sha256": "7376373e20fb7e7607af29fc928b229d6c27cd070e2056204b632cb118e94af1",
+      "version": "2.11.0",
+      "url": "fw/2.11.0/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
+      "size": 1555984,
+      "sha256": "a920e5778a1b1de03fc4eae9db5019a18d67df60de48652452847e9d6fc571ee",
       "install": {
-        "url": "fw/2.9.3/BATTLAB_CLOUDSCREEN_INSTALL.bin",
-        "size": 1427808,
-        "sha256": "b479ddc09bf80c24739d5bed6f92e7940f3494a831b9a9eb9b723d685536c6ac"
+        "url": "fw/2.11.0/BATTLAB_CLOUDSCREEN_INSTALL.bin",
+        "size": 1621520,
+        "sha256": "a4efe29be9fe5d1d1cd919dc796d904c741ca7fedfa5e0ed352377c5bb30b005"
       },
-      "webtools": "fw/2.9.3/webtools-cloudscreen.json",
+      "webtools": "fw/2.11.0/webtools-cloudscreen.json",
       "title": "Cloud Screen (CYD 3.5\")"
     },
     "es3c40": {
@@ -55,20 +55,48 @@
       "title": "ES3C40 4.0\" (BMS screen, S3)"
     },
     "cloudscreen_es3c40": {
-      "version": "2.10.1",
-      "url": "fw/2.10.1/BATTLAB_ES3C40_CLOUDSCREEN_APP_UPDATE.bin",
-      "size": 1307856,
-      "sha256": "5c6f8ad9ee0fa7a0ffd5f050b57517bf7a1404ca3dd0eac9e0894c98b7d26fde",
+      "version": "2.11.0",
+      "url": "fw/2.11.0/BATTLAB_ES3C40_CLOUDSCREEN_APP_UPDATE.bin",
+      "size": 1501552,
+      "sha256": "08729b4570222f1869ca20c2c991c6c9c24ffb0abdae02c0ea67dbbca058e612",
       "install": {
-        "url": "fw/2.10.1/BATTLAB_ES3C40_CLOUDSCREEN_INSTALL.bin",
-        "size": 1373392,
-        "sha256": "650ea7e36523d97a04bee7db94c371f379bf5ba2c078f5d8a61c03c3b63c02fa"
+        "url": "fw/2.11.0/BATTLAB_ES3C40_CLOUDSCREEN_INSTALL.bin",
+        "size": 1567088,
+        "sha256": "9147ec170c67e8d72ba58b0499c738aa253842281779430139bfad1c328ed31f"
       },
-      "webtools": "fw/2.10.1/webtools-cloudscreen_es3c40.json",
+      "webtools": "fw/2.11.0/webtools-cloudscreen_es3c40.json",
       "title": "Cloud Screen (ES3C40 4.0\")"
     }
   },
   "history": [
+    {
+      "version": "2.11.0",
+      "date": "2026-11-13",
+      "notes": "2.11.0: Cloud Screen new look - day / night / auto colours, smooth Inter fonts, icon dock, battery cards",
+      "zip": null,
+      "boards": {
+        "s3": {
+          "app": "fw/2.10.1/BATTLAB_S3_APP_UPDATE.bin",
+          "install": "fw/2.10.1/BATTLAB_S3_BLEFIX_INSTALL.bin"
+        },
+        "cyd35": {
+          "app": "fw/2.10.1/BATTLAB_CYD35_APP_UPDATE.bin",
+          "install": "fw/2.10.1/BATTLAB_CYD35_INSTALL.bin"
+        },
+        "cloudscreen": {
+          "app": "fw/2.11.0/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
+          "install": "fw/2.11.0/BATTLAB_CLOUDSCREEN_INSTALL.bin"
+        },
+        "es3c40": {
+          "app": "fw/2.10.1/BATTLAB_ES3C40_APP_UPDATE.bin",
+          "install": "fw/2.10.1/BATTLAB_ES3C40_INSTALL.bin"
+        },
+        "cloudscreen_es3c40": {
+          "app": "fw/2.11.0/BATTLAB_ES3C40_CLOUDSCREEN_APP_UPDATE.bin",
+          "install": "fw/2.11.0/BATTLAB_ES3C40_CLOUDSCREEN_INSTALL.bin"
+        }
+      }
+    },
     {
       "version": "2.10.1",
       "date": "2026-11-13",
@@ -132,29 +160,6 @@
         "s3": {
           "app": "fw/2.9.2/BATTLAB_S3_APP_UPDATE.bin",
           "install": "fw/2.9.2/BATTLAB_S3_BLEFIX_INSTALL.bin"
-        },
-        "cyd35": {
-          "app": "fw/2.9.1/BATTLAB_CYD35_APP_UPDATE.bin",
-          "install": "fw/2.9.1/BATTLAB_CYD35_INSTALL.bin"
-        },
-        "cloudscreen": {
-          "app": "fw/2.8.8/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
-          "install": "fw/2.8.8/BATTLAB_CLOUDSCREEN_INSTALL.bin"
-        }
-      }
-    },
-    {
-      "version": "2.9.1",
-      "date": "2026-11-04",
-      "notes": "EV home (CYD) ดีไซน์ใหม่: เกจสมมาตร regen/drive + การ์ด RANGE/SOC/VOLT/CURRENT, motion นุ่มขึ้น",
-      "zip": {
-        "url": "fw/2.9.1/BATTLAB_v2.9.1_READY_TO_FLASH.zip",
-        "size": 17013731
-      },
-      "boards": {
-        "s3": {
-          "app": "fw/2.9.0/BATTLAB_S3_APP_UPDATE.bin",
-          "install": "fw/2.9.0/BATTLAB_S3_BLEFIX_INSTALL.bin"
         },
         "cyd35": {
           "app": "fw/2.9.1/BATTLAB_CYD35_APP_UPDATE.bin",

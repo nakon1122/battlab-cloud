@@ -1,17 +1,17 @@
 {
-  "name": "BATTLAB CYD 3.5\" (BMS screen)",
-  "version": "2.9.1",
+  "name": "BATTLAB Cloud Screen (ES3C40 4.0\")",
+  "version": "2.11.0",
   "new_install_prompt_erase": true,
   "builds": [
     {
-      "chipFamily": "ESP32",
+      "chipFamily": "ESP32-S3",
       "parts": [
         {
-          "path": "CYD_BOOTLOADER.bin",
-          "offset": 4096
+          "path": "ES3C40_BOOTLOADER.bin",
+          "offset": 0
         },
         {
-          "path": "CYD_PARTITIONS.bin",
+          "path": "ES3C40_PARTITIONS.bin",
           "offset": 32768
         },
         {
@@ -19,7 +19,7 @@
           "offset": 57344
         },
         {
-          "path": "BATTLAB_CYD35_APP_UPDATE.bin",
+          "path": "BATTLAB_ES3C40_CLOUDSCREEN_APP_UPDATE.bin",
           "offset": 65536
         }
       ]
