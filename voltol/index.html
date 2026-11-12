@@ -142,6 +142,31 @@ main{max-width:1000px;padding:18px clamp(12px,3vw,24px) calc(116px + env(safe-ar
 .race-clock{display:flex;justify-content:space-between;align-items:end;gap:12px;margin:14px 0}.race-clock>strong{font-size:clamp(36px,10vw,76px);line-height:1;color:#ffd52e;font-variant-numeric:tabular-nums}.race-clock div{text-align:right}.race-clock small{display:block}
 .race-splits{width:100%;border-collapse:collapse;margin:14px 0;font-variant-numeric:tabular-nums}.race-splits th,.race-splits td{text-align:left;border-bottom:1px solid #1e2e42;padding:8px 4px;font-size:clamp(10px,2.3vw,14px)}.race-splits [data-target=true]{background:#ffd52e16}
 .usb-install{padding:14px;margin:10px 0;background:#0b121d}.usb-install h3{margin-top:0}
+#cloud-firmware .fw{display:flex;flex-direction:column;gap:12px}
+#cloud-firmware .fw h2{margin:0}
+.fw-hero{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px 14px;padding:16px;border-radius:12px;background:#0b121d;border:1px solid #1f2a36;position:relative}
+.fw-ver{display:flex;flex-direction:column;gap:2px;min-width:0}.fw-ver small{color:#8a99a8;font-size:13px}
+.fw-ver strong{font-size:clamp(28px,6vw,40px);font-weight:800;line-height:1.1;font-variant-numeric:tabular-nums}
+.fw-arrow{font-size:28px;color:#5b6876}
+.fw-badge{grid-column:1/-1;justify-self:start;padding:6px 12px;border-radius:99px;font-weight:700;font-size:14px;background:#1a222b;color:#b8c4cf}
+.fw-hero[data-state=update] .fw-badge{background:#ffcc0022;color:#ffcc00}.fw-hero[data-state=update] #firmwareLatest{color:#ffcc00}
+.fw-hero[data-state=ok] .fw-badge{background:#00e08a22;color:#00e08a}.fw-hero[data-state=ok] #firmwareVersion{color:#00e08a}
+.fw-hero[data-state=offline] .fw-badge{background:#ff3b3022;color:#ff8a80}
+.fw-hero[data-state=busy] .fw-badge{background:#4fc3ff22;color:#4fc3ff}
+.fw-go{min-height:56px;font-size:18px;font-weight:800;border-radius:12px;border:0;background:#ffcc00;color:#111;cursor:pointer}
+.fw-go:disabled{background:#1a222b;color:#6e7c89;cursor:default}
+.fw-prog{height:10px;border-radius:5px;background:#18212b;overflow:hidden}.fw-prog i{display:block;height:100%;width:0;background:#4fc3ff;transition:width .4s}
+.fw-msg{margin:0;color:#b8c4cf;font-size:15px;min-height:1.4em}
+.fw-h{margin:8px 0 0;font-size:16px}.fw-h small{display:block;color:#8a99a8;font-weight:400;font-size:13px;margin-top:2px}
+.fw-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.fw-card{display:flex;flex-direction:column;gap:8px;padding:14px;border-radius:12px;background:#0b121d;border:1px solid #1f2a36}
+.fw-card>small{color:#8a99a8}.fw-card b{font-size:17px}
+.fw-card.mine{border-color:#ffcc00;box-shadow:0 0 0 1px #ffcc0055 inset}.fw-card.mine b::after{content:" · โมดูลนี้";color:#ffcc00;font-size:13px;font-weight:600}
+.fw-btn{display:flex;align-items:center;justify-content:center;min-height:44px;border-radius:10px;background:#ffcc00;color:#111!important;font-weight:700;text-decoration:none}
+.fw-btn.alt{background:#1a222b;color:#e8edf2!important}
+.fw-note{font-size:12px;color:#6e7c89!important}
+.fw-help{background:#0b121d;border:1px solid #1f2a36;border-radius:12px;padding:12px 14px}.fw-help summary{cursor:pointer;font-weight:700}.fw-help ol{margin:10px 0 0;padding-left:20px;line-height:1.7;color:#b8c4cf}
+.fw-links{margin:0}.fw-links small{color:#8a99a8}
 </style><style id="compact-dashboard">
 .temperatures{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .temperatures .metric{padding:8px 12px;border-radius:12px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:4px 8px}
@@ -471,7 +496,37 @@ html[data-tpl="pitwall"] body .cloud-dock button[aria-pressed=true]{background:r
 </div>
 <div id="cloud-history" class="cloud-view" hidden><section><h2>เหตุขัดข้องล่าสุด</h2><ul id="events"></ul><button id="exportReadings" type="button" disabled>ดาวน์โหลดข้อมูลล่าสุด (CSV)</button></section>
 </div>
-<div id="cloud-firmware" class="cloud-view" hidden><section><p class="dash-label">VOLTOL / FIRMWARE</p><h2>เฟิร์มแวร์สำหรับโมดูล VOLTOL</h2><section class="usb-install"><h3>ติดตั้งผ่าน USB บนเว็บ</h3><p>สำหรับโมดูลใหม่ ESP32-S3 DevKitC-1 แฟลช 8 MB ใช้ Chrome หรือ Edge บนคอมพิวเตอร์ (ล้างข้อมูลทั้งบอร์ด)</p><a href="/fw/flash/" target="_blank" rel="noopener">เปิดเครื่องมือแฟลชผ่านเว็บ</a></section><h3>อัปเดตผ่าน OTA</h3><p id="firmwareVersion"></p><p id="firmwareLatest">เวอร์ชันล่าสุด —</p><p><a id="fwZip" href="/fw/VOLTOL-v1.8.0-ReadyToFlash.zip">ดาวน์โหลดเฟิร์มแวร์โมดูล VOLTOL v<span id="fwZipVer">1.8.0</span> (ติดตั้งผ่าน USB)</a><br><small>บอร์ดที่ใช้อยู่แล้วให้ใช้ UPDATE_S3_WINDOWS.bat เพื่อเก็บ Wi-Fi โทเคน และค่าตั้งไว้ครบ</small></p><button id="remoteOta" type="button" disabled>สั่งอัปเดตผ่าน Cloud</button><p id="remoteOtaStatus" role="status"></p><a href="http://192.168.4.1/">เปิดเว็บตั้งค่าโมดูล</a> <a href="/fw/version.json" target="_blank" rel="noreferrer">ดูเวอร์ชันล่าสุด</a></section>
+<div id="cloud-firmware" class="cloud-view" hidden><section class="fw">
+<p class="dash-label">VOLTOL / FIRMWARE</p><h2>อัปเดตเฟิร์มแวร์</h2>
+<div class="fw-hero" id="fwHero" data-state="unknown">
+  <div class="fw-ver"><small>ในโมดูลนี้</small><strong id="firmwareVersion">—</strong><small id="fwBoard"></small></div>
+  <div class="fw-arrow" aria-hidden="true">→</div>
+  <div class="fw-ver"><small>ล่าสุด</small><strong id="firmwareLatest">—</strong><small>&nbsp;</small></div>
+  <span class="fw-badge" id="fwBadge">กำลังตรวจ</span>
+</div>
+<button id="remoteOta" class="fw-go" type="button" disabled>อัปเดตผ่าน Cloud</button>
+<div class="fw-prog" id="fwProg" hidden><i id="fwProgBar"></i></div>
+<p id="remoteOtaStatus" class="fw-msg" role="status"></p>
+<h3 class="fw-h">ติดตั้งผ่านสาย USB <small>สำหรับโมดูลใหม่ หรือเมื่ออัปเดตผ่าน Cloud ไม่ได้</small></h3>
+<div class="fw-cards">
+  <article class="fw-card" data-board="cyd35"><b>CYD 3.5"</b><small>ESP32 จอ 3.5" ทัชแบบกด</small>
+    <a class="fw-btn fw-zip" id="fwZip" href="/fw/VOLTOL-v1.8.0-ReadyToFlash.zip">ดาวน์โหลด v<span id="fwZipVer">—</span></a>
+    <small class="fw-note">ใช้ไฟล์ FLASH_CYD35 (ครั้งแรก) หรือ UPDATE_CYD35 (เก็บค่าเดิม)</small></article>
+  <article class="fw-card" data-board="s340"><b>S3 จอ 4.0"</b><small>ESP32-S3 จอ 480×320 ทัช</small>
+    <a class="fw-btn fw-flash" href="/fw/flash/" target="_blank" rel="noopener">ติดตั้งผ่านเว็บ</a>
+    <a class="fw-btn fw-zip alt" href="/fw/VOLTOL-v1.8.0-ReadyToFlash.zip">ดาวน์โหลด .zip</a>
+    <small class="fw-note">ใช้ไฟล์ FLASH_S3_40 หรือ UPDATE_S3_40</small></article>
+  <article class="fw-card" data-board="s3"><b>S3 DevKitC</b><small>ESP32-S3 ไม่มีจอ ใช้หน้าเว็บ</small>
+    <a class="fw-btn fw-flash" href="/fw/flash/" target="_blank" rel="noopener">ติดตั้งผ่านเว็บ</a>
+    <a class="fw-btn fw-zip alt" href="/fw/VOLTOL-v1.8.0-ReadyToFlash.zip">ดาวน์โหลด .zip</a>
+    <small class="fw-note">ใช้ไฟล์ FLASH_S3 หรือ UPDATE_S3</small></article>
+</div>
+<details class="fw-help"><summary>วิธีติดตั้งด้วยไฟล์ .zip</summary><ol>
+  <li>แตกไฟล์ .zip แล้วเสียบสาย USB เข้าโมดูล</li>
+  <li>ดับเบิลคลิกไฟล์ <b>UPDATE_…</b> ของรุ่นบอร์ด เพื่ออัปเดตโดยเก็บ Wi-Fi และค่าตั้งไว้ หรือ <b>FLASH_…</b> สำหรับบอร์ดใหม่ (ล้างทั้งบอร์ด)</li>
+  <li>พิมพ์หมายเลขพอร์ต เช่น COM7 แล้วรอจนขึ้น SUCCESS (ถ้าไม่ผ่าน กดปุ่ม BOOT ค้าง แล้วกด RESET 1 ครั้ง)</li></ol></details>
+<p class="fw-links"><a href="http://192.168.4.1/">เปิดเว็บตั้งค่าโมดูล</a> <small>(ต่อ Wi-Fi ชื่อ VOLTOL-xxxx ก่อน)</small></p>
+</section>
 </div>
 <div id="cloud-drag" class="cloud-view tt" hidden>
 <section class="tt-bar">
@@ -939,7 +994,7 @@ $('remoteOta').onclick=async ()=>{
   }catch(error){status.textContent=error.message||'ส่งคำสั่งอัปเดตไม่สำเร็จ';button.disabled=false;}
 };
 let fwLatest='', otaSentAt=0;
-fetch('/fw/version.json',{cache:'no-store'}).then(r=>r.json()).then(v=>{fwLatest=v.version||'';$('firmwareLatest').textContent='เวอร์ชันล่าสุด '+fwLatest;if(fwLatest){$('fwZip').href='/fw/VOLTOL-v'+fwLatest+'-ReadyToFlash.zip';$('fwZipVer').textContent=fwLatest;}}).catch(()=>{});
+fetch('/fw/version.json',{cache:'no-store'}).then(r=>r.json()).then(v=>{fwLatest=v.version||'';$('firmwareLatest').textContent=fwLatest||'—';if(fwLatest){document.querySelectorAll('#cloud-firmware .fw-zip').forEach(a=>a.href='/fw/VOLTOL-v'+fwLatest+'-ReadyToFlash.zip');$('fwZipVer').textContent=fwLatest;}}).catch(()=>{});
 const authClient=window.supabase.createClient(base,key,{auth:window.battlabAuthOptions});
 let renewing=null, accountGeneration=0;
 function rememberSession(data){ session=data; }
@@ -1184,12 +1239,23 @@ async function refreshData(generation,id) {
     volt:controller?p.voltage:null,amp:controller?p.current:null});}
   $('controllerStatus').textContent=(board?'โมดูลออนไลน์':'โมดูลออฟไลน์ / ยังไม่มีข้อมูล')+' · '+(controller?'Controller Online':board?'Controller Offline':'Controller ยังไม่ทราบสถานะ');
   $('uartFlow').dataset.active=String(controller);
-  $('firmwareVersion').textContent=p.firmware?'เวอร์ชันที่โมดูลรายงาน '+p.firmware:'ยังไม่มีรายงานเวอร์ชัน';
+  $('firmwareVersion').textContent=p.firmware||'—';
+  $('fwBoard').textContent={cyd35:'CYD 3.5"',s3:'S3 DevKitC',s340:'S3 จอ 4.0"',p4c5:'P4C5 4.3"'}[p.board]||'';
+  document.querySelectorAll('#cloud-firmware .fw-card').forEach(c=>c.classList.toggle('mine',!!p.board&&c.dataset.board===p.board));
   {const n=v=>{const m=String(v||'').match(/(\d+)\.(\d+)\.(\d+)/);return m?(+m[1])*1e6+(+m[2])*1e3+(+m[3]):0;};
    const cur=n(p.firmware), can=cur>=1007000, newer=fwLatest&&n(fwLatest)>cur;
    if(Date.now()-otaSentAt>120000){$('remoteOta').disabled=!(board&&can&&newer);
    $('remoteOtaStatus').textContent=!p.firmware?'':!can?'โมดูลเวอร์ชัน '+p.firmware+' ยังรับคำสั่งจาก Cloud ไม่ได้ · อัปเดตครั้งแรกที่หน้าเว็บโมดูล (เมนูตั้งค่า > เฟิร์มแวร์ > ตรวจสอบ > ติดตั้ง) หรือผ่าน USB หลังจากนั้นกดปุ่มนี้ได้'
-     :!newer?'โมดูลใช้เวอร์ชันล่าสุดแล้ว':!board?'โมดูลออฟไลน์ · รอให้โมดูลออนไลน์ก่อนสั่งอัปเดต':'มีเวอร์ชันใหม่ '+fwLatest+' · กดปุ่มเพื่อสั่งอัปเดต';}}
+     :!newer?'โมดูลใช้เวอร์ชันล่าสุดแล้ว':!board?'เปิดโมดูลและต่อ Wi-Fi ให้ขึ้นออนไลน์ก่อน แล้วกดปุ่มอัปเดต':'จอดรถให้นิ่ง แล้วกดปุ่มด้านบน โมดูลจะดาวน์โหลดและรีสตาร์ตเอง (1-2 นาที)';}
+   // simple status: badge + big button + progress while the board downloads
+   const os=board?Number(p.ota_state):0, busy=os===1||os===2||os===3;
+   const st=!p.firmware||!fwLatest?'unknown':busy?'busy':!newer?'ok':!board?'offline':'update';
+   $('fwHero').dataset.state=st;
+   $('fwBadge').textContent={unknown:'ยังไม่มีข้อมูลจากโมดูล',busy:os===3?'กำลังรีสตาร์ต':'กำลังอัปเดต',ok:'✓ เป็นรุ่นล่าสุดแล้ว',offline:'มีอัปเดต · โมดูลออฟไลน์',update:'มีอัปเดตใหม่'}[st];
+   $('remoteOta').textContent=st==='ok'?'ไม่ต้องอัปเดต':'อัปเดตเป็น '+(fwLatest||'ล่าสุด');
+   $('fwProg').hidden=!busy;$('fwProgBar').style.width=(os===2?Math.max(3,Number(p.ota_progress)||0):os===3?100:5)+'%';
+   if(busy)$('remoteOtaStatus').textContent=os===2?'กำลังดาวน์โหลด '+(Number(p.ota_progress)||0)+'%':os===3?'ติดตั้งเสร็จ · กำลังรีสตาร์ต':'กำลังตรวจหาเวอร์ชัน';
+   else if(board&&Number(p.ota_state)===4&&p.ota_msg)$('remoteOtaStatus').textContent='อัปเดตไม่สำเร็จ: '+p.ota_msg;}
   const uart=$('uartMetrics');uart.replaceChildren();
   for(const [label,value] of [['UART baud',p.uart_baud],['เฟรม/วินาที',p.uart_hz],...(p.tx==null&&Number.isFinite(p.valid_frames)?[]:[['TX requests',p.tx],['RX bytes',p.rx_bytes]]),['เฟรมผ่าน',p.valid_frames],['เฟรมผิด',p.bad_frames],['Timeout',p.timeouts],['ตอบล่าสุด',p.reply_age_ms>=0?(p.reply_age_ms/1000).toFixed(2)+' s':null]]){
     const card=document.createElement('div'),title=document.createElement('small'),val=document.createElement('strong');
