@@ -146,10 +146,25 @@ const icon = k => `<span class="ic" style="color:${KIND[k]?.c||'#fff'}"><svg vie
 const S = { tab:'ov', me:null, members:null, esp:null, q:'', memFilter:'all', espKind:'all', espOnline:false };
 const isSuper = () => S.me?.role === 'super';
 
+// never leave a blank page: every startup step has a time limit, failures show the reason + retry
+const withTimeout = (p, ms, what) => Promise.race([p, new Promise((_, rej) => setTimeout(() => rej(new Error(what + ' ใช้เวลานานเกิน ' + ms / 1000 + ' วินาที')), ms))]);
+function failGate(err) {
+  if (!$('#app').hidden) return;
+  gate('เปิดหลังบ้านไม่สำเร็จ', esc((err && err.message) || err || 'ไม่ทราบสาเหตุ') + '<br>กด "ลองใหม่" · ถ้ายังไม่ได้ ให้ออกจากระบบแล้วเข้าใหม่');
+  $('#gate').insertAdjacentHTML('beforeend', '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px"><button class="btn y" type="button" id="gRetry">ลองใหม่</button><button class="btn" type="button" id="gOut">ออกจากระบบแล้วเข้าใหม่</button></div>');
+  $('#gRetry').onclick = () => location.reload();
+  $('#gOut').onclick = async () => { try { await withTimeout(sb.auth.signOut(), 5000, 'ออกจากระบบ'); } catch (e) {} location.href = '/'; };
+}
+addEventListener('error', e => failGate(e.message));
+addEventListener('unhandledrejection', e => failGate(e.reason));
 async function boot() {
-  const { data } = await sb.auth.getSession();
-  if (!data.session) return gate('เข้าสู่ระบบก่อน', 'ล็อกอินที่หน้าหลัก BATTLAB ด้วยบัญชีแอดมิน แล้วกลับมาหน้านี้', true);
-  try { S.me = await rpc('admin_whoami'); } catch (e) { return gate('หน้านี้สำหรับแอดมินเท่านั้น', 'บัญชี ' + esc(data.session.user.email) + ' ไม่มีสิทธิ์เข้าหลังบ้าน'); }
+  let data;
+  try { ({ data } = await withTimeout(sb.auth.getSession(), 12000, 'ตรวจการเข้าสู่ระบบ')); } catch (e) { return failGate(e); }
+  if (!data || !data.session) return gate('เข้าสู่ระบบก่อน', 'ล็อกอินที่หน้าหลัก BATTLAB ด้วยบัญชีแอดมิน แล้วกลับมาหน้านี้', true);
+  try { S.me = await withTimeout(rpc('admin_whoami'), 12000, 'ตรวจสิทธิ์แอดมิน'); } catch (e) {
+    if (/นานเกิน|fetch|network|JWT|expired/i.test(String(e && e.message))) return failGate(e);
+    return gate('หน้านี้สำหรับแอดมินเท่านั้น', 'บัญชี ' + esc(data.session.user.email) + ' ไม่มีสิทธิ์เข้าหลังบ้าน');
+  }
   $('#who').textContent = (S.me.role === 'super' ? 'Super admin' : 'Support') + ' · ' + S.me.email;
   $('#app').hidden = false;
   document.querySelectorAll('[data-tab]').forEach(b => b.onclick = () => go(b.dataset.tab));
@@ -364,7 +379,7 @@ async function openDevice(id) {
   document.querySelectorAll('#panel [data-cmd]').forEach(b => b.onclick = () => act(b, () => rpc('admin_send_command', {p_device: id, p_cmd: b.dataset.cmd, p_args: {}}), 'ส่งคำสั่งแล้ว'));
   if ($('#del')) $('#del').onclick = e => act(e.target, () => k === 'voltol' ? rpc('admin_voltol_delete', {p_id: id, p_confirm_name: $('#delConf').value}) : rpc('admin_device_delete', {p_id: id, p_confirm_name: $('#delConf').value}), 'ลบแล้ว', () => { closeDrawer(); refresh(); });
 }
-boot();
+boot().catch(failGate);
 </script>
 </body>
 </html>
