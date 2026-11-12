@@ -239,6 +239,25 @@ body .track-cockpit::before{background:linear-gradient(105deg,transparent 42%,rg
 .rn-scan{display:grid;grid-template-columns:1fr auto;gap:8px;margin:4px 0}.rn-scan select{min-height:44px;background:#0b1118;color:inherit;border:1px solid #2a3a4a;border-radius:10px;padding:0 10px}.rn-scan button{min-height:44px}
 .rn-add{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:end}.rn-add label{display:grid;gap:4px;font-size:12px;color:var(--cp-muted)}
 .rn-note{font-size:12px;color:var(--cp-muted);margin:8px 0 12px}.rn-actions{display:flex;flex-wrap:wrap;gap:8px}
+.ct{background:var(--cp-card);border:1px solid var(--cp-line);border-radius:20px;padding:18px;margin-bottom:84px}
+.ct-lock{padding:10px 12px;border-radius:12px;background:#ffcf2212;border:1px solid #ffcf2240;color:#ffe9a0;font-size:13px}
+.ct-adv{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--cp-muted);min-height:44px}
+.ct-groups{display:grid;gap:8px;margin-top:8px}
+.ct-g{border:1px solid var(--cp-line);border-radius:14px;background:#0c1015}.ct-g>summary{cursor:pointer;padding:12px 14px;font:700 15px "Chakra Petch",sans-serif;display:flex;justify-content:space-between;gap:8px}
+.ct-g>summary small{color:var(--cp-muted);font:500 12px system-ui,sans-serif}.ct-g>summary small.ch{color:var(--cp-y)}
+.ct-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 10px;align-items:center;padding:10px 14px;border-top:1px solid var(--cp-line)}
+.ct-row .nm{min-width:0}.ct-row .nm b{display:block;font-weight:600;font-size:14px}.ct-row .nm small{color:var(--cp-muted);font-size:12px}
+.ct-row.ch{background:#ffcf220d}.ct-row.ch .nm small{color:var(--cp-y)}
+.ct-ed{display:flex;align-items:center;gap:4px}.ct-ed button{width:40px;min-height:40px;padding:0;font-size:20px}
+.ct-ed input{width:84px;min-height:40px;text-align:center;background:#0b1118;color:inherit;border:1px solid #2a3a4a;border-radius:10px;font:600 15px "Chakra Petch",sans-serif}
+.ct-ed .u{width:30px;font-size:12px;color:var(--cp-muted)}
+.ct-prof{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.ct-bk{margin-top:14px}.ct-bk summary{cursor:pointer;color:var(--cp-muted);padding:8px 0}
+.ct-bar{position:fixed;left:50%;transform:translateX(-50%);bottom:76px;z-index:30;display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:16px;background:#1b1607;border:1px solid #ffcf2266;box-shadow:0 12px 30px #000a;width:min(560px,calc(100% - 32px))}
+.ct-bar span{flex:1;color:#ffe9a0;font-weight:600;white-space:nowrap}.ct-bar button{min-height:44px}
+.ct-dlg{max-width:520px;width:calc(100% - 32px);background:var(--cp-card);color:var(--cp-text);border:1px solid var(--cp-line);border-radius:18px}
+.ct-dlg ul{list-style:none;padding:0;margin:8px 0 14px;display:grid;gap:4px;max-height:50vh;overflow:auto;font-size:14px}.ct-dlg li b{color:var(--cp-y)}
+@media(max-width:520px){.ct-row{grid-template-columns:1fr}.ct-ed{justify-content:flex-end}}
 .rn-cmds{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:4px;font-size:12px;color:var(--cp-muted)}.rn-cmds b{color:var(--cp-text);font-weight:600}.rn-cmds .ok{color:#b9f5d2}.rn-cmds .bad{color:#ffb4a8}
 @media(max-width:620px){.rn-add{grid-template-columns:1fr}}
 @keyframes cpRise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
@@ -582,7 +601,19 @@ html[data-tpl="pitwall"] body .cloud-dock button[aria-pressed=true]{background:r
 </div>
 <section class="tt-log"><div class="tt-head"><h2>RUN LOG · ประวัติ</h2><small>แตะรอบเพื่อดูกราฟ</small></div><div id="ttRuns" class="tt-runs"></div><div id="dragHistory"></div></section>
 </div>
-<div id="cloud-tune" class="cloud-view" hidden><section><p class="dash-label">VOLTOL / TUNE</p><h2>จูนพารามิเตอร์คอนโทรลเลอร์</h2><p>เชื่อม Wi-Fi ของโมดูล เปิดหน้า ESP32 แล้วเลือก TUNE เพื่ออ่านค่า สำรอง กู้คืน และเขียนค่าผ่าน UART</p><a href="http://192.168.4.1/" target="_blank" rel="noopener">เปิดหน้าจูนบนโมดูล</a><p>การอ่านและเขียนพารามิเตอร์จาก Cloud ยังต้องใช้เฟิร์มแวร์และช่องทางคำสั่งที่รองรับ</p></section></div>
+<div id="cloud-tune" class="cloud-view" hidden><section class="ct" aria-labelledby="ctTitle">
+<div class="rn-head"><div><small>VOLTOL / TUNE</small><h2 id="ctTitle">จูนพารามิเตอร์ผ่าน Cloud</h2></div><span id="ctPill" class="rn-pill">รอข้อมูล</span></div>
+<p id="ctInfo" class="rn-now">กด “อ่านค่า” เพื่อให้โมดูลอ่านพารามิเตอร์จากคอนโทรลเลอร์</p>
+<p id="ctLock" class="ct-lock" hidden>🔒 การเขียนจาก Cloud ปิดอยู่บนโมดูล — เปิด <b>CLOUD TUNE</b> ที่หน้า TUNE บนจอ หรือ “อนุญาตจูนผ่าน Cloud” ในหน้าตั้งค่าของเว็บโมดูล (อ่านค่าได้ตามปกติ)</p>
+<div class="rn-actions"><button id="ctRead" type="button">อ่านค่าจากคอนโทรลเลอร์</button><button id="ctRefresh" type="button" class="secondary">โหลดค่าล่าสุด</button><label class="ct-adv"><input id="ctAdv" type="checkbox"> แสดงค่าขั้นสูง</label></div>
+<p id="ctMsg" class="rn-note" role="status"></p>
+<div id="ctProf" class="ct-prof" hidden></div>
+<div id="ctGroups" class="ct-groups"></div>
+<details class="ct-bk"><summary>ค่าสำรอง (Backup) บนโมดูล</summary><p class="rn-note">โมดูลสำรองค่าเดิมอัตโนมัติก่อนเขียนทุกครั้ง · “โหลด” = นำค่าสำรองเข้าตัวแก้ แล้วกดเขียนเพื่อยืนยัน</p><ul id="ctBackups" class="rn-list"></ul></details>
+<ul id="ctCmds" class="rn-cmds"></ul>
+<div id="ctBar" class="ct-bar" hidden><span id="ctCount"></span><button id="ctUndo" type="button" class="secondary">ยกเลิกการแก้</button><button id="ctWrite" type="button">เขียนลงคอนโทรลเลอร์</button></div>
+</section>
+<dialog id="ctDlg" class="ct-dlg"><form method="dialog"><h3>ยืนยันการเขียนค่า</h3><p class="rn-note">จอดรถให้นิ่ง (0 RPM) · โมดูลสำรองค่าเดิมก่อนเขียน · คำสั่งหมดอายุใน 2 นาที</p><ul id="ctDiff"></ul><div class="rn-actions"><button value="cancel" class="secondary">ยกเลิก</button><button id="ctGo" value="ok">เขียนเลย</button></div></form></dialog></div>
 <nav class="cloud-dock" aria-label="เมนู Cloud"><button data-cloud="overview" data-icon="◴" aria-pressed="true">หน้าปัด</button><button data-cloud="drag" data-icon="⚑" aria-pressed="false">จับเวลา</button><button data-cloud="history" data-icon="≋" aria-pressed="false">ประวัติ</button><button data-cloud="link" data-icon="⇄" aria-pressed="false">การเชื่อมต่อ</button><button data-cloud="tune" data-icon="≛" aria-pressed="false">จูน</button><button data-cloud="firmware" data-icon="⚙" aria-pressed="false">เฟิร์มแวร์</button></nav>
 </div>
 <dialog class="pair-sheet" id="pairSheet" aria-labelledby="pairTitle">
@@ -1574,4 +1605,72 @@ $('rnScan').onclick=()=>{rnScanAsked=Date.now();rnScanKey='';rnSend('wifi_scan',
 $('rnRestart').onclick=()=>rnSend('restart',{},'รีสตาร์ตโมดูล?');
 setInterval(()=>{if(!$('cloud-link').hidden)rnRender();},1500);
 setInterval(()=>rnCmds(),4000);
+
+// ---- cloud tuning (firmware 1.8.4+) ----
+const CT={dev:null,snap:null,at:0,edits:new Map(),open:new Set(),busy:false};
+const ctShown=(d,r)=>d[9]===3?(Math.floor(Math.trunc(r*550/255)+2.2)/100).toFixed(2):(r/10**d[4]).toFixed(d[4]);
+const ctRaw=(d,v)=>d[9]===3?Math.round((v*100-2)*255/550):Math.round(v*10**d[4]);
+const ctClamp=(d,r)=>Math.min(d[7],Math.max(d[6],r));
+function ctOrig(i){return CT.snap?.fields?.[i]?.[2];}
+function ctVal(i){return CT.edits.has(i)?CT.edits.get(i):ctOrig(i);}
+function ctSet(i,r){const d=CT.snap.defs[i];r=ctClamp(d,r);if(r===ctOrig(i))CT.edits.delete(i);else CT.edits.set(i,r);ctRender();}
+async function ctLoad(){const id=$('devices').value;if(!id)return;
+  if(id!==CT.dev){CT.dev=id;CT.snap=null;CT.edits.clear();ctRender();}
+  try{const rows=await api('/rest/v1/voltol_events?select=received_at,detail&device_id=eq.'+id+'&code=eq.params&order=received_at.desc&limit=1');
+    const r=rows[0];if(!r||id!==CT.dev)return;const t=Date.parse(r.received_at);if(t===CT.at)return;
+    const old=CT.snap;CT.snap=r.detail;CT.at=t;
+    if(!old||old.sum!==CT.snap.sum)CT.edits.clear();
+    // a backup loaded on the module shows up as edited values: take them into the editor
+    for(const f of CT.snap.fields||[])if(f[1]!==f[2])CT.edits.set(f[0],f[1]);
+    ctRender();}catch{}}
+async function ctCmds(){const id=$('devices').value;if(!id||$('cloud-tune').hidden)return;
+  try{const rows=await api('/rest/v1/voltol_commands?select=cmd,status,result,created_at&device_id=eq.'+id+'&cmd=like.params_*&order=created_at.desc&limit=4');
+    const N={params_read:'อ่านค่า',params_get:'โหลดค่า',params_write:'เขียนค่า',params_restore:'โหลดค่าสำรอง'};
+    $('ctCmds').replaceChildren(...rows.map(r=>{const li=document.createElement('li');const b=document.createElement('b');b.textContent=N[r.cmd]||r.cmd;li.append(b,' '+new Date(r.created_at).toLocaleTimeString('th-TH')+' · ');const st=document.createElement('span');st.className=r.status==='done'?'ok':(r.status==='failed'||r.status==='expired')?'bad':'';st.textContent=(RN_ST[r.status]||r.status)+(r.result?' ('+r.result+')':'');li.append(st);return li;}));}catch{}}
+async function ctSend(cmd,args){const id=$('devices').value;if(!id||CT.busy)return false;CT.busy=true;ctRender();
+  try{await api('/rest/v1/rpc/voltol_send_command',{body:{p_device:id,p_cmd:cmd,p_args:args}});$('ctMsg').textContent='ส่งคำสั่งแล้ว · โมดูลจะทำภายในไม่กี่วินาที';return true;}
+  catch(e){$('ctMsg').textContent=e.message||'ส่งคำสั่งไม่สำเร็จ';return false;}
+  finally{CT.busy=false;ctRender();ctCmds();}}
+function ctRender(){const s=CT.snap,online=receivedAgo(lastReading)<6000;
+  const pill=$('ctPill');pill.className='rn-pill'+(online?' ok':'');pill.textContent=online?(s?.cloudTune?'โมดูลออนไลน์ · เขียนได้':'โมดูลออนไลน์ · อ่านอย่างเดียว'):'โมดูลออฟไลน์';
+  $('ctRead').disabled=!online||CT.busy;$('ctRefresh').disabled=!online||CT.busy;
+  $('ctLock').hidden=!s||!!s.cloudTune;
+  if(!s){$('ctInfo').textContent=online?'ยังไม่มีค่าบน Cloud · กด “อ่านค่าจากคอนโทรลเลอร์” (เฟิร์มแวร์ 1.8.4 ขึ้นไป)':'รอให้โมดูลออนไลน์';$('ctGroups').replaceChildren();$('ctBar').hidden=true;$('ctProf').hidden=true;$('ctBackups').replaceChildren();return;}
+  const info=$('ctInfo');info.replaceChildren();
+  if(s.have){const b=document.createElement('b');b.textContent='อ่านค่าเมื่อ '+(s.when||'-');info.append(b,' · checksum '+(s.sum>>>0).toString(16).toUpperCase().padStart(5,'0')+' · อัปโหลด '+new Date(CT.at).toLocaleTimeString('th-TH')+(s.linked?'':' · คอนโทรลเลอร์ไม่ได้ต่อ'));}
+  else info.textContent=s.busy?'โมดูลกำลังอ่านค่า…':'โมดูลยังอ่านค่าไม่สำเร็จ · เปิดสวิตช์รถแล้วกด “อ่านค่า”';
+  if(s.msg)$('ctMsg').textContent='โมดูล: '+s.msg;
+  const adv=$('ctAdv').checked,defs=s.defs||[],groups=new Map();
+  for(const d of defs){if(d[8]&&!adv&&!CT.edits.has(d[0]))continue;if(!groups.has(d[1]))groups.set(d[1],[]);groups.get(d[1]).push(d);}
+  const box=$('ctGroups'),focus=document.activeElement?.dataset?.i;
+  box.replaceChildren(...[...groups].map(([g,list])=>{const det=document.createElement('details');det.className='ct-g';det.open=CT.open.has(g);det.ontoggle=()=>det.open?CT.open.add(g):CT.open.delete(g);
+    const ch=list.filter(d=>CT.edits.has(d[0])).length;const sm=document.createElement('summary');const sl=document.createElement('small');sl.textContent=list.length+' ค่า'+(ch?' · แก้ '+ch:'');if(ch)sl.className='ch';sm.append(g,sl);det.append(sm);
+    for(const d of list){const i=d[0],v=ctVal(i),o=ctOrig(i),row=document.createElement('div');row.className='ct-row'+(CT.edits.has(i)?' ch':'');
+      const nm=document.createElement('div');nm.className='nm';const b=document.createElement('b');b.textContent=d[2]+(d[8]?' ★':'');const sm2=document.createElement('small');sm2.textContent=CT.edits.has(i)?'เดิม '+ctShown(d,o)+' '+d[3]+' → ใหม่':'ช่วง '+ctShown(d,d[6])+' – '+ctShown(d,d[7]);nm.append(b,sm2);
+      const ed=document.createElement('div');ed.className='ct-ed';const mi=document.createElement('button');mi.type='button';mi.className='secondary';mi.textContent='−';mi.onclick=()=>ctSet(i,v-d[5]);
+      const inp=document.createElement('input');inp.inputMode='decimal';inp.value=ctShown(d,v);inp.dataset.i=i;inp.onchange=()=>{const x=parseFloat(inp.value);if(Number.isFinite(x))ctSet(i,ctRaw(d,x));else ctRender();};
+      const pl=document.createElement('button');pl.type='button';pl.className='secondary';pl.textContent='+';pl.onclick=()=>ctSet(i,v+d[5]);
+      const u=document.createElement('span');u.className='u';u.textContent=d[3];
+      const dis=!s.have;mi.disabled=pl.disabled=inp.disabled=dis;ed.append(mi,inp,pl,u);row.append(nm,ed);det.append(row);}
+    return det;}));
+  if(focus!=null)box.querySelector('input[data-i="'+focus+'"]')?.focus();
+  // launch profiles saved on the module
+  const pf=$('ctProf');pf.replaceChildren();const P=s.prof;
+  if(P&&P.have&&P.names){[0,1].forEach(q=>{if(!P.p?.[q]?.have)return;const b=document.createElement('button');b.type='button';b.className=q?'':'secondary';b.textContent=q?'ใช้โปรไฟล์ LAUNCH':'ใช้โปรไฟล์ STREET';
+      b.onclick=()=>{P.names.forEach((n,f)=>{const d=defs.find(x=>x[2]===n);if(d)ctSet(d[0],P.p[q].v[f]);});CT.open.add((defs.find(x=>x[2]===P.names[0])||[])[1]);ctRender();};pf.append(b);});}
+  pf.hidden=!pf.childElementCount;
+  $('ctBackups').replaceChildren(...(s.backups||[]).map(([id,when,sum])=>{const li=document.createElement('li');const sp=document.createElement('span');sp.textContent='#'+id+' · '+when+' · '+(sum>>>0).toString(16).toUpperCase().padStart(5,'0')+(sum===s.sum?' (ค่าปัจจุบัน)':'');
+    const b=document.createElement('button');b.type='button';b.className='secondary';b.textContent='โหลด';b.disabled=!online||CT.busy;b.onclick=()=>ctSend('params_restore',{id});li.append(sp,b);return li;}));
+  const n=CT.edits.size;$('ctBar').hidden=!n;$('ctCount').textContent='แก้ไข '+n+' ค่า';
+  $('ctWrite').disabled=!online||CT.busy||!s.cloudTune||!s.have;$('ctWrite').title=s.cloudTune?'':'เปิด CLOUD TUNE บนโมดูลก่อน';}
+$('ctRead').onclick=()=>ctSend('params_read',{});
+$('ctRefresh').onclick=()=>ctSend('params_get',{});
+$('ctAdv').onchange=ctRender;
+$('ctUndo').onclick=()=>{CT.edits.clear();ctRender();};
+$('ctWrite').onclick=()=>{const s=CT.snap;if(!s)return;const ul=$('ctDiff');ul.replaceChildren(...[...CT.edits].map(([i,r])=>{const d=s.defs[i],li=document.createElement('li');const b=document.createElement('b');b.textContent=ctShown(d,r)+' '+d[3];li.append(d[1]+' · '+d[2]+': '+ctShown(d,ctOrig(i))+' → ',b);return li;}));$('ctDlg').showModal();};
+$('ctDlg').onclose=async()=>{if($('ctDlg').returnValue!=='ok'||!CT.snap)return;const set=[...CT.edits].map(([i,r])=>[i,r]);
+  if(await ctSend('params_write',{sum:CT.snap.sum,set}))$('ctMsg').textContent='ส่งคำสั่งเขียนแล้ว · รอโมดูลเขียนและอ่านกลับเพื่อตรวจสอบ';};
+setInterval(()=>{if(!$('cloud-tune').hidden){ctLoad();ctRender();}},2500);
+setInterval(()=>ctCmds(),4000);
+document.querySelector('[data-cloud="tune"]')?.addEventListener('click',()=>{ctLoad();ctCmds();ctRender();});
 </script></html>
