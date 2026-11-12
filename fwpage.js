@@ -2,7 +2,7 @@
 // Bluetooth, downloads, and the installation guide. Loaded by index.html.
 'use strict';
 const FWB = {board: 's3', tab: 'install', art: null, q: ''};
-const BOARDS = [['s3', '🔌', 'ESP32-S3', 'บอร์ดหลัก ไม่มีจอ'], ['cyd35', '📟', 'CYD 3.5"', 'ต่อ BMS ตรง'], ['cloudscreen', '🖥️', 'Cloud Screen', 'จอดูทุกแบต']];
+const BOARDS = [['s3', '🔌', 'ESP32-S3', 'บอร์ดหลัก ไม่มีจอ'], ['cyd35', '📟', 'CYD 3.5"', 'ต่อ BMS ตรง'], ['cloudscreen', '🖥️', 'Cloud Screen', 'จอดูทุกแบต'], ['es3c40', '📱', 'ES3C40 4.0"', 'จอสัมผัส ต่อ BMS + RS485'], ['cloudscreen_es3c40', '🖥️', 'Cloud Screen 4.0"', 'จอ ES3C40 ดูทุกแบต']];
 const BSV = '7a1e0000-5b3c-4f6a-9d2e-b47710ba7700', BCH = n => '7a1e000' + n + '-5b3c-4f6a-9d2e-b47710ba7700';
 
 // ------------------------------------------------------------------ guide
@@ -162,7 +162,7 @@ function fwBoardsHtml() {
     '<div class="small muted" style="margin-top:8px">' + (B ? 'เวอร์ชันล่าสุด <b style="color:var(--text)">' + esc(B.version) + '</b>' + (MAN.notes ? ' · ' + esc(MAN.notes) : '') : 'กำลังโหลดรายการเฟิร์มแวร์…') + '</div></div>';
 }
 function fwInstallHtml() {
-  const B = fwBoard(), cs = FWB.board === 'cloudscreen';
+  const B = fwBoard(), cs = /^cloudscreen/.test(FWB.board);
   let h = fwBoardsHtml() + '<div class="card"><h3 style="margin:0">2. เลือกวิธีติดตั้ง</h3>';
   h += '<div class="meth"><h4>🔵 ผ่านบลูทูธ <span class="pill on" style="font-size:11px">ง่ายสุด</span></h4><div class="small muted">' + (cs ? 'จอ Cloud Screen ไม่มีบลูทูธ ใช้ปุ่ม UPDATE บนจอ (SETUP → PAIRING) หรือปุ่ม ⬆ ในหน้าอุปกรณ์ของฉัน หรือ USB ด้านล่าง' : '<b style="color:var(--text)">เฉพาะบอร์ดที่ติดตั้ง BATTLAB แล้ว</b> · ทำจากมือถือได้ ไม่ต้องต่อสาย') + '</div>' +
     (cs ? '' : fwBleHtml()) + '</div>';

@@ -1207,7 +1207,7 @@ function keepForm(){if(!editS)return;editS.chem=$('sChem').value;const c=parseFl
 const FW_BASE='https://nakon1122.github.io/battlab-cloud/';
 let MAN=null;const fwSeen={};
 function verNum(v){const m=String(v||'').match(/(\d+)\.(\d+)\.(\d+)/);return m?(+m[1])*10000+(+m[2])*100+(+m[3]):0}
-function boardOf(d){const c=d&&d.cfg;if(c&&c.board)return c.board;const f=String(d&&d.fw||'');return f.endsWith('-s3')?'s3':f.endsWith('-cyd35')?'cyd35':f.includes('cloudscreen')?'cloudscreen':''}
+function boardOf(d){const c=d&&d.cfg;if(c&&c.board)return c.board;const f=String(d&&d.fw||'');return f.endsWith('-s3')?'s3':f.endsWith('-cyd35')?'cyd35':f.endsWith('-cloudscreen-es3c40')?'cloudscreen_es3c40':f.endsWith('-es3c40')?'es3c40':f.includes('cloudscreen')?'cloudscreen':''}
 function fwUpdate(d){if(!MAN||!d)return null;const b=MAN.boards&&MAN.boards[boardOf(d)];return b&&verNum(b.version)>verNum(d.fw)?b:null}
 fetch(FW_BASE+'fw/manifest.json?t='+Date.now()).then(r=>r.json()).then(m=>{MAN=m;ctlKey='';if(!$('vFw').classList.contains('hide')&&typeof renderFw==='function')renderFw();else if(cur)renderDev();else if(!$('vList').classList.contains('hide')){renderList();renderViewers()}}).catch(()=>{});
 function fwCardHtml(d,c){const b=MAN&&MAN.boards&&MAN.boards[boardOf(d)],up=fwUpdate(d);

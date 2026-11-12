@@ -1,16 +1,16 @@
 {
-  "updated": "2026-11-12T06:23:54+07:00",
-  "notes": "v2.10.1: ค้นหาดองเกิล LuxPower ไม่ทำให้บอร์ดค้างแล้ว · ถ้า IP ดองเกิลเปลี่ยน บอร์ดค้นหาและตั้ง IP ใหม่ให้เอง · จอ CYD บอกสถานะการค้นหา",
+  "updated": "2026-11-13T00:43:23+07:00",
+  "notes": "2.10.1: new board ES3C40P 4.0\" (ESP32-S3, capacitive touch) - BMS screen with RS485 + Cloud Screen",
   "boards": {
     "s3": {
       "version": "2.10.1",
       "url": "fw/2.10.1/BATTLAB_S3_APP_UPDATE.bin",
       "size": 1496192,
-      "sha256": "fffd2c17b3b2d8ed6fbe338a902d98a812bd40ac8de4de4bff8e97b969ac8999",
+      "sha256": "e0eb5d669ff270b89faa962fad3d97018132e150c3c0d9d7d898c445adcb076d",
       "install": {
         "url": "fw/2.10.1/BATTLAB_S3_BLEFIX_INSTALL.bin",
         "size": 1561728,
-        "sha256": "9d7c0c775d8fa10d413d838cb5edc05630e9a7814df5a28e275149ec035fa2e1"
+        "sha256": "0cd9974710c30e47ebcbbe46b0f70fc4641b9738d885ea3423098677a3d47ac1"
       },
       "webtools": "fw/2.10.1/webtools-s3.json",
       "title": "ESP32-S3 (BMS board)"
@@ -19,11 +19,11 @@
       "version": "2.10.1",
       "url": "fw/2.10.1/BATTLAB_CYD35_APP_UPDATE.bin",
       "size": 1813488,
-      "sha256": "e485c55394741088edb9ef37c1f7bcf0ed7c4a76037d62864a4c8ef4315b9bfb",
+      "sha256": "8e5033d28007a40b397c5ae9452a102f7aaffc7cabb0ab8119b6b6fbd86575e7",
       "install": {
         "url": "fw/2.10.1/BATTLAB_CYD35_INSTALL.bin",
         "size": 1879024,
-        "sha256": "c61e8676a1ae4344eb904340bc9f3fb4713f0039860897e047ed6229bd345dbb"
+        "sha256": "999445381dd7b51f877a983eb3e6d7ae2cedad5e063d1483d834bd0b446a9a3a"
       },
       "webtools": "fw/2.10.1/webtools-cyd35.json",
       "title": "CYD 3.5\" (BMS screen)"
@@ -31,22 +31,48 @@
     "cloudscreen": {
       "version": "2.9.3",
       "url": "fw/2.9.3/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
-      "size": 1360464,
-      "sha256": "8531df721d518e85fa2fea1ddf3c7abf59089d795614a972add94678fca31fc1",
+      "size": 1362272,
+      "sha256": "7376373e20fb7e7607af29fc928b229d6c27cd070e2056204b632cb118e94af1",
       "install": {
         "url": "fw/2.9.3/BATTLAB_CLOUDSCREEN_INSTALL.bin",
-        "size": 1426000,
-        "sha256": "dca194d0ad2614fba2fe5e1bc26ca590130091acd98f628514e003ee3be2be10"
+        "size": 1427808,
+        "sha256": "b479ddc09bf80c24739d5bed6f92e7940f3494a831b9a9eb9b723d685536c6ac"
       },
       "webtools": "fw/2.9.3/webtools-cloudscreen.json",
       "title": "Cloud Screen (CYD 3.5\")"
+    },
+    "es3c40": {
+      "version": "2.10.1",
+      "url": "fw/2.10.1/BATTLAB_ES3C40_APP_UPDATE.bin",
+      "size": 1751584,
+      "sha256": "a176e8f50787565f3fcb27cda5d3c6d1973928834769da23075ff83171f92b35",
+      "install": {
+        "url": "fw/2.10.1/BATTLAB_ES3C40_INSTALL.bin",
+        "size": 1817120,
+        "sha256": "b1f49e8979d89f7557664845d1375602205566c983ed7861a5618fc745e2cb64"
+      },
+      "webtools": "fw/2.10.1/webtools-es3c40.json",
+      "title": "ES3C40 4.0\" (BMS screen, S3)"
+    },
+    "cloudscreen_es3c40": {
+      "version": "2.10.1",
+      "url": "fw/2.10.1/BATTLAB_ES3C40_CLOUDSCREEN_APP_UPDATE.bin",
+      "size": 1307856,
+      "sha256": "5c6f8ad9ee0fa7a0ffd5f050b57517bf7a1404ca3dd0eac9e0894c98b7d26fde",
+      "install": {
+        "url": "fw/2.10.1/BATTLAB_ES3C40_CLOUDSCREEN_INSTALL.bin",
+        "size": 1373392,
+        "sha256": "650ea7e36523d97a04bee7db94c371f379bf5ba2c078f5d8a61c03c3b63c02fa"
+      },
+      "webtools": "fw/2.10.1/webtools-cloudscreen_es3c40.json",
+      "title": "Cloud Screen (ES3C40 4.0\")"
     }
   },
   "history": [
     {
       "version": "2.10.1",
-      "date": "2026-11-12",
-      "notes": "v2.10.1: ค้นหาดองเกิล LuxPower ไม่ทำให้บอร์ดค้างแล้ว · ถ้า IP ดองเกิลเปลี่ยน บอร์ดค้นหาและตั้ง IP ใหม่ให้เอง · จอ CYD บอกสถานะการค้นหา",
+      "date": "2026-11-13",
+      "notes": "2.10.1: new board ES3C40P 4.0\" (ESP32-S3, capacitive touch) - BMS screen with RS485 + Cloud Screen",
       "zip": null,
       "boards": {
         "s3": {
@@ -60,6 +86,14 @@
         "cloudscreen": {
           "app": "fw/2.9.3/BATTLAB_CLOUDSCREEN_APP_UPDATE.bin",
           "install": "fw/2.9.3/BATTLAB_CLOUDSCREEN_INSTALL.bin"
+        },
+        "es3c40": {
+          "app": "fw/2.10.1/BATTLAB_ES3C40_APP_UPDATE.bin",
+          "install": "fw/2.10.1/BATTLAB_ES3C40_INSTALL.bin"
+        },
+        "cloudscreen_es3c40": {
+          "app": "fw/2.10.1/BATTLAB_ES3C40_CLOUDSCREEN_APP_UPDATE.bin",
+          "install": "fw/2.10.1/BATTLAB_ES3C40_CLOUDSCREEN_INSTALL.bin"
         }
       }
     },
