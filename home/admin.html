@@ -116,6 +116,24 @@ a{color:var(--y)}a.btn{color:var(--text)}
 </div>
 <div class="drawer" id="drawer" hidden><div class="panel" id="panel" role="dialog" aria-modal="true" aria-labelledby="dTitle"></div></div>
 
+<script>
+/* safety net in old-style JS (runs even where newer syntax fails): if the back office has not
+   appeared after 15 s, show why instead of a blank page */
+(function () {
+  var errs = [];
+  window.onerror = function (m, s, l) { errs.push(String(m) + (s ? ' (' + String(s).split('/').pop() + ':' + l + ')' : '')); };
+  function h(v) { return String(v).replace(/[&<>"']/g, function (c) { return '&#' + c.charCodeAt(0) + ';'; }); }
+  setTimeout(function () {
+    var app = document.getElementById('app'), g = document.getElementById('gate');
+    if (!g || (app && !app.hidden) || !g.hidden) return;
+    var why = typeof window.supabase === 'undefined' ? 'โหลดไลบรารีฐานข้อมูล (cdn.jsdelivr.net) ไม่ได้ · ลองเปลี่ยนเน็ต Wi-Fi/4G' : errs.length ? 'เบราว์เซอร์นี้รันหน้าหลังบ้านไม่ได้' : 'หน้าเว็บค้างระหว่างเริ่มต้น';
+    g.hidden = false;
+    g.innerHTML = '<h2 style="margin-top:0">เปิดหลังบ้านไม่สำเร็จ</h2><p class="note" style="font-size:14px">' + h(why) +
+      '<br><small style="word-break:break-all">' + h(errs.join(' | ').slice(0, 400)) + '<br>' + h(navigator.userAgent) + '</small></p>' +
+      '<button class="btn y" type="button" onclick="location.reload()">ลองใหม่</button>';
+  }, 15000);
+})();
+</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script src="/session-client.js?v=2"></script>
 <script src="/battlab-nav.js?v=3" defer></script>
