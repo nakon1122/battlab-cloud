@@ -395,6 +395,12 @@ html[data-tpl="pitwall"] body .cloud-dock button[aria-pressed=true]{background:r
 #cloud-drag .tt-marks span[data-hit=true]{color:var(--tt-c)}
 #cloud-drag .tt-hover{position:absolute;top:30px;padding:8px 10px;border-radius:4px;background:#0c0e10f2;border:1px solid #2e333a;font:12px/1.6 "JetBrains Mono",monospace;pointer-events:none;white-space:nowrap}
 #cloud-drag .tt-empty[hidden]{display:none}
+#cloud-drag .tt-tools{display:flex;flex-wrap:wrap;gap:6px}
+#cloud-drag .tt-zoom button{min-width:40px;justify-content:center;font-size:16px;padding:0 10px}
+#cloud-drag .tt-zl{display:flex;align-items:center;font:12px "JetBrains Mono",monospace;color:var(--tt-c);min-width:0}
+#cloud-drag .tt-chart{touch-action:none;cursor:grab}
+#cloud-drag .tt-main.tt-max{position:fixed;inset:0;z-index:999;overflow:auto;border-radius:0;padding:max(12px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) 12px max(12px,env(safe-area-inset-left))}
+#cloud-drag .tt-main.tt-max .tt-chart{height:calc(100vh - 260px);min-height:260px}
 #cloud-drag .tt-empty{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;margin:0;color:var(--tt-m);font-size:14px;text-align:center;padding:20px}
 #cloud-drag .tt-axisrow{display:flex;justify-content:space-between;font:11px "JetBrains Mono",monospace;color:var(--tt-m);margin-top:4px}
 #cloud-drag .tt-thr{margin-top:12px;border:1px solid var(--tt-l);border-radius:4px;padding:8px 10px}
@@ -489,7 +495,8 @@ html[data-tpl="pitwall"] body .cloud-dock button[aria-pressed=true]{background:r
 <section class="tt-main">
   <div class="tt-head">
     <h2>TRACE · <span id="ttRunLabel">รอข้อมูลรอบวิ่ง</span></h2>
-    <div class="tt-seg tt-axis" role="group" aria-label="แกนนอน"><button type="button" data-axis="d" aria-pressed="true">ระยะทาง</button><button type="button" data-axis="t" aria-pressed="false">เวลา</button></div>
+    <div class="tt-tools"><div class="tt-seg tt-axis" role="group" aria-label="แกนนอน"><button type="button" data-axis="d" aria-pressed="true">ระยะทาง</button><button type="button" data-axis="t" aria-pressed="false">เวลา</button></div>
+    <div class="tt-seg tt-zoom" role="group" aria-label="ซูมกราฟ"><button type="button" id="ttZoomOut" aria-label="ซูมออก">−</button><span id="ttZoomLabel" class="tt-zl"></span><button type="button" id="ttZoomIn" aria-label="ซูมเข้า">+</button><button type="button" id="ttZoomReset" aria-label="ดูทั้งรอบ">⟲</button><button type="button" id="ttFull" aria-pressed="false" aria-label="ขยายเต็มจอ">⛶</button></div></div>
   </div>
   <div class="tt-legend" role="group" aria-label="เส้นในกราฟ">
     <button type="button" data-s="kmh" aria-pressed="true"><i style="background:#3EE08F"></i>ความเร็ว km/h</button>
@@ -605,6 +612,7 @@ function renderDragTarget(drag){
   const index=dragSplits(drag).findIndex(([meters])=>meters===distance);
   const split=readDragSplit(drag,index);
   const reached=Number.isFinite(drag?.distance_m)&&drag.distance_m>=distance;
+  if(ttFresh(drag)){$('raceTime').textContent='0.000 s';$('raceSpeed').textContent='0.0 km/h';progress.value=0;$('dragSplitPanel').replaceChildren(splitDetails(null));return;}
   $('raceTime').textContent=split?.done?formatNumber(split.t,3,' s'):reached?'—':formatNumber(drag?.elapsed_s,3,' s');
   $('raceSpeed').textContent=split?.done?formatNumber(split.v,1,' km/h'):reached||receivedAgo(lastReading)>=6000?'—':formatNumber(lastReading?.payload?.speed_kmh,1,' km/h');
   $('dragSplitPanel').replaceChildren(splitDetails(drag));
@@ -683,7 +691,8 @@ function renderDragHistory(history,device){
 // b9/b18/b19 are controller bytes whose meaning is not known yet: "ค้นหาคันเร่ง" draws them so the
 // throttle can be found (twist the throttle with the wheel off the ground).
 const TT={axis:'d',on:{kmh:true,amp:true,thr:true,rpm:false,best:true,raw:false},sel:null,cache:new Map(),fetching:new Set(),
-  device:null,lastHistory:[],live:false,drawnKey:'',thrIndex:null,samples:[],bestSamples:[]};
+  device:null,lastHistory:[],live:false,drawnKey:'',thrIndex:null,samples:[],bestSamples:[],
+  saved:new Map(),savedAt:0,savedBusy:false,armAt:0,zoom:{a:0,b:1}};
 const TT_SPLITS=[[18.288,'60 ft'],[100,'100 m'],[201.168,'201 m'],[402.336,'402 m'],[1000,'1000 m']];
 function ttFrames(rows,rid){
   const out=new Map();
@@ -717,27 +726,58 @@ async function ttFetch(rid){
   if(TT.fetching.has(rid)||TT.cache.get(rid)?.full||!TT.device)return;
   TT.fetching.add(rid);
   try{
-    const rows=await api('/rest/v1/voltol_telemetry?select=payload,received_at&device_id=eq.'+encodeURIComponent(TT.device)+
+    let rows=[];
+    if(TT.saved.has(String(rid))){
+      const sv=await api('/rest/v1/voltol_drag_runs?select=frames,finished_at,target_m,elapsed_s,distance_m,splits&device_id=eq.'+encodeURIComponent(TT.device)+'&run_id=eq.'+encodeURIComponent(rid)+'&limit=1');
+      const r=sv[0];
+      if(r&&Array.isArray(r.frames)&&r.frames.length)rows=[{received_at:r.finished_at,payload:{frames:r.frames,drag:{state:'DONE',run_id:String(rid),target_m:r.target_m,elapsed_s:r.elapsed_s,distance_m:r.distance_m,splits:r.splits||[]}}}];
+    }
+    if(!rows.length)rows=await api('/rest/v1/voltol_telemetry?select=payload,received_at&device_id=eq.'+encodeURIComponent(TT.device)+
       '&payload->drag->>run_id=eq.'+encodeURIComponent(rid)+'&order=received_at.desc&limit=600');
     const drag=ttLastDrag(rows,rid);
     TT.cache.set(rid,{samples:ttFrames(rows,rid),drag,full:drag?.state==='DONE'||drag?.state==='ABORTED'});
     ttRender();
   }catch(e){}finally{TT.fetching.delete(rid);}
 }
-function ttReset(){TT.sel=null;TT.cache.clear();TT.lastHistory=[];TT.drawnKey='';ttRender();}
+function ttReset(){TT.sel=null;TT.cache.clear();TT.saved.clear();TT.savedAt=0;TT.lastHistory=[];TT.drawnKey='';TT.zoom={a:0,b:1};ttRender();}
+// finished runs are kept for good in voltol_drag_runs (filled by the database when a run ends)
+async function ttLoadSaved(force){
+  if(!TT.device||TT.savedBusy||(!force&&Date.now()-TT.savedAt<30000))return;
+  TT.savedBusy=true;const dev=TT.device;
+  try{
+    const rows=await api('/rest/v1/voltol_drag_runs?select=run_id,finished_at,target_m,elapsed_s,distance_m,splits,firmware&device_id=eq.'+encodeURIComponent(dev)+'&order=finished_at.desc&limit=200');
+    if(dev!==TT.device)return;
+    TT.saved=new Map(rows.map(r=>[String(r.run_id),{rid:String(r.run_id),at:r.finished_at,fw:r.firmware,
+      drag:{state:'DONE',run_id:String(r.run_id),target_m:r.target_m,elapsed_s:r.elapsed_s,distance_m:r.distance_m,splits:r.splits||[]}}]));
+    TT.savedAt=Date.now();ttRender();
+  }catch(e){}finally{TT.savedBusy=false;}
+}
+function ttAllRuns(history){
+  const runs=new Map();
+  for(const r of ttRuns(history))runs.set(String(r.rid),r);
+  for(const [rid,r] of TT.saved)if(!runs.has(rid)||runs.get(rid).drag.state!=='DONE')runs.set(rid,r);
+  return [...runs.values()].sort((a,b)=>(Date.parse(b.at||0)||0)-(Date.parse(a.at||0)||0));
+}
+function ttHistoryRows(history){return ttAllRuns(history).filter(r=>r.drag.state==='DONE').map(r=>({received_at:r.at,payload:{drag:r.drag}}));}
 function ttUpdate(history,device,live){
-  if(device!==TT.device){TT.device=device;TT.sel=null;TT.cache.clear();}
+  if(device!==TT.device){TT.device=device;TT.sel=null;TT.cache.clear();TT.saved.clear();TT.savedAt=0;TT.zoom={a:0,b:1};}
+  const st=history[0]?.payload?.drag?.state;
+  if(st==='DONE'&&TT.lastState&&TT.lastState!=='DONE')setTimeout(()=>ttLoadSaved(true),2500);  // a run just finished
+  if(st==='RUN'||st==='ARMED'||st==='READY')TT.armAt=0;
+  TT.lastState=st;
   TT.lastHistory=history;TT.live=live;
+  ttLoadSaved(false);
   ttRender();
 }
 function ttRender(){
   const history=TT.lastHistory, latest=history[0]?.payload?.drag;
   const bar=document.querySelector('#cloud-drag .tt-bar');
   if(bar){const st=TT.live&&latest?latest.state:'STANDBY';bar.dataset.state=st;$('ttCode').textContent={RUN:'LIVE RUN',DONE:'FINISH',ARMED:'ARMED',READY:'READY',ABORTED:'STOPPED',IDLE:'IDLE'}[st]||'STANDBY';}
-  const runs=ttRuns(history);
-  for(const [rid,c] of TT.cache)if(!runs.some(r=>r.rid===rid)&&c.drag)runs.push({rid,drag:c.drag,at:null});
+  const runs=ttAllRuns(history);
+  for(const [rid,c] of TT.cache)if(!runs.some(r=>String(r.rid)===String(rid))&&c.drag)runs.push({rid,drag:c.drag,at:null});
+  const fresh=TT.live&&ttFresh(latest);
   const liveRid=TT.live&&latest&&['RUN','DONE'].includes(latest.state)?latest.run_id:null;
-  const rid=TT.sel||liveRid||runs[0]?.rid||null;
+  const rid=TT.sel||(fresh?null:liveRid||runs[0]?.rid)||null;
   const run=runs.find(r=>r.rid===rid);
   let drag=run?.drag||null, samples=[];
   if(rid){
@@ -754,7 +794,7 @@ function ttRender(){
   let bestS=[];
   if(best&&best.rid!==rid){const c=TT.cache.get(best.rid);if(c?.full)bestS=c.samples;else ttFetch(best.rid);}
   TT.samples=samples;TT.bestSamples=bestS;
-  ttTower(drag||latest,target,best?.drag);
+  ttTower(fresh&&!TT.sel?null:drag||latest,target,best?.drag);
   ttChart(samples,bestS,drag,target,rid);
   ttRunChips(runs,rid,best?.rid);
   $('ttRunLabel').textContent=!rid?'รอข้อมูลรอบวิ่ง':(rid===liveRid&&drag?.state==='RUN'?'รอบนี้ (สด)':run?.at?new Date(run.at).toLocaleString('th-TH',{timeZone:'Asia/Bangkok',day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}):'รอบที่เลือก')+(drag?.state==='DONE'&&Number.isFinite(drag.elapsed_s)?' · '+drag.elapsed_s.toFixed(3)+' s':'');
@@ -782,7 +822,9 @@ function ttChart(s,bs,drag,target,rid){
   const svg=$('ttSvg'), thr=$('ttThrSvg'); if(!svg)return;
   const W=760,H=330,axis=TT.axis, n=ttN(target);
   const tEnd=Math.max(1,...s.map(x=>x.t),...bs.map(x=>x.t),Number.isFinite(drag?.elapsed_s)?drag.elapsed_s:0)*1.03;
-  const X=axis==='d'?(x=>Math.max(0,Math.min(W,x.d/target*W))):(x=>Math.max(0,Math.min(W,x.t/tEnd*W)));
+  const za=TT.zoom.a, zb=TT.zoom.b, zf=f=>(f-za)/(zb-za)*W;
+  TT.tEnd=tEnd;
+  const X=axis==='d'?(x=>zf(x.d/target)):(x=>zf(x.t/tEnd));
   const pts=s.filter(x=>axis==='t'||x.d<=target*1.01);
   const vMax=Math.max(120,...pts.map(x=>x.kmh),...bs.map(x=>x.kmh))*1.08, aMax=Math.max(100,...pts.map(x=>x.a))*1.1, rMax=Math.max(1000,...pts.map(x=>x.rpm))*1.08;
   const line=(arr,fy)=>arr.length?'M'+arr.map(x=>X(x).toFixed(1)+' '+fy(x).toFixed(1)).join('L'):'';
@@ -790,7 +832,7 @@ function ttChart(s,bs,drag,target,rid){
   let marks='',lab='';
   TT_SPLITS.slice(0,n).forEach(([m,name],i)=>{
     const sp=drag?.splits?.[i], hit=!!sp?.done;
-    const x=axis==='d'?m/target*W:(hit&&Number.isFinite(sp.t)?sp.t/tEnd*W:null); if(x==null)return;
+    const x=axis==='d'?zf(m/target):(hit&&Number.isFinite(sp.t)?zf(sp.t/tEnd):null); if(x==null||x<-2||x>W+2)return;
     marks+='<path d="M'+x.toFixed(1)+' 0V'+H+'" stroke="'+(hit?'#3cc8f0':'#3a4048')+'" stroke-dasharray="3 4" fill="none" vector-effect="non-scaling-stroke"/>';
     lab+='<span data-hit="'+hit+'" style="left:'+(Math.min(96,Math.max(4,x/W*100))).toFixed(2)+'%">'+name+(hit&&Number.isFinite(sp.t)?' '+sp.t.toFixed(2):'')+'</span>';
   });
@@ -804,9 +846,9 @@ function ttChart(s,bs,drag,target,rid){
     (TT.on.kmh?path(line(pts,yV),'#3ee08f',2.6):'');
   $('ttMarks').innerHTML=lab;
   $('ttEmpty').hidden=pts.length>1;
-  $('ttAx0').textContent=axis==='d'?'0 m':'0 s';
-  $('ttAx1').textContent=axis==='d'?(target/2).toFixed(0)+' m':(tEnd/2).toFixed(1)+' s';
-  $('ttAx2').textContent=axis==='d'?(target>=999?'1000':target.toFixed(0))+' m':tEnd.toFixed(1)+' s';
+  const axl=f=>axis==='d'?(f*target).toFixed(f*target<100&&zb-za<0.5?1:0)+' m':(f*tEnd).toFixed(zb-za<0.5?2:1)+' s';
+  $('ttAx0').textContent=axl(za);$('ttAx1').textContent=axl((za+zb)/2);$('ttAx2').textContent=axl(zb);
+  $('ttZoomLabel').textContent=zb-za<0.999?'×'+(1/(zb-za)).toFixed(1):'';
   // throttle lane: the known throttle channel, or the 3 candidate bytes while searching
   let t='';
   if(TT.on.raw&&pts.length>1){
@@ -821,8 +863,9 @@ function ttHover(ev){
   const box=$('ttChartBox'), hv=$('ttHover'), s=TT.samples; if(!s.length){hv.hidden=true;return;}
   const r=box.getBoundingClientRect(), fx=(ev.clientX-r.left)/r.width;
   const drag=TT.cache.get(TT.sel)?.drag||TT.lastHistory[0]?.payload?.drag, target=ttTarget(drag);
-  const tEnd=Math.max(1,...s.map(x=>x.t))*1.03;
-  const want=TT.axis==='d'?fx*target:fx*tEnd;
+  const tEnd=TT.tEnd||Math.max(1,...s.map(x=>x.t))*1.03;
+  const f=TT.zoom.a+fx*(TT.zoom.b-TT.zoom.a);
+  const want=TT.axis==='d'?f*target:f*tEnd;
   let best=s[0];for(const x of s)if(Math.abs((TT.axis==='d'?x.d:x.t)-want)<Math.abs((TT.axis==='d'?best.d:best.t)-want))best=x;
   hv.hidden=false;hv.style.left=Math.min(r.width-170,Math.max(4,ev.clientX-r.left+12))+'px';
   hv.innerHTML=best.t.toFixed(2)+' s · '+best.d.toFixed(1)+' m<br><span style="color:#3ee08f">'+best.kmh.toFixed(1)+' km/h</span> · <span style="color:#ff6a1a">'+best.a.toFixed(0)+' A</span><br>'+best.rpm+' rpm · '+best.v.toFixed(1)+' V'+(TT.thrIndex!=null?' · คันเร่ง '+ttThrValue(best):'');
@@ -830,9 +873,47 @@ function ttHover(ev){
 document.querySelectorAll('#cloud-drag .tt-axis button').forEach(b=>b.onclick=()=>{TT.axis=b.dataset.axis;document.querySelectorAll('#cloud-drag .tt-axis button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));ttRender();});
 document.querySelectorAll('#cloud-drag .tt-legend button').forEach(b=>b.onclick=()=>{TT.on[b.dataset.s]=!TT.on[b.dataset.s];b.setAttribute('aria-pressed',String(TT.on[b.dataset.s]));TT.drawnKey='';ttRender();});
 $('ttRuns').addEventListener('click',e=>{const b=e.target.closest('button[data-rid]');if(!b)return;TT.sel=b.dataset.rid;ttRender();});
-$('ttChartBox').addEventListener('pointermove',ttHover);
 $('ttChartBox').addEventListener('pointerleave',()=>{$('ttHover').hidden=true;});
+// zoom: wheel / pinch / + - buttons; drag to pan; double-click or reset button = whole run
+function ttZoomTo(a,b){
+  const span=Math.max(0.02,Math.min(1,b-a));
+  if(a<0){a=0;}if(a+span>1)a=1-span;
+  TT.zoom={a:Math.max(0,a),b:Math.max(0,a)+span};TT.drawnKey=TT.drawnKey;ttRender();
+}
+function ttZoomBy(k,cf){const z=TT.zoom,c=z.a+(cf??0.5)*(z.b-z.a),span=(z.b-z.a)/k;ttZoomTo(c-(cf??0.5)*span,c-(cf??0.5)*span+span);}
+(function(){
+  const box=$('ttChartBox'), pts=new Map();let pan=null,pinch=null;
+  const fxOf=e=>{const r=box.getBoundingClientRect();return Math.min(1,Math.max(0,(e.clientX-r.left)/r.width));};
+  box.addEventListener('wheel',e=>{e.preventDefault();ttZoomBy(e.deltaY<0?1.25:0.8,fxOf(e));},{passive:false});
+  box.addEventListener('dblclick',()=>ttZoomTo(0,1));
+  box.addEventListener('pointerdown',e=>{box.setPointerCapture(e.pointerId);pts.set(e.pointerId,e.clientX);
+    if(pts.size===1)pan={x:e.clientX,z:{...TT.zoom}};
+    if(pts.size===2){const xs=[...pts.values()];pinch={d:Math.abs(xs[0]-xs[1])||1,z:{...TT.zoom},c:(fxOf({clientX:(xs[0]+xs[1])/2}))};pan=null;}});
+  box.addEventListener('pointermove',e=>{
+    if(!pts.has(e.pointerId)){ttHover(e);return;}
+    pts.set(e.pointerId,e.clientX);
+    const w=box.getBoundingClientRect().width;
+    if(pinch&&pts.size>=2){const xs=[...pts.values()],d=Math.abs(xs[0]-xs[1])||1,k=d/pinch.d,span=(pinch.z.b-pinch.z.a)/k,c=pinch.z.a+pinch.c*(pinch.z.b-pinch.z.a);ttZoomTo(c-pinch.c*span,c-pinch.c*span+span);}
+    else if(pan){const df=(e.clientX-pan.x)/w*(pan.z.b-pan.z.a);if(Math.abs(e.clientX-pan.x)>3){$('ttHover').hidden=true;ttZoomTo(pan.z.a-df,pan.z.b-df);}else ttHover(e);}
+  });
+  const up=e=>{pts.delete(e.pointerId);if(pts.size<2)pinch=null;if(!pts.size)pan=null;};
+  box.addEventListener('pointerup',up);box.addEventListener('pointercancel',up);
+  $('ttZoomIn').onclick=()=>ttZoomBy(1.6);$('ttZoomOut').onclick=()=>ttZoomBy(1/1.6);$('ttZoomReset').onclick=()=>ttZoomTo(0,1);
+  $('ttFull').onclick=()=>{const m=document.querySelector('#cloud-drag .tt-main');const on=!m.classList.contains('tt-max');
+    m.classList.toggle('tt-max',on);$('ttFull').setAttribute('aria-pressed',String(on));document.body.style.overflow=on?'hidden':'';ttRender();};
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.querySelector('#cloud-drag .tt-main.tt-max'))$('ttFull').click();});
+})();
 
+// a new ARM starts from zero: time, speed, distance, tower and trace are cleared at once
+function ttArmReset(){
+  TT.armAt=Date.now();TT.sel=null;TT.zoom={a:0,b:1};TT.drawnKey='';
+  $('raceTime').textContent='0.000 s';$('raceSpeed').textContent='0.0 km/h';$('raceDistance').textContent='0.0 ม.';$('dragProgress').value=0;
+  ttRender();
+}
+function ttFresh(latest){
+  const st=latest?.state;
+  return st==='ARMED'||st==='READY'||(TT.armAt&&Date.now()-TT.armAt<10000&&st!=='RUN');
+}
 let dragRequestBusy=false;
 async function sendDragCommand(command){
   const device=$('devices').value;
@@ -846,7 +927,7 @@ async function sendDragCommand(command){
   }catch(error){status.textContent=error.message||'ส่งคำสั่งไม่สำเร็จ';}
   finally{dragRequestBusy=false;}
 }
-$('dragArm').onclick=()=>sendDragCommand('A');
+$('dragArm').onclick=()=>{ttArmReset();sendDragCommand('A');};
 $('dragCancel').onclick=()=>sendDragCommand('C');
 $('remoteOta').onclick=async ()=>{
   const button=$('remoteOta'), device=$('devices').value, status=$('remoteOtaStatus');
@@ -1049,14 +1130,14 @@ async function refreshData(generation,id) {
   metrics.replaceChildren();metrics.dataset.device=id;events.replaceChildren();
   const p=reading?.payload??{};
   const drag=p.drag;
-  $('raceDistance').textContent=Number.isFinite(drag?.distance_m)?drag.distance_m.toFixed(1)+' ม.':'—';
+  $('raceDistance').textContent=ttFresh(drag)?'0.0 ม.':Number.isFinite(drag?.distance_m)?drag.distance_m.toFixed(1)+' ม.':'—';
   const liveReading=age<6000;
   renderCyberTelemetry(history,liveReading&&p.controller_online!==false);
   $('raceAmp').textContent=liveReading&&Number.isFinite(p.current)?p.current.toFixed(1)+' A':'—';
   $('raceRpm').textContent=liveReading&&Number.isFinite(reading.rpm)?reading.rpm+' RPM':'—';
   $('raceVolt').textContent=liveReading?formatNumber(p.voltage,1,' V'):'—';
   renderDragTarget(drag);
-  renderDragHistory(history,id);
+  renderDragHistory(ttHistoryRows(history),id);
   ttUpdate(history,id,liveReading);
   const dragFresh=!!drag&&liveReading;
   const dragActive=['ARMED','READY','RUN'].includes(drag?.state);
