@@ -258,6 +258,47 @@ body .track-cockpit::before{background:linear-gradient(105deg,transparent 42%,rg
 .ct-dlg{max-width:520px;width:calc(100% - 32px);background:var(--cp-card);color:var(--cp-text);border:1px solid var(--cp-line);border-radius:18px}
 .ct-dlg ul{list-style:none;padding:0;margin:8px 0 14px;display:grid;gap:4px;max-height:50vh;overflow:auto;font-size:14px}.ct-dlg li b{color:var(--cp-y)}
 @media(max-width:520px){.ct-row{grid-template-columns:1fr}.ct-ed{justify-content:flex-end}}
+.pr-steps{list-style:none;margin:6px 0 14px;padding:0;display:grid;gap:0}
+.pr-steps li{display:flex;gap:12px;align-items:flex-start;position:relative;padding:6px 0 10px}
+.pr-steps li:not(:last-child)::after{content:"";position:absolute;left:15px;top:38px;bottom:-2px;width:2px;background:#2a3a4a}
+.pr-steps li[data-st=done]:not(:last-child)::after{background:#00e08a88}
+.pr-steps i{flex:none;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font:700 14px "Chakra Petch",system-ui;font-style:normal;background:#1a222b;color:#8a99a8;position:relative}
+.pr-steps b{display:block;font-size:15px}.pr-steps small{color:#8a99a8;font-size:13px}
+.pr-steps li[data-st=wait] b{color:#8a99a8}
+.pr-steps li[data-st=active] i{background:#ffcd6726;color:transparent}.pr-steps li[data-st=active] i::before{content:"";position:absolute;inset:4px;border-radius:50%;border:3px solid #ffcd67;border-right-color:transparent;animation:prSpin .9s linear infinite}
+.pr-steps li[data-st=active] small{color:#ffcd67}
+.pr-steps li[data-st=done] i{background:#00e08a;color:#062014;font-size:0}.pr-steps li[data-st=done] i::before{content:"✓";font-size:17px}
+.pr-steps li[data-st=fail] i{background:#ff3b30;color:#fff;font-size:0}.pr-steps li[data-st=fail] i::before{content:"✕";font-size:15px}
+.pr-steps li[data-st=fail] small{color:#ff8a80}
+@keyframes prSpin{to{transform:rotate(360deg)}}
+.pr-stage{display:grid;gap:12px;padding:16px;border-radius:18px;background:#0c1520;border:1px solid #233243;margin-bottom:10px}
+.pr-stage[hidden]{display:none}
+.pr-lead{margin:0;color:#b8c4cf;font-size:14px;line-height:1.5}
+.pr-go{min-height:52px;font-size:17px;font-weight:700;border-radius:14px}
+.pr-hero{display:grid;place-items:center;height:110px}
+.pr-bt{width:84px;height:84px;border-radius:50%;background:#4fc3ff1f;position:relative;display:grid;place-items:center}
+.pr-bt::before{content:"";position:absolute;inset:-10px;border-radius:50%;border:2px solid #4fc3ff66;animation:prPulse 1.8s ease-out infinite}
+.pr-bt::after{content:"ᛒ";font:700 46px system-ui;color:#4fc3ff;line-height:1}
+@keyframes prPulse{from{transform:scale(.8);opacity:1}to{transform:scale(1.35);opacity:0}}
+.pr-help summary{cursor:pointer;color:#8fd3ff;font-size:14px;padding:4px 0}.pr-help ul{margin:6px 0 0;padding-left:18px;color:#b8c4cf;font-size:13px;display:grid;gap:6px}
+.pr-nets{display:grid;gap:6px;max-height:240px;overflow:auto}
+.pr-net{display:flex;align-items:center;gap:10px;width:100%;min-height:48px;padding:8px 12px;border-radius:12px;background:#121c27;border:1px solid #233243;color:inherit;text-align:left;font-size:15px}
+.pr-net span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pr-net em{font-style:normal;color:#8a99a8;font-size:12px}
+.pr-net[aria-pressed=true]{border-color:#ffcd67;background:#2a2410}
+.pr-bars{display:inline-flex;gap:2px;align-items:flex-end;height:14px}.pr-bars u{width:4px;background:#2f3f50;border-radius:1px}.pr-bars u.on{background:#4fc3ff}
+.pr-scan{display:flex;gap:10px;align-items:center;color:#8a99a8;margin:4px 0;font-size:14px}
+.pr-spin{width:18px;height:18px;border-radius:50%;border:3px solid #ffcd67;border-right-color:transparent;animation:prSpin .9s linear infinite;flex:none}
+.pr-pass{display:grid;grid-template-columns:1fr auto;gap:6px}.pr-pass button{min-height:44px}
+.pr-stage label{display:grid;gap:4px;font-size:13px;color:#8a99a8}
+.pr-disc{width:120px;height:120px;border-radius:50%;margin:6px auto 0;display:grid;place-items:center;position:relative}
+.pr-disc[data-k=work]{background:#ffcd6714}.pr-disc[data-k=work]::before{content:"";position:absolute;inset:0;border-radius:50%;border:6px solid #ffcd6733;border-top-color:#ffcd67;animation:prSpin 1s linear infinite}
+.pr-disc[data-k=ok]{background:#00e08a;animation:prPop .4s cubic-bezier(.2,1.6,.4,1)}.pr-disc[data-k=ok] span::before{content:"✓";font:800 64px system-ui;color:#062014}
+.pr-disc[data-k=fail]{background:#ff3b30}.pr-disc[data-k=fail] span::before{content:"✕";font:800 54px system-ui;color:#fff}
+@keyframes prPop{from{transform:scale(.4)}to{transform:scale(1)}}
+.pr-disc[data-k=work] span::before{content:"⇅";font:700 40px system-ui;color:#ffcd67}
+#prRun h3{text-align:center;margin:4px 0 0;font-size:19px}#prRun .pr-lead{text-align:center}
+.pr-actions{display:grid;gap:8px}
+.pr-msg{margin:4px 0;font-size:14px;color:#ffb4a8}.pr-msg:empty{display:none}
 .rn-cmds{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:4px;font-size:12px;color:var(--cp-muted)}.rn-cmds b{color:var(--cp-text);font-weight:600}.rn-cmds .ok{color:#b9f5d2}.rn-cmds .bad{color:#ffb4a8}
 @media(max-width:620px){.rn-add{grid-template-columns:1fr}}
 @keyframes cpRise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
@@ -617,15 +658,38 @@ html[data-tpl="pitwall"] body .cloud-dock button[aria-pressed=true]{background:r
 <nav class="cloud-dock" aria-label="เมนู Cloud"><button data-cloud="overview" data-icon="◴" aria-pressed="true">หน้าปัด</button><button data-cloud="drag" data-icon="⚑" aria-pressed="false">จับเวลา</button><button data-cloud="history" data-icon="≋" aria-pressed="false">ประวัติ</button><button data-cloud="link" data-icon="⇄" aria-pressed="false">การเชื่อมต่อ</button><button data-cloud="tune" data-icon="≛" aria-pressed="false">จูน</button><button data-cloud="firmware" data-icon="⚙" aria-pressed="false">เฟิร์มแวร์</button></nav>
 </div>
 <dialog class="pair-sheet" id="pairSheet" aria-labelledby="pairTitle">
-<div class="row pair-head"><h2 id="pairTitle">เชื่อมโมดูลผ่าน Bluetooth</h2><button type="button" class="secondary" id="closePair" aria-label="ปิด">✕</button></div>
-<p>เปิดโมดูลที่ยังไม่ได้ผูกบัญชี ระบบจะเปิดโหมดจับคู่อัตโนมัติ 3 นาที กดค้นหา Bluetooth แล้วเลือก <b>VOLTOL Setup</b></p>
-<p>ถ้าโมดูลเคยผูกบัญชี ให้เปิดเมนู Bluetooth บน <a href="http://192.168.4.1/">หน้าโมดูล</a> แล้วใช้ลิงก์จับคู่ที่สร้างจากบอร์ด</p><p id="grantStatus" role="status"></p><form method="post" id="bleForm" class="auth-form"><button type="button" id="findBle">ค้นหาโมดูล Bluetooth</button><div id="bleWifi" hidden><label id="scanLabel" hidden>เลือก Wi-Fi ที่โมดูลพบ<select id="bleNetworks"></select></label>
-
-<label>ชื่อ Wi-Fi 2.4 GHz<input name="ssid" required maxlength="32"></label>
-<label>รหัสผ่าน Wi-Fi<input name="pass" type="password" maxlength="64" autocomplete="off"></label>
-<label>ชื่อโมดูล (เว้นว่างเพื่อใช้ชื่ออัตโนมัติ)<input name="label" maxlength="100"></label><button type="submit">บันทึกและเชื่อม Wi-Fi</button></div><p id="bleResult" role="status"></p>
+<div class="row pair-head"><h2 id="pairTitle">เพิ่มโมดูลผ่าน Bluetooth</h2><button type="button" class="secondary" id="closePair" aria-label="ปิด">✕</button></div>
+<ol class="pr-steps" id="prSteps">
+<li data-st="active"><i>1</i><div><b>เชื่อมบลูทูธกับโมดูล</b><small>กดค้นหาแล้วเลือก VOLTOL Setup</small></div></li>
+<li data-st="wait"><i>2</i><div><b>เลือก Wi-Fi ให้โมดูล</b><small>Wi-Fi 2.4 GHz ที่มีอินเทอร์เน็ต</small></div></li>
+<li data-st="wait"><i>3</i><div><b>โมดูลต่อ Wi-Fi</b><small>ใช้เวลาไม่เกิน 30 วินาที</small></div></li>
+<li data-st="wait"><i>4</i><div><b>เชื่อม Cloud สำเร็จ</b><small>ข้อมูลสดขึ้นหน้าปัด</small></div></li>
+</ol>
+<section class="pr-stage" data-stage="find" id="prFind">
+<div class="pr-hero"><span class="pr-bt"></span></div>
+<p class="pr-lead">เปิดสวิตช์รถ/โมดูล รอจอขึ้น <b>“รอมือถือเชื่อมต่อ”</b> แล้วกดปุ่มด้านล่าง เลือกชื่อ <b>VOLTOL Setup</b></p>
+<button type="button" id="findBle" class="pr-go">ค้นหาโมดูล Bluetooth</button>
+<details class="pr-help"><summary>หาโมดูลไม่เจอ?</summary><ul>
+<li>โมดูลใหม่เปิดโหมดจับคู่เอง 3 นาทีหลังเปิดเครื่อง · หมดเวลาให้ปิดแล้วเปิดใหม่</li>
+<li>จอ 4.3″: แตะหน้าจอ › ตั้งค่า › <b>เชื่อมต่อ Cloud</b> › <b>เริ่มจับคู่บลูทูธ</b></li>
+<li>เปิดบลูทูธและตำแหน่ง (Location) บนมือถือ · ใช้ Chrome บน Android หรือคอมพิวเตอร์ (iPhone ใช้แอป Bluefy)</li>
+<li>จอ CYD 3.5″ ไม่มีบลูทูธ ใช้ “ตั้งค่าผ่าน USB / หน้าโมดูล” ด้านล่าง</li></ul></details>
+</section>
+<form method="post" id="bleForm" class="pr-stage" data-stage="wifi" hidden>
+<p class="pr-lead">แตะเลือก Wi-Fi ที่โมดูลเจอ แล้วใส่รหัสผ่าน</p>
+<div id="prNets" class="pr-nets"><p class="pr-scan"><span class="pr-spin"></span>โมดูลกำลังค้นหา Wi-Fi รอบตัว…</p></div>
+<label>ชื่อ Wi-Fi<input name="ssid" required maxlength="32" autocomplete="off" placeholder="เลือกด้านบน หรือพิมพ์เอง"></label>
+<label>รหัสผ่าน Wi-Fi<span class="pr-pass"><input name="pass" type="password" maxlength="64" autocomplete="off"><button type="button" id="prEye" class="secondary">แสดง</button></span></label>
+<details class="pr-help"><summary>ตั้งชื่อโมดูล (ไม่บังคับ)</summary><label>ชื่อโมดูล<input name="label" maxlength="100" placeholder="เว้นว่าง = ตั้งชื่อให้อัตโนมัติ"></label></details>
+<button type="submit" class="pr-go">เชื่อมต่อ</button>
 </form>
-<details id="usbPair" hidden><summary>ตั้งค่าผ่าน USB Serial</summary><form method="post" id="register" class="row"><input name="label" maxlength="100" required placeholder="ชื่อโมดูล" aria-label="ชื่อโมดูล"><button>สร้างรหัสโมดูล</button></form><pre id="token" hidden></pre><p id="pairStatus" role="status"></p></details>
+<section class="pr-stage" data-stage="run" id="prRun" hidden>
+<div class="pr-disc" id="prDisc" data-k="work"><span></span></div>
+<h3 id="prHead">กำลังส่งข้อมูลให้โมดูล…</h3><p id="prLine" class="pr-lead"></p>
+<div class="pr-actions"><button type="button" id="prRetry" class="secondary" hidden>แก้ Wi-Fi แล้วส่งใหม่</button><button type="button" id="prDone" class="pr-go" hidden>ไปหน้าปัด</button></div>
+</section>
+<p id="bleResult" class="pr-msg" role="status"></p><p id="grantStatus" class="pr-msg" role="status"></p>
+<details id="usbPair" class="pr-help" hidden><summary>ตั้งค่าผ่าน USB / หน้าโมดูล (จอ CYD)</summary><p class="pr-lead">สร้างรหัสโมดูล แล้วส่งผ่าน USB Serial หรือวางในหน้าโมดูล (ต่อ Wi-Fi VOLTOL-xxxx › เปิด 192.168.4.1 › Cloud)</p><form method="post" id="register" class="row"><input name="label" maxlength="100" required placeholder="ชื่อโมดูล" aria-label="ชื่อโมดูล"><button>สร้างรหัสโมดูล</button></form><pre id="token" hidden></pre><p id="pairStatus" role="status"></p></details>
 </dialog>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script><script src="https://www.battlab.net/session-client.js?v=2"></script><script src="https://www.battlab.net/battlab-nav.js?v=2" defer></script><script type="module">
@@ -1109,9 +1173,10 @@ for(const button of document.querySelectorAll('[data-cloud]')){
 }
 function openCloudPair(){
  if(!session||$('pairSheet').open)return;
+ prReset();
  const ready=!!navigator.bluetooth;
- $('bleForm').hidden=!ready; $('usbPair').hidden=false;
- $('grantStatus').textContent=ready?'':'เบราว์เซอร์นี้ไม่รองรับ Bluetooth สำหรับเว็บ ใช้ทางเลือก USB Serial ด้านล่างได้';
+ $('findBle').disabled=!ready;$('usbPair').hidden=false;$('usbPair').open=!ready;
+ $('grantStatus').textContent=ready?'':'เบราว์เซอร์นี้ใช้บลูทูธไม่ได้ · ใช้ Chrome บน Android หรือคอมพิวเตอร์ (iPhone ใช้แอป Bluefy) หรือใช้ “ตั้งค่าผ่าน USB / หน้าโมดูล” ด้านล่าง';
  $('pairSheet').showModal();
 }
 $('openPair').onclick=openCloudPair;
@@ -1448,18 +1513,35 @@ if(location.hash.startsWith('#pair=')){
 
 const bleService='648b7040-33c9-4a41-a133-83c009df0001';
 let picked=null;
-$('bleNetworks').onchange=()=>{$('bleForm').elements.ssid.value=$('bleNetworks').value;};
-$('pairSheet').addEventListener('close',()=>{picked?.gatt.disconnect();picked=null;$('bleWifi').hidden=true;$('scanLabel').hidden=true;});
+const PR={stage:'find',run:0,cloudId:null,since:0,ssid:''};
+function prStep(i,st,sub){const li=$('prSteps').children[i];li.dataset.st=st;if(sub!=null)li.querySelector('small').textContent=sub;}
+const PR_SUB=['กดค้นหาแล้วเลือก VOLTOL Setup','Wi-Fi 2.4 GHz ที่มีอินเทอร์เน็ต','ใช้เวลาไม่เกิน 30 วินาที','ข้อมูลสดขึ้นหน้าปัด'];
+function prStage(name){PR.stage=name;for(const el of document.querySelectorAll('#pairSheet .pr-stage'))el.hidden=el.dataset.stage!==name;}
+function prReset(){PR.run++;PR.cloudId=null;prStage('find');PR_SUB.forEach((t,i)=>prStep(i,i?'wait':'active',t));$('bleResult').textContent='';$('bleForm').reset();
+  $('prNets').innerHTML='<p class="pr-scan"><span class="pr-spin"></span>โมดูลกำลังค้นหา Wi-Fi รอบตัว…</p>';$('prRetry').hidden=true;$('prDone').hidden=true;$('findBle').textContent='ค้นหาโมดูล Bluetooth';}
+function prRunView(kind,head,line){$('prDisc').dataset.k=kind;$('prHead').textContent=head;$('prLine').textContent=line||'';}
+$('prEye').onclick=()=>{const f=$('bleForm').elements.pass;f.type=f.type==='password'?'text':'password';$('prEye').textContent=f.type==='password'?'แสดง':'ซ่อน';};
+$('pairSheet').addEventListener('close',()=>{PR.run++;picked?.gatt.disconnect();picked=null;});
+function prNets(list){const box=$('prNets');
+  if(!list.length){box.innerHTML='<p class="pr-scan">ไม่พบ Wi-Fi 2.4 GHz รอบโมดูล · พิมพ์ชื่อ Wi-Fi เองด้านล่างได้</p>';return;}
+  box.replaceChildren(...list.map(n=>{const b=document.createElement('button');b.type='button';b.className='pr-net';b.setAttribute('aria-pressed','false');
+    const lv=n.rssi>-60?4:n.rssi>-70?3:n.rssi>-80?2:1;const bars=document.createElement('span');bars.className='pr-bars';bars.style.flex='none';
+    for(let k=1;k<=4;k++){const u=document.createElement('u');u.style.height=(k*3+2)+'px';if(k<=lv)u.className='on';bars.append(u);}
+    const nm=document.createElement('span');nm.textContent=n.ssid;const em=document.createElement('em');em.textContent=(n.lock?'🔒 ':'')+(lv>=3?'สัญญาณดี':lv==2?'พอใช้':'อ่อน');
+    b.append(bars,nm,em);b.onclick=()=>{for(const x of box.children)x.setAttribute('aria-pressed',String(x===b));const f=$('bleForm').elements;f.ssid.value=n.ssid;f.pass.value='';if(n.lock)f.pass.focus();};return b;}));}
 $('findBle').onclick=async ()=>{
  const out=$('bleResult'), button=$('findBle');
  if(!navigator.bluetooth||!session)return;
- button.disabled=true;out.textContent='เลือก VOLTOL Setup…';
+ button.disabled=true;out.textContent='';button.textContent='กำลังเปิดรายการบลูทูธ…';
  try{
    if(picked?.gatt.connected)picked.gatt.disconnect();
    picked=await navigator.bluetooth.requestDevice({filters:[{services:[bleService]}]});
+   button.textContent='กำลังเชื่อมต่อโมดูล…';
    const gatt=await picked.gatt.connect(), svc=await gatt.getPrimaryService(bleService);
-   $('bleWifi').hidden=false;$('scanLabel').hidden=true;
-   out.textContent='พบโมดูลแล้ว · กำลังค้นหา Wi-Fi';
+   const st=new TextDecoder().decode(await (await svc.getCharacteristic(bleService.slice(0,-1)+'3')).readValue());
+   const grant=setupGrant?.until>Date.now();
+   if(st==='locked'&&!grant){picked.gatt.disconnect();throw Object.assign(Error('โมดูลนี้ยังไม่เปิดโหมดจับคู่ · บนจอโมดูล: ตั้งค่า › เชื่อมต่อ Cloud › เริ่มจับคู่บลูทูธ (หรือปิด-เปิดโมดูลใหม่ถ้าเป็นโมดูลใหม่)'),{soft:true});}
+   prStep(0,'done','เชื่อมกับ '+(picked.name||'VOLTOL Setup')+' แล้ว');prStep(1,'active','แตะเลือก Wi-Fi แล้วใส่รหัสผ่าน');prStage('wifi');
    try{
      const list=await svc.getCharacteristic(bleService.slice(0,-1)+'5');
      const writer=await svc.getCharacteristic(bleService.slice(0,-1)+'2');
@@ -1469,41 +1551,64 @@ $('findBle').onclick=async ()=>{
        const data=await list.readValue(), count=data.getUint8(0);
        if(count===119)continue;
        if(count>12)break;
-       const select=$('bleNetworks'), seen=new Set();
-       select.replaceChildren(new Option('เลือกเครือข่าย',''));
-       let pos=1;
+       const nets=[],seen=new Set();let pos=1;
        for(let n=0;n<count&&pos+3<=data.byteLength;n++){
          const len=data.getUint8(pos), lock=data.getUint8(pos+1), rssi=data.getInt8(pos+2);pos+=3;
          if(pos+len>data.byteLength)break;
          const ssid=new TextDecoder().decode(new Uint8Array(data.buffer,data.byteOffset+pos,len));pos+=len;
-         if(ssid&&!seen.has(ssid)){seen.add(ssid);select.add(new Option((lock?'🔒 ':'')+ssid+' · '+rssi+' dBm',ssid));}
+         if(ssid&&!seen.has(ssid)){seen.add(ssid);nets.push({ssid,lock:!!lock,rssi});}
        }
-       if(seen.size){$('scanLabel').hidden=false;out.textContent='เลือกเครือข่ายแล้วกรอกรหัสผ่าน';return;}
-       break;
+       nets.sort((a,b)=>b.rssi-a.rssi);prNets(nets);return;
      }
    }catch{}
-   out.textContent='พบโมดูลแล้ว · กรอกชื่อ Wi-Fi 2.4 GHz ที่จะใช้';
- }catch{out.textContent='ยังเชื่อม Bluetooth ไม่ได้ ลองเปิดโมดูลใหม่แล้วค้นหาอีกครั้ง';}
- finally{button.disabled=false;}
+   prNets([]);
+ }catch(e){out.textContent=e.soft?e.message:e.name==='NotFoundError'?'ยังไม่ได้เลือกโมดูล · กดค้นหาอีกครั้งแล้วเลือก VOLTOL Setup':'เชื่อมบลูทูธไม่สำเร็จ · ให้มือถืออยู่ใกล้โมดูล แล้วลองอีกครั้ง';
+   prStep(0,'active',e.soft?'โมดูลยังไม่เปิดโหมดจับคู่':'ลองค้นหาอีกครั้ง');}
+ finally{button.disabled=false;button.textContent='ค้นหาโมดูล Bluetooth';}
 };
+async function prFollow(run,status){
+ // module reports: accepted -> joining -> online -> cloud-ok (or wifi-fail / cloud-fail); old firmware stays "accepted":
+ // then the first upload of this module on the cloud tells us it worked.
+ const t0=Date.now();let last='',bleOk=!!status,tick=0;
+ while(run===PR.run&&Date.now()-t0<120000){
+   await new Promise(r=>setTimeout(r,800));
+   let v='';
+   if(bleOk){try{v=new TextDecoder().decode(await status.readValue());}catch{bleOk=false;}}
+   let up=false;
+   if(PR.cloudId&&(!v||v==='accepted'||v==='online'||v==='joining')&&(++tick%4===0)){
+     try{const rows=await api('/rest/v1/voltol_telemetry?select=received_at&device_id=eq.'+PR.cloudId+'&order=received_at.desc&limit=1');up=!!rows[0]&&Date.parse(rows[0].received_at)>PR.since-5000;}catch{}
+   }
+   if(up||v==='cloud-ok')return 'ok';
+   if(v==='wifi-fail'||v==='cloud-fail')return v;
+   if(v&&v!==last){last=v;
+     if(v==='joining'||v==='accepted'){prStep(2,'active','โมดูลกำลังต่อ '+PR.ssid);prRunView('work','โมดูลกำลังต่อ Wi-Fi…','ใช้เวลาไม่เกิน 30 วินาที');}
+     if(v==='online'){prStep(2,'done','ต่อ '+PR.ssid+' แล้ว');prStep(3,'active','กำลังส่งข้อมูลชุดแรก');prRunView('work','กำลังเชื่อม Cloud…','ต่อ Wi-Fi สำเร็จ กำลังส่งข้อมูลชุดแรก');}
+   }
+   if(!bleOk&&!last){prStep(2,'active','โมดูลกำลังต่อ '+PR.ssid);prRunView('work','รอโมดูลออนไลน์…','โมดูลกำลังต่อ Wi-Fi และ Cloud');last='x';}
+ }
+ return run===PR.run?'timeout':'closed';
+}
+$('prRetry').onclick=()=>{$('prRetry').hidden=true;prStep(1,'active','แก้ชื่อหรือรหัสผ่าน แล้วกดเชื่อมต่อ');prStep(2,'wait',PR_SUB[2]);prStep(3,'wait',PR_SUB[3]);$('bleForm').elements.pass.value='';prStage('wifi');$('bleForm').elements.pass.focus();};
+$('prDone').onclick=()=>{$('pairSheet').close();if(PR.cloudId&&[...$('devices').options].some(o=>o.value===PR.cloudId)){$('devices').value=PR.cloudId;$('devices').dispatchEvent(new Event('change'));}};
 $('bleForm').onsubmit=async e=>{
  e.preventDefault();
  const form=e.currentTarget,out=$('bleResult'),button=form.querySelector('[type=submit]'), fields=new FormData(form);
  if(!navigator.bluetooth){out.textContent='เบราว์เซอร์นี้ยังไม่รองรับ Bluetooth สำหรับเว็บ';return;}
  if(!session||button.disabled)return;
- const generation=accountGeneration, grant=setupGrant?.until>Date.now()?setupGrant.value:null;
+ const generation=accountGeneration, grant=setupGrant?.until>Date.now()?setupGrant.value:null, run=++PR.run;
  const enc=new TextEncoder(),ssid=enc.encode(fields.get('ssid')),pass=enc.encode(fields.get('pass'));
  if(!ssid.length||ssid.length>32||pass.length>64){out.textContent='ชื่อหรือรหัสผ่าน Wi-Fi ยาวเกินที่โมดูลรองรับ';return;}
- let device;
- button.disabled=true;out.textContent='เลือก VOLTOL Setup…';
+ let device;PR.ssid=String(fields.get('ssid'));
+ button.disabled=true;out.textContent='';
+ prStep(1,'done',PR.ssid);prStep(2,'active','กำลังส่งข้อมูลแบบเข้ารหัส…');prStage('run');prRunView('work','กำลังส่งข้อมูลให้โมดูล…','ข้อมูลถูกเข้ารหัสก่อนส่งทางบลูทูธ');
  try{
    device=picked;if(!device)throw Error('ค้นหาและเลือกโมดูลก่อน');
    if(generation!==accountGeneration)throw Error('กรุณาเข้าสู่ระบบใหม่');
    const server=device.gatt.connected?device.gatt:await device.gatt.connect(), service=await server.getPrimaryService(bleService);
    const write=await service.getCharacteristic(bleService.slice(0,-1)+'2'), status=await service.getCharacteristic(bleService.slice(0,-1)+'3');
    const ready=new TextDecoder().decode(await status.readValue());
-      const physical=ready==='boot-ready';
-   if(!physical&&(!grant||!['ready','invalid-code','invalid-data'].includes(ready)))throw Error('เปิดโหมดจับคู่บนโมดูลใหม่แล้วลองอีกครั้ง');
+   const physical=ready==='boot-ready'||ready==='wifi-fail';
+   if(!physical&&(!grant||!['ready','invalid-code','invalid-data'].includes(ready)))throw Error('หมดเวลาจับคู่ · บนจอโมดูลกด จับคู่ใหม่ (หรือปิด-เปิดโมดูล) แล้วค้นหาอีกครั้ง');
    let prefix=new Uint8Array(0), raw;
    if(physical){
      const pub=await service.getCharacteristic(bleService.slice(0,-1)+'4');
@@ -1515,14 +1620,13 @@ $('bleForm').onsubmit=async e=>{
    if(generation!==accountGeneration)throw Error('กรุณาเข้าสู่ระบบใหม่');
    const label=String(fields.get('label')||'').trim()||'VOLTOL '+device.id.slice(-6).toUpperCase();
    const existing=existingDeviceByLabel(label);
-   if(existing&&!confirm('ออกโทเคนใหม่ให้ '+(existing.display_name||existing.label)+'? โทเคนเก่าจะหยุดใช้ทันที'))return;
-   if(existing){out.textContent='โมดูลนี้มีอยู่แล้วในระบบ · กำลังเชื่อมข้อมูลเดิมและออกโทเคนใหม่';}
+   if(existing&&!(bleDraft&&bleDraft.deviceId===device.id&&bleDraft.label===label)&&!confirm('โมดูลชื่อ '+(existing.display_name||existing.label)+' มีอยู่แล้ว · เชื่อมเป็นโมดูลเดิม (รหัสเก่าจะหยุดใช้)?'))throw Error('ยกเลิกแล้ว · ตั้งชื่อโมดูลใหม่ในหัวข้อ “ตั้งชื่อโมดูล”');
    if(!bleDraft||bleDraft.deviceId!==device.id||bleDraft.label!==label){
      const registration=await api('/functions/v1/voltol-device/register',{body:{label,reconnect:!!existing}});
      if(generation!==accountGeneration)throw Error('กรุณาเข้าสู่ระบบใหม่');
-     bleDraft={deviceId:device.id,label,token:registration.device_token};
+     bleDraft={deviceId:device.id,label,token:registration.device_token,cloudId:registration.device_id};
    }
-   const token=bleDraft.token;
+   const token=bleDraft.token;PR.cloudId=bleDraft.cloudId||null;
    const key=await crypto.subtle.importKey('raw',raw,'AES-GCM',false,['encrypt']);
    const nonce=crypto.getRandomValues(new Uint8Array(12));
    const plain=new Uint8Array(66+ssid.length+pass.length);
@@ -1533,16 +1637,30 @@ $('bleForm').onsubmit=async e=>{
    await send(Uint8Array.of(0));
    for(let offset=0;offset<packet.length;offset+=19)await send(Uint8Array.of(1,...packet.slice(offset,offset+19)));
    await send(Uint8Array.of(2));
-   for(let i=0;i<15;i++){
+   PR.since=Date.now();
+   let got='';
+   for(let i=0;i<15&&!got;i++){
      await new Promise(resolve=>setTimeout(resolve,300));
      const value=new TextDecoder().decode(await status.readValue());
-     if(value==='accepted'){out.textContent='โมดูลรับค่าตั้งแล้ว รอสถานะออนไลน์บน Dashboard';form.elements.pass.value='';setupGrant=null;bleDraft=null;await run(loadDevices);return;}
-     if(value==='invalid-code'||value==='expired')throw Error('รหัสจับคู่ผิดหรือหมดอายุ เปิดรหัสใหม่บนโมดูลแล้วลองอีกครั้ง');
-     if(value==='invalid-data')throw Error('โมดูลปฏิเสธค่าตั้ง กรุณาตรวจแล้วลองอีกครั้ง');
+     if(['accepted','joining','online','cloud-ok'].includes(value))got=value;
+     if(value==='invalid-code'||value==='expired')throw Error('รหัสจับคู่หมดอายุ · บนจอโมดูลกด จับคู่ใหม่ แล้วลองอีกครั้ง');
+     if(value==='invalid-data')throw Error('โมดูลไม่รับข้อมูล · ลองกดเชื่อมต่ออีกครั้ง');
    }
-   throw Error('โมดูลยังไม่ยืนยันการรับค่าตั้ง ลองเปิดโหมดจับคู่ใหม่');
- }catch(error){out.textContent=error.name==='NotFoundError'?'ไม่พบโมดูลหรือยกเลิกการเลือก':error.message||'จับคู่ไม่สำเร็จ';}
- finally{if(device?.gatt.connected)device.gatt.disconnect();button.disabled=false;}
+   if(!got)throw Error('โมดูลไม่ตอบรับ · ให้มือถืออยู่ใกล้โมดูลแล้วลองอีกครั้ง');
+   form.elements.pass.value='';setupGrant=null;
+   prStep(2,'active','โมดูลกำลังต่อ '+PR.ssid);prRunView('work','โมดูลกำลังต่อ Wi-Fi…','ใช้เวลาไม่เกิน 30 วินาที');
+   const result=await prFollow(run,status);
+   if(result==='closed')return;
+   if(result==='ok'){bleDraft=null;[0,1,2,3].forEach(i=>prStep(i,'done',i===2?'ต่อ '+PR.ssid+' แล้ว':i===3?'ออนไลน์แล้ว':null));prRunView('ok','เชื่อมต่อสำเร็จ!','โมดูลส่งข้อมูลสดขึ้น Cloud แล้ว');$('prDone').hidden=false;await loadDevices().catch(()=>{});return;}
+   if(result==='wifi-fail'){prStep(2,'fail','ต่อ '+PR.ssid+' ไม่ได้');prRunView('fail','ต่อ Wi-Fi ไม่สำเร็จ','รหัสผ่านผิด หรือ Wi-Fi อยู่ไกลเกินไป (ต้องเป็น 2.4 GHz)');$('prRetry').hidden=false;return;}
+   if(result==='cloud-fail'){prStep(2,'done');prStep(3,'fail','Wi-Fi นี้ออกอินเทอร์เน็ตไม่ได้?');prRunView('fail','ยังเชื่อม Cloud ไม่ได้','ตรวจว่า Wi-Fi มีอินเทอร์เน็ต · โมดูลจะลองต่อเองเรื่อยๆ');$('prRetry').hidden=false;return;}
+   prStep(3,'fail','ยังไม่เห็นข้อมูลจากโมดูล');prRunView('fail','โมดูลยังไม่ออนไลน์','ตรวจชื่อ/รหัส Wi-Fi และดูสถานะบนจอโมดูล');$('prRetry').hidden=false;
+ }catch(error){
+   const m=error.name==='NotFoundError'?'ไม่พบโมดูล · กดค้นหาใหม่':error.name==='NetworkError'?'บลูทูธหลุด · ให้มือถืออยู่ใกล้โมดูลแล้วค้นหาใหม่':error.message||'จับคู่ไม่สำเร็จ';
+   prRunView('fail','ส่งข้อมูลไม่สำเร็จ',m);prStep(2,'fail',m);$('prRetry').hidden=false;
+   if(error.name==='NetworkError'||error.name==='NotFoundError'){$('prRetry').hidden=true;prReset();out.textContent=m;}
+ }
+ finally{button.disabled=false;}
 };
 $('register').onsubmit=e=>{e.preventDefault();run(async()=>{
   const generation=accountGeneration, form=e.currentTarget, button=form.querySelector('button');button.disabled=true;
