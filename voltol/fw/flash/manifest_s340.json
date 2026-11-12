@@ -7,7 +7,7 @@
       "chipFamily": "ESP32-S3",
       "parts": [
         {
-          "path": "https://raw.githubusercontent.com/nakon1122/voltol-monitor/fw-downloads/s340/VOLTOL_S3_40_INSTALL_v1.8.1.bin",
+          "path": "VOLTOL_S3_40_INSTALL.bin",
           "offset": 0
         }
       ]
