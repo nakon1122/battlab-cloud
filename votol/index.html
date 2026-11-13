@@ -1857,7 +1857,7 @@ setInterval(()=>{if(!$('cloud-tune').hidden){ctLoad();ctRender();}},2500);
 setInterval(()=>ctCmds(),4000);
 document.querySelector('[data-cloud="tune"]')?.addEventListener('click',()=>{ctLoad();ctCmds();ctRender();});
 // ---- smart BMS over Bluetooth (firmware 1.9.0+) ----
-// live: telemetry payload.bms · log: votol_bms_log (3 s batches of 0.3 s samples), votol_bms_min (1-min summary)
+// live: telemetry payload.bms · log: votol_bms_log (3 s batches of 0.3 s samples, o = ms after t0), votol_bms_min (1-min summary)
 // settings: votol_events code bms_params · history: votol_events code bms_change · commands: bms_read / bms_write
 const BM={dev:null,snap:null,at:0,edits:new Map(),busy:false,range:5,log:null,hist:[],step:1};
 const BM_ST={online:'BMS ออนไลน์',scan:'กำลังค้นหา BMS',connect:'กำลังเชื่อม BMS',lost:'ขาดสัญญาณ BMS',off:'ยังไม่ได้เชื่อม BMS',noble:'บอร์ดไม่มีบลูทูธ'};
@@ -1904,8 +1904,8 @@ function bmChart(rows){const svg=$('bmChart');svg.replaceChildren();const W=600,
 async function bmLoadLog(){const id=$('devices').value;if(!id||$('cloud-bms').hidden)return;
   const since=new Date(Date.now()-BM.range*60000).toISOString();
   try{let rows=[];
-    if(BM.range<=60){const raw=await api('/rest/v1/votol_bms_log?select=t0,dt,v,a,soc,d&device_id=eq.'+id+'&t0=gte.'+since+'&order=t0.asc&limit=1200');
-      for(const r of raw){const t=Date.parse(r.t0);(r.v||[]).forEach((_,k)=>rows.push({t:t+k*(r.dt||300),v:r.v[k],a:r.a[k],soc:r.soc[k],d:r.d[k]}));}}
+    if(BM.range<=60){const raw=await api('/rest/v1/votol_bms_log?select=t0,o,v,a,soc,d&device_id=eq.'+id+'&t0=gte.'+since+'&order=t0.asc&limit=1200');
+      for(const r of raw){const t=Date.parse(r.t0);(r.v||[]).forEach((_,k)=>rows.push({t:t+(r.o?.[k]??k*300),v:r.v[k],a:r.a[k],soc:r.soc[k],d:r.d[k]}));}}
     else{const mn=await api('/rest/v1/votol_bms_min?select=t,v,a,soc,d&device_id=eq.'+id+'&t=gte.'+since+'&order=t.asc&limit=10080');rows=mn.map(r=>({t:Date.parse(r.t),v:r.v,a:r.a,soc:r.soc,d:r.d}));}
     BM.log=rows;bmChart(rows);bmLogInfo();}catch{}}
 function bmLogInfo(){const r=BM.log||[];$('bmLogInfo').textContent=r.length?r.length.toLocaleString('th-TH')+' จุด · '+(BM.range<=60?'ละเอียดทุก 0.3 วินาที (เก็บ 7 วัน)':'สรุปทุก 1 นาที (เก็บ 1 ปี)'):'';}
