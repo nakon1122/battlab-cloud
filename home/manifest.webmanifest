@@ -2,7 +2,7 @@
   "id": "/",
   "name": "BATTLAB",
   "short_name": "BATTLAB",
-  "description": "Battery Cloud และ VOLTOL Monitor ในแอปเดียว",
+  "description": "Battery Cloud และ VOTOL Monitor ในแอปเดียว",
   "lang": "th",
   "start_url": "/?source=app",
   "scope": "/",
@@ -18,6 +18,6 @@
   ],
   "shortcuts": [
     {"name": "Battery Cloud", "url": "https://batterycloud.battlab.net/", "icons": [{"src": "/icon-192.png", "sizes": "192x192"}]},
-    {"name": "VOLTOL Monitor", "url": "https://voltol.battlab.net/", "icons": [{"src": "/icon-192.png", "sizes": "192x192"}]}
+    {"name": "VOTOL Monitor", "url": "https://votol.battlab.net/", "icons": [{"src": "/icon-192.png", "sizes": "192x192"}]}
   ]
 }

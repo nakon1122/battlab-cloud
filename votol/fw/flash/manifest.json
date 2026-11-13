@@ -1,5 +1,5 @@
 {
-  "name": "VOLTOL Monitor",
+  "name": "VOTOL Monitor",
   "version": "1.8.5",
   "new_install_prompt_erase": true,
   "builds": [
@@ -7,7 +7,7 @@
       "chipFamily": "ESP32-S3",
       "parts": [
         {
-          "path": "VOLTOL_S3_INSTALL.bin",
+          "path": "VOTOL_S3_INSTALL.bin",
           "offset": 0
         }
       ]

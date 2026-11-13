@@ -1,6 +1,6 @@
 DirectoryIndex home.html index.html
 
-# VOLTOL PRO v2.0 — Apache / Plesk Optimization
+# VOTOL PRO v2.0 — Apache / Plesk Optimization
 <IfModule mod_headers.c>
   Header set Access-Control-Allow-Origin "*"
   Header set Access-Control-Allow-Methods "GET, POST, OPTIONS"

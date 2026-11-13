@@ -1,4 +1,4 @@
-# VOLTOL: always fetch the newest page and update manifest
+# VOTOL: always fetch the newest page and update manifest
 <IfModule mod_headers.c>
 <FilesMatch "(^index\.html$|^version\.json$|^manifest\.json$)">
 Header set Cache-Control "no-cache, must-revalidate"

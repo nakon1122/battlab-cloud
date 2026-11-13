@@ -1,9 +1,9 @@
-<!doctype html><html lang="th"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="canonical" href="https://voltol.battlab.net/">
-<title>VOLTOL Cloud Pro · ข้อมูลจริง</title>
+<!doctype html><html lang="th"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="canonical" href="https://votol.battlab.net/">
+<title>VOTOL Cloud Pro · ข้อมูลจริง</title>
 <script>
 /* template chosen before first paint: ?tpl= preview > last value seen from the server > carbon (A) */
 (function(){var ok={carbon:1,pitwall:1},t='carbon',q=null;try{q=new URLSearchParams(location.search).get('tpl')}catch(e){}
-try{var c=localStorage.getItem('voltol_tpl');if(ok[c])t=c}catch(e){}if(ok[q])t=q;document.documentElement.setAttribute('data-tpl',t);window.__tplPreview=ok[q]?q:null})();
+try{var c=localStorage.getItem('votol_tpl');if(ok[c])t=c}catch(e){}if(ok[q])t=q;document.documentElement.setAttribute('data-tpl',t);window.__tplPreview=ok[q]?q:null})();
 </script>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%23141619%27/%3E%3Cpath d=%27M36 6L15 36h15l-3 22 22-32H34z%27 fill=%27%23ffd45e%27/%3E%3C/svg%3E">
 <style>
@@ -175,7 +175,7 @@ main{max-width:1000px;padding:18px clamp(12px,3vw,24px) calc(116px + env(safe-ar
 .dashboard-graphs summary{cursor:pointer;padding:10px 12px;color:#c2d1e0;font-weight:700}
 .dashboard-graphs[open]{padding:0 8px}
 </style>
-<!-- ===== VOLTOL Carbon Pro (design A) — look + motion layer. Keeps every id/handler of the page; data logic untouched. ===== -->
+<!-- ===== VOTOL Carbon Pro (design A) — look + motion layer. Keeps every id/handler of the page; data logic untouched. ===== -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style id="carbonPro">
@@ -407,7 +407,7 @@ html[data-tpl="pitwall"] body .cloud-dock button[aria-pressed=true]{background:r
 @media(min-width:1024px){
   html[data-tpl="pitwall"] body{padding-left:208px}
   html[data-tpl="pitwall"] body .cloud-dock{top:0;bottom:0;left:0;right:auto;transform:none;width:200px;border-radius:0;border-width:0 1px 0 0;display:flex;flex-direction:column;justify-content:flex-start;gap:6px;padding:92px 12px 16px;box-shadow:none}
-  html[data-tpl="pitwall"] body .cloud-dock::before{content:"VOLTOL · PIT WALL";position:absolute;top:30px;left:18px;font:700 13px "Chakra Petch",sans-serif;letter-spacing:.22em;color:var(--cp-text)}
+  html[data-tpl="pitwall"] body .cloud-dock::before{content:"VOTOL · PIT WALL";position:absolute;top:30px;left:18px;font:700 13px "Chakra Petch",sans-serif;letter-spacing:.22em;color:var(--cp-text)}
   html[data-tpl="pitwall"] body .cloud-dock button{display:flex;justify-content:flex-start;align-items:center;gap:12px;min-height:46px;padding:0 14px;font-size:15px}
   html[data-tpl="pitwall"] main{padding-bottom:40px}
 }
@@ -416,17 +416,17 @@ html[data-tpl="pitwall"] body .cloud-dock button[aria-pressed=true]{background:r
 @media (prefers-reduced-motion:reduce){html[data-tpl="pitwall"] body .track-cockpit,html[data-tpl="pitwall"] body .track-cockpit::before,html[data-tpl="pitwall"] body .tc-tile{animation:none!important}}
 </style>
 <script>
-/* Web template switch: the active template is stored in Supabase (site_settings.voltol_template, public read).
+/* Web template switch: the active template is stored in Supabase (site_settings.votol_template, public read).
    Only a super admin can change it, from the BATTLAB back office. ?tpl=pitwall or ?tpl=carbon previews without changing it. */
 (() => {
   const OK = { carbon: 1, pitwall: 1 };
   if (window.__tplPreview) return;
-  fetch('https://zpsxcdzkayqhzbdcdoed.supabase.co/rest/v1/site_settings?key=eq.voltol_template&select=value', { headers: { apikey: 'sb_publishable_roXek86Fm64tr_vEG2pYRw_4onX6cBJ' }, cache: 'no-store' })
+  fetch('https://zpsxcdzkayqhzbdcdoed.supabase.co/rest/v1/site_settings?key=eq.votol_template&select=value', { headers: { apikey: 'sb_publishable_roXek86Fm64tr_vEG2pYRw_4onX6cBJ' }, cache: 'no-store' })
     .then(r => r.ok ? r.json() : []).then(rows => {
       const t = rows && rows[0] && rows[0].value && rows[0].value.active;
       if (!OK[t]) return;
       document.documentElement.setAttribute('data-tpl', t);
-      try { localStorage.setItem('voltol_tpl', t); } catch (e) {}
+      try { localStorage.setItem('votol_tpl', t); } catch (e) {}
     }).catch(() => {});
 })();
 </script>
@@ -508,7 +508,7 @@ html[data-tpl="pitwall"] body .cloud-dock button[aria-pressed=true]{background:r
 @media(prefers-reduced-motion:reduce){#cloud-drag.tt *{animation:none!important}}
 </style>
 
-<header class="module-header"><div class="brand"><b>⚡</b> VOLTOL<small>Monitor · Cloud</small></div><span class="cloud-top-tools"><a href="https://www.battlab.net/">← BATTLAB Home</a> <span id="cloudHealth" class="health-pill" data-state="unknown">กำลังตรวจสอบ Cloud</span></span><aside class="track-status" aria-label="สถานะการเชื่อมต่อ">
+<header class="module-header"><div class="brand"><b>⚡</b> VOTOL<small>Monitor · Cloud</small></div><span class="cloud-top-tools"><a href="https://www.battlab.net/">← BATTLAB Home</a> <span id="cloudHealth" class="health-pill" data-state="unknown">กำลังตรวจสอบ Cloud</span></span><aside class="track-status" aria-label="สถานะการเชื่อมต่อ">
 <article><b><span aria-hidden="true">☁</span> ESP32 → CLOUD</b><strong id="tcCloud" data-state="unknown">รอตรวจสอบ</strong><small id="tcCloudDetail">—</small></article>
 <article><b><span aria-hidden="true">◉</span> WI-FI</b><strong id="tcWifi" data-state="unknown">รอตรวจสอบ</strong><small id="tcWifiDetail">—</small></article>
 <article><b><span aria-hidden="true">⇄</span> UART</b><strong id="tcUart" data-state="unknown">รอตรวจสอบ</strong><small id="tcUartDetail">—</small></article>
@@ -516,7 +516,7 @@ html[data-tpl="pitwall"] body .cloud-dock button[aria-pressed=true]{background:r
 <main>
 <p id="status" role="status"></p>
 <section id="login" class="auth-shell">
-  <aside class="auth-brand"><span class="auth-kicker">VOLTOL / CLOUD</span><h2>ข้อมูล Controller<br>ในที่เดียว</h2><p>ดูข้อมูลสด ตรวจการสื่อสาร UART และจัดการอุปกรณ์ VOLTOL ของคุณ</p><div class="auth-tags"><span>ข้อมูลสด</span><span>วินิจฉัย UART</span></div></aside>
+  <aside class="auth-brand"><span class="auth-kicker">VOTOL / CLOUD</span><h2>ข้อมูล Controller<br>ในที่เดียว</h2><p>ดูข้อมูลสด ตรวจการสื่อสาร UART และจัดการอุปกรณ์ VOTOL ของคุณ</p><div class="auth-tags"><span>ข้อมูลสด</span><span>วินิจฉัย UART</span></div></aside>
   <div class="auth-panel">
     <h2 id="authTitle">เข้าสู่ระบบ</h2><p id="authHint">เข้าสู่บัญชีเพื่อดูอุปกรณ์ของคุณ</p>
     <form method="post" id="auth" class="auth-form"><label>อีเมล<input name="email" type="email" autocomplete="username" required placeholder="you@example.com"></label><label>รหัสผ่าน<input name="password" type="password" autocomplete="current-password" required></label><button class="auth-show" type="button" aria-pressed="false">แสดงรหัสผ่าน</button><button type="submit">เข้าสู่ระบบ</button></form>
@@ -524,7 +524,7 @@ html[data-tpl="pitwall"] body .cloud-dock button[aria-pressed=true]{background:r
   </div>
 </section>
 <div id="dashboard" hidden>
-<div class="dashIntro"><div><div class="dash-label">VOLTOL / CLOUD</div><h1>Controller Dashboard</h1></div><div class="cloud-tools"><button class="primary" id="openPair" type="button">เชื่อมโมดูล Bluetooth</button><button id="refresh" type="button">รีเฟรช</button><button id="logout" type="button">ออกจากระบบ</button></div></div>
+<div class="dashIntro"><div><div class="dash-label">VOTOL / CLOUD</div><h1>Controller Dashboard</h1></div><div class="cloud-tools"><button class="primary" id="openPair" type="button">เชื่อมโมดูล Bluetooth</button><button id="refresh" type="button">รีเฟรช</button><button id="logout" type="button">ออกจากระบบ</button></div></div>
 
 
 <section class="module-select"><label for="devices">โมดูลที่กำลังดู</label><select id="devices"></select><div class="module-actions"><button id="renameDevice" type="button" disabled>เปลี่ยนชื่อ</button><button id="deleteDevice" type="button" class="secondary" disabled>ลบโมดูล</button></div><p id="deviceState" class="device-state" role="status"></p><p id="updated"></p></section>
@@ -545,7 +545,7 @@ html[data-tpl="pitwall"] body .cloud-dock button[aria-pressed=true]{background:r
 </div></section><section><h2>กราฟรอบมอเตอร์</h2><p id="chartLabel">รอข้อมูล RPM</p><svg id="rpmChart" viewBox="0 0 600 135" width="100%" role="img" aria-label="กราฟรอบมอเตอร์ย้อนหลัง"></svg></section></details>
 </div>
 <div id="cloud-link" class="cloud-view" hidden><section id="remoteNet" class="remote-net" aria-labelledby="rnTitle">
-<div class="rn-head"><div><small>VOLTOL / REMOTE</small><h2 id="rnTitle">Wi-Fi และการควบคุมโมดูล</h2></div><span id="rnFw" class="rn-pill">—</span></div>
+<div class="rn-head"><div><small>VOTOL / REMOTE</small><h2 id="rnTitle">Wi-Fi และการควบคุมโมดูล</h2></div><span id="rnFw" class="rn-pill">—</span></div>
 <p id="rnNow" class="rn-now">รอข้อมูลจากโมดูล</p>
 <ul id="rnList" class="rn-list" aria-label="Wi-Fi ที่บันทึกในโมดูล"></ul>
 <div class="rn-scan"><select id="rnScanSel" aria-label="เครือข่ายใกล้โมดูล"><option value="">กด "ค้นหา Wi-Fi" เพื่อดูเครือข่ายรอบโมดูล</option></select><button type="button" class="secondary" id="rnScan">ค้นหา Wi-Fi</button></div><p class="rn-note" id="rnScanMsg"></p><form id="rnAdd" class="rn-add"><label>ชื่อ Wi-Fi (2.4 GHz)<input name="ssid" maxlength="32" required autocomplete="off"></label><label>รหัสผ่าน<input name="pass" type="password" maxlength="64" autocomplete="new-password"></label><button type="submit">เพิ่ม Wi-Fi ให้โมดูล</button></form>
@@ -557,7 +557,7 @@ html[data-tpl="pitwall"] body .cloud-dock button[aria-pressed=true]{background:r
 <div id="cloud-history" class="cloud-view" hidden><section><h2>เหตุขัดข้องล่าสุด</h2><ul id="events"></ul><button id="exportReadings" type="button" disabled>ดาวน์โหลดข้อมูลล่าสุด (CSV)</button></section>
 </div>
 <div id="cloud-firmware" class="cloud-view" hidden><section class="fw">
-<p class="dash-label">VOLTOL / FIRMWARE</p><h2>อัปเดตเฟิร์มแวร์</h2>
+<p class="dash-label">VOTOL / FIRMWARE</p><h2>อัปเดตเฟิร์มแวร์</h2>
 <div class="fw-hero" id="fwHero" data-state="unknown">
   <div class="fw-ver"><small>ในโมดูลนี้</small><strong id="firmwareVersion">—</strong><small id="fwBoard"></small></div>
   <div class="fw-arrow" aria-hidden="true">→</div>
@@ -570,22 +570,22 @@ html[data-tpl="pitwall"] body .cloud-dock button[aria-pressed=true]{background:r
 <h3 class="fw-h">ติดตั้งผ่านสาย USB <small>สำหรับโมดูลใหม่ หรือเมื่ออัปเดตผ่าน Cloud ไม่ได้</small></h3>
 <div class="fw-cards">
   <article class="fw-card" data-board="cyd35"><b>CYD 3.5"</b><small>ESP32 จอ 3.5" ทัชแบบกด</small>
-    <a class="fw-btn fw-zip" id="fwZip" href="/fw/VOLTOL-v1.8.0-ReadyToFlash.zip">ดาวน์โหลด v<span id="fwZipVer">—</span></a>
+    <a class="fw-btn fw-zip" id="fwZip" href="/fw/VOTOL-v1.8.0-ReadyToFlash.zip">ดาวน์โหลด v<span id="fwZipVer">—</span></a>
     <small class="fw-note">ใช้ไฟล์ FLASH_CYD35 (ครั้งแรก) หรือ UPDATE_CYD35 (เก็บค่าเดิม)</small></article>
   <article class="fw-card" data-board="s340"><b>S3 จอ 4.0"</b><small>ESP32-S3 จอ 480×320 ทัช</small>
     <a class="fw-btn fw-flash" href="/fw/flash/" target="_blank" rel="noopener">ติดตั้งผ่านเว็บ</a>
-    <a class="fw-btn fw-zip alt" href="/fw/VOLTOL-v1.8.0-ReadyToFlash.zip">ดาวน์โหลด .zip</a>
+    <a class="fw-btn fw-zip alt" href="/fw/VOTOL-v1.8.0-ReadyToFlash.zip">ดาวน์โหลด .zip</a>
     <small class="fw-note">ใช้ไฟล์ FLASH_S3_40 หรือ UPDATE_S3_40</small></article>
   <article class="fw-card" data-board="s3"><b>S3 DevKitC</b><small>ESP32-S3 ไม่มีจอ ใช้หน้าเว็บ</small>
     <a class="fw-btn fw-flash" href="/fw/flash/" target="_blank" rel="noopener">ติดตั้งผ่านเว็บ</a>
-    <a class="fw-btn fw-zip alt" href="/fw/VOLTOL-v1.8.0-ReadyToFlash.zip">ดาวน์โหลด .zip</a>
+    <a class="fw-btn fw-zip alt" href="/fw/VOTOL-v1.8.0-ReadyToFlash.zip">ดาวน์โหลด .zip</a>
     <small class="fw-note">ใช้ไฟล์ FLASH_S3 หรือ UPDATE_S3</small></article>
 </div>
 <details class="fw-help"><summary>วิธีติดตั้งด้วยไฟล์ .zip</summary><ol>
   <li>แตกไฟล์ .zip แล้วเสียบสาย USB เข้าโมดูล</li>
   <li>ดับเบิลคลิกไฟล์ <b>UPDATE_…</b> ของรุ่นบอร์ด เพื่ออัปเดตโดยเก็บ Wi-Fi และค่าตั้งไว้ หรือ <b>FLASH_…</b> สำหรับบอร์ดใหม่ (ล้างทั้งบอร์ด)</li>
   <li>พิมพ์หมายเลขพอร์ต เช่น COM7 แล้วรอจนขึ้น SUCCESS (ถ้าไม่ผ่าน กดปุ่ม BOOT ค้าง แล้วกด RESET 1 ครั้ง)</li></ol></details>
-<p class="fw-links"><a href="http://192.168.4.1/">เปิดเว็บตั้งค่าโมดูล</a> <small>(ต่อ Wi-Fi ชื่อ VOLTOL-xxxx ก่อน)</small></p>
+<p class="fw-links"><a href="http://192.168.4.1/">เปิดเว็บตั้งค่าโมดูล</a> <small>(ต่อ Wi-Fi ชื่อ VOTOL-xxxx ก่อน)</small></p>
 </section>
 </div>
 <div id="cloud-drag" class="cloud-view tt" hidden>
@@ -643,7 +643,7 @@ html[data-tpl="pitwall"] body .cloud-dock button[aria-pressed=true]{background:r
 <section class="tt-log"><div class="tt-head"><h2>RUN LOG · ประวัติ</h2><small>แตะรอบเพื่อดูกราฟ</small></div><div id="ttRuns" class="tt-runs"></div><div id="dragHistory"></div></section>
 </div>
 <div id="cloud-tune" class="cloud-view" hidden><section class="ct" aria-labelledby="ctTitle">
-<div class="rn-head"><div><small>VOLTOL / TUNE</small><h2 id="ctTitle">จูนพารามิเตอร์ผ่าน Cloud</h2></div><span id="ctPill" class="rn-pill">รอข้อมูล</span></div>
+<div class="rn-head"><div><small>VOTOL / TUNE</small><h2 id="ctTitle">จูนพารามิเตอร์ผ่าน Cloud</h2></div><span id="ctPill" class="rn-pill">รอข้อมูล</span></div>
 <p id="ctInfo" class="rn-now">กด “อ่านค่า” เพื่อให้โมดูลอ่านพารามิเตอร์จากคอนโทรลเลอร์</p>
 <p id="ctLock" class="ct-lock" hidden>🔒 การเขียนจาก Cloud ปิดอยู่บนโมดูล — เปิด <b>CLOUD TUNE</b> ที่หน้า TUNE บนจอ หรือ “อนุญาตจูนผ่าน Cloud” ในหน้าตั้งค่าของเว็บโมดูล (อ่านค่าได้ตามปกติ)</p>
 <div class="rn-actions"><button id="ctRead" type="button">อ่านค่าจากคอนโทรลเลอร์</button><button id="ctRefresh" type="button" class="secondary">โหลดค่าล่าสุด</button><label class="ct-adv"><input id="ctAdv" type="checkbox"> แสดงค่าขั้นสูง</label></div>
@@ -660,18 +660,18 @@ html[data-tpl="pitwall"] body .cloud-dock button[aria-pressed=true]{background:r
 <dialog class="pair-sheet" id="pairSheet" aria-labelledby="pairTitle">
 <div class="row pair-head"><h2 id="pairTitle">เพิ่มโมดูลผ่าน Bluetooth</h2><button type="button" class="secondary" id="closePair" aria-label="ปิด">✕</button></div>
 <ol class="pr-steps" id="prSteps">
-<li data-st="active"><i>1</i><div><b>เชื่อมบลูทูธกับโมดูล</b><small>กดค้นหาแล้วเลือก VOLTOL Setup</small></div></li>
+<li data-st="active"><i>1</i><div><b>เชื่อมบลูทูธกับโมดูล</b><small>กดค้นหาแล้วเลือก VOTOL Setup</small></div></li>
 <li data-st="wait"><i>2</i><div><b>เลือก Wi-Fi ให้โมดูล</b><small>Wi-Fi 2.4 GHz ที่มีอินเทอร์เน็ต</small></div></li>
 <li data-st="wait"><i>3</i><div><b>โมดูลต่อ Wi-Fi</b><small>ใช้เวลาไม่เกิน 30 วินาที</small></div></li>
 <li data-st="wait"><i>4</i><div><b>เชื่อม Cloud สำเร็จ</b><small>ข้อมูลสดขึ้นหน้าปัด</small></div></li>
 </ol>
 <section class="pr-stage" data-stage="find" id="prFind">
 <div class="pr-hero"><span class="pr-bt"></span></div>
-<p class="pr-lead">เปิดสวิตช์รถ/โมดูล รอจอขึ้น <b>“รอมือถือเชื่อมต่อ”</b> แล้วกดปุ่มด้านล่าง เลือกชื่อ <b>VOLTOL Setup</b></p>
+<p class="pr-lead">เปิดสวิตช์รถ/โมดูล รอจอขึ้น <b>“รอมือถือเชื่อมต่อ”</b> แล้วกดปุ่มด้านล่าง เลือกชื่อ <b>VOTOL Setup</b></p>
 <button type="button" id="findBle" class="pr-go">ค้นหาโมดูล Bluetooth</button>
 <details class="pr-help"><summary>หาโมดูลไม่เจอ?</summary><ul>
 <li>โมดูลใหม่เปิดโหมดจับคู่เอง 3 นาทีหลังเปิดเครื่อง · หมดเวลาให้ปิดแล้วเปิดใหม่</li>
-<li>จอ 4.3″: แตะหน้าจอ › ตั้งค่า › <b>เชื่อมต่อ Cloud</b> › <b>เริ่มจับคู่บลูทูธ</b></li>
+<li>จอ 4.0″: แตะหน้าจอ › ตั้งค่า › <b>เชื่อมต่อ Cloud</b> › <b>เริ่มจับคู่บลูทูธ</b></li>
 <li>เปิดบลูทูธและตำแหน่ง (Location) บนมือถือ · ใช้ Chrome บน Android หรือคอมพิวเตอร์ (iPhone ใช้แอป Bluefy)</li>
 <li>จอ CYD 3.5″ ไม่มีบลูทูธ ใช้ “ตั้งค่าผ่าน USB / หน้าโมดูล” ด้านล่าง</li></ul></details>
 </section>
@@ -689,7 +689,7 @@ html[data-tpl="pitwall"] body .cloud-dock button[aria-pressed=true]{background:r
 <div class="pr-actions"><button type="button" id="prRetry" class="secondary" hidden>แก้ Wi-Fi แล้วส่งใหม่</button><button type="button" id="prDone" class="pr-go" hidden>ไปหน้าปัด</button></div>
 </section>
 <p id="bleResult" class="pr-msg" role="status"></p><p id="grantStatus" class="pr-msg" role="status"></p>
-<details id="usbPair" class="pr-help" hidden><summary>ตั้งค่าผ่าน USB / หน้าโมดูล (จอ CYD)</summary><p class="pr-lead">สร้างรหัสโมดูล แล้วส่งผ่าน USB Serial หรือวางในหน้าโมดูล (ต่อ Wi-Fi VOLTOL-xxxx › เปิด 192.168.4.1 › Cloud)</p><form method="post" id="register" class="row"><input name="label" maxlength="100" required placeholder="ชื่อโมดูล" aria-label="ชื่อโมดูล"><button>สร้างรหัสโมดูล</button></form><pre id="token" hidden></pre><p id="pairStatus" role="status"></p></details>
+<details id="usbPair" class="pr-help" hidden><summary>ตั้งค่าผ่าน USB / หน้าโมดูล (จอ CYD)</summary><p class="pr-lead">สร้างรหัสโมดูล แล้วส่งผ่าน USB Serial หรือวางในหน้าโมดูล (ต่อ Wi-Fi VOTOL-xxxx › เปิด 192.168.4.1 › Cloud)</p><form method="post" id="register" class="row"><input name="label" maxlength="100" required placeholder="ชื่อโมดูล" aria-label="ชื่อโมดูล"><button>สร้างรหัสโมดูล</button></form><pre id="token" hidden></pre><p id="pairStatus" role="status"></p></details>
 </dialog>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script><script src="https://www.battlab.net/session-client.js?v=2"></script><script src="https://www.battlab.net/battlab-nav.js?v=2" defer></script><script type="module">
@@ -878,11 +878,11 @@ async function ttFetch(rid){
   try{
     let rows=[];
     if(TT.saved.has(String(rid))){
-      const sv=await api('/rest/v1/voltol_drag_runs?select=frames,finished_at,target_m,elapsed_s,distance_m,splits&device_id=eq.'+encodeURIComponent(TT.device)+'&run_id=eq.'+encodeURIComponent(rid)+'&limit=1');
+      const sv=await api('/rest/v1/votol_drag_runs?select=frames,finished_at,target_m,elapsed_s,distance_m,splits&device_id=eq.'+encodeURIComponent(TT.device)+'&run_id=eq.'+encodeURIComponent(rid)+'&limit=1');
       const r=sv[0];
       if(r&&Array.isArray(r.frames)&&r.frames.length)rows=[{received_at:r.finished_at,payload:{frames:r.frames,drag:{state:'DONE',run_id:String(rid),target_m:r.target_m,elapsed_s:r.elapsed_s,distance_m:r.distance_m,splits:r.splits||[]}}}];
     }
-    if(!rows.length)rows=await api('/rest/v1/voltol_telemetry?select=payload,received_at&device_id=eq.'+encodeURIComponent(TT.device)+
+    if(!rows.length)rows=await api('/rest/v1/votol_telemetry?select=payload,received_at&device_id=eq.'+encodeURIComponent(TT.device)+
       '&payload->drag->>run_id=eq.'+encodeURIComponent(rid)+'&order=received_at.desc&limit=600');
     const drag=ttLastDrag(rows,rid);
     TT.cache.set(rid,{samples:ttFrames(rows,rid),drag,full:drag?.state==='DONE'||drag?.state==='ABORTED'});
@@ -890,12 +890,12 @@ async function ttFetch(rid){
   }catch(e){}finally{TT.fetching.delete(rid);}
 }
 function ttReset(){TT.sel=null;TT.cache.clear();TT.saved.clear();TT.savedAt=0;TT.lastHistory=[];TT.drawnKey='';TT.zoom={a:0,b:1};ttRender();}
-// finished runs are kept for good in voltol_drag_runs (filled by the database when a run ends)
+// finished runs are kept for good in votol_drag_runs (filled by the database when a run ends)
 async function ttLoadSaved(force){
   if(!TT.device||TT.savedBusy||(!force&&Date.now()-TT.savedAt<30000))return;
   TT.savedBusy=true;const dev=TT.device;
   try{
-    const rows=await api('/rest/v1/voltol_drag_runs?select=run_id,finished_at,target_m,elapsed_s,distance_m,splits,firmware&device_id=eq.'+encodeURIComponent(dev)+'&order=finished_at.desc&limit=200');
+    const rows=await api('/rest/v1/votol_drag_runs?select=run_id,finished_at,target_m,elapsed_s,distance_m,splits,firmware&device_id=eq.'+encodeURIComponent(dev)+'&order=finished_at.desc&limit=200');
     if(dev!==TT.device)return;
     TT.saved=new Map(rows.map(r=>[String(r.run_id),{rid:String(r.run_id),at:r.finished_at,fw:r.firmware,
       drag:{state:'DONE',run_id:String(r.run_id),target_m:r.target_m,elapsed_s:r.elapsed_s,distance_m:r.distance_m,splits:r.splits||[]}}]));
@@ -1072,7 +1072,7 @@ async function sendDragCommand(command){
   dragRequestBusy=true;
   const status=$('dragCommandStatus');
   try{
-    await api('/rest/v1/voltol_drag_commands',{body:{device_id:device,command}});
+    await api('/rest/v1/votol_drag_commands',{body:{device_id:device,command}});
     status.textContent='ส่งคำสั่งแล้ว · ตรวจสถานะตัวจับเวลาที่โมดูลรายงานด้านบน';
   }catch(error){status.textContent=error.message||'ส่งคำสั่งไม่สำเร็จ';}
   finally{dragRequestBusy=false;}
@@ -1084,12 +1084,12 @@ $('remoteOta').onclick=async ()=>{
   if(!session||!device||button.disabled||!confirm('อัปเดตเฟิร์มแวร์โมดูลเป็น '+(fwLatest||'เวอร์ชันล่าสุด')+'? จอดรถให้นิ่ง โมดูลจะรีสตาร์ตเอง'))return;
   button.disabled=true;
   try{
-    await api('/rest/v1/rpc/voltol_send_command',{body:{p_device:device,p_cmd:'ota_install',p_args:{}}});
+    await api('/rest/v1/rpc/votol_send_command',{body:{p_device:device,p_cmd:'ota_install',p_args:{}}});
     otaSentAt=Date.now();status.textContent='ส่งคำสั่งแล้ว · โมดูลจะดาวน์โหลดและรีสตาร์ตเอง (ประมาณ 1-2 นาที)';
   }catch(error){status.textContent=error.message||'ส่งคำสั่งอัปเดตไม่สำเร็จ';button.disabled=false;}
 };
 let fwLatest='', otaSentAt=0;
-fetch('/fw/version.json',{cache:'no-store'}).then(r=>r.json()).then(v=>{fwLatest=v.version||'';$('firmwareLatest').textContent=fwLatest||'—';if(fwLatest){document.querySelectorAll('#cloud-firmware .fw-zip').forEach(a=>a.href='/fw/VOLTOL-v'+fwLatest+'-ReadyToFlash.zip');$('fwZipVer').textContent=fwLatest;}}).catch(()=>{});
+fetch('/fw/version.json',{cache:'no-store'}).then(r=>r.json()).then(v=>{fwLatest=v.version||'';$('firmwareLatest').textContent=fwLatest||'—';if(fwLatest){document.querySelectorAll('#cloud-firmware .fw-zip').forEach(a=>a.href='/fw/VOTOL-v'+fwLatest+'-ReadyToFlash.zip');$('fwZipVer').textContent=fwLatest;}}).catch(()=>{});
 const authClient=window.supabase.createClient(base,key,{auth:window.battlabAuthOptions});
 let renewing=null, accountGeneration=0;
 function rememberSession(data){ session=data; }
@@ -1124,7 +1124,7 @@ $('exportReadings').onclick=()=>{
   ].join(','));
   const url=URL.createObjectURL(new Blob(['timestamp,rpm,voltage,current,controller_temp_c,motor_temp_c\n'+lines.join('\n')],{type:'text/csv'}));
   const link=document.createElement('a');
-  link.href=url;link.download='voltol-readings.csv';link.click();
+  link.href=url;link.download='votol-readings.csv';link.click();
   setTimeout(()=>URL.revokeObjectURL(url),1000);
 };
 const message=s=>{$('status').textContent=s};
@@ -1259,8 +1259,8 @@ async function refreshData(generation,id) {
     const filter='device_id=eq.'+encodeURIComponent(id)+'&order=received_at.desc';
     const reload=shownDevice!==id||Date.now()-cachedAt>=15000;
     const [rows,events]=await Promise.all([
-      api('/rest/v1/voltol_telemetry?select=rpm,payload,received_at&limit='+(reload?180:8)+'&'+filter),
-      reload?api('/rest/v1/voltol_events?select=code,received_at,detail&limit=15&'+filter):cachedEvents
+      api('/rest/v1/votol_telemetry?select=rpm,payload,received_at&limit='+(reload?180:8)+'&'+filter),
+      reload?api('/rest/v1/votol_events?select=code,received_at,detail&limit=15&'+filter):cachedEvents
     ]);
     if(generation!==accountGeneration||id!==$('devices').value)return;
     cachedRows=reload?rows:[...new Map([...rows,...cachedRows].map(row=>[row.received_at,row])).values()].slice(0,180);
@@ -1388,7 +1388,7 @@ async function loadDevices(){
   const generation=accountGeneration;
   try{
     const selected=$('devices').value;
-    const rows=await api('/rest/v1/voltol_devices?select=id,label,display_name,created_at&order=created_at.desc');
+    const rows=await api('/rest/v1/votol_devices?select=id,label,display_name,created_at&order=created_at.desc');
     if(!session||generation!==accountGeneration)return;
     setCloudHealth('online','ติดต่อ Cloud ได้');
     deviceRows=rows;
@@ -1433,7 +1433,7 @@ $('renameForm').onsubmit=async event=>{
   if(!name){$('renameStatus').textContent='กรุณาใส่ชื่อโมดูล';return;}
   button.disabled=true;
   try{
-    const rows=await api('/rest/v1/voltol_devices?id=eq.'+encodeURIComponent(id)+'&select=id,display_name',{method:'PATCH',body:{display_name:name}});
+    const rows=await api('/rest/v1/votol_devices?id=eq.'+encodeURIComponent(id)+'&select=id,display_name',{method:'PATCH',body:{display_name:name}});
     if(!rows?.some(row=>row.id===id))throw Error('บันทึกชื่อไม่สำเร็จ');
     $('renameDialog').close();
     await loadDevices();
@@ -1449,7 +1449,7 @@ $('deleteDevice').onclick=async ()=>{
   deletingDevice=true;
   updateDeviceState();
   try{
-    const removed=await api('/rest/v1/voltol_devices?id=eq.'+encodeURIComponent(row.id)+'&select=id',{method:'DELETE'});
+    const removed=await api('/rest/v1/votol_devices?id=eq.'+encodeURIComponent(row.id)+'&select=id',{method:'DELETE'});
     if(session!==current)return;
     if(!removed?.some(item=>item.id===row.id))throw Error('ไม่พบรายการหรือไม่มีสิทธิ์ลบ');
     resetModuleView();
@@ -1515,7 +1515,7 @@ const bleService='648b7040-33c9-4a41-a133-83c009df0001';
 let picked=null;
 const PR={stage:'find',run:0,cloudId:null,since:0,ssid:''};
 function prStep(i,st,sub){const li=$('prSteps').children[i];li.dataset.st=st;if(sub!=null)li.querySelector('small').textContent=sub;}
-const PR_SUB=['กดค้นหาแล้วเลือก VOLTOL Setup','Wi-Fi 2.4 GHz ที่มีอินเทอร์เน็ต','ใช้เวลาไม่เกิน 30 วินาที','ข้อมูลสดขึ้นหน้าปัด'];
+const PR_SUB=['กดค้นหาแล้วเลือก VOTOL Setup','Wi-Fi 2.4 GHz ที่มีอินเทอร์เน็ต','ใช้เวลาไม่เกิน 30 วินาที','ข้อมูลสดขึ้นหน้าปัด'];
 function prStage(name){PR.stage=name;for(const el of document.querySelectorAll('#pairSheet .pr-stage'))el.hidden=el.dataset.stage!==name;}
 function prReset(){PR.run++;PR.cloudId=null;prStage('find');PR_SUB.forEach((t,i)=>prStep(i,i?'wait':'active',t));$('bleResult').textContent='';$('bleForm').reset();
   $('prNets').innerHTML='<p class="pr-scan"><span class="pr-spin"></span>โมดูลกำลังค้นหา Wi-Fi รอบตัว…</p>';$('prRetry').hidden=true;$('prDone').hidden=true;$('findBle').textContent='ค้นหาโมดูล Bluetooth';}
@@ -1541,7 +1541,7 @@ $('findBle').onclick=async ()=>{
    const st=new TextDecoder().decode(await (await svc.getCharacteristic(bleService.slice(0,-1)+'3')).readValue());
    const grant=setupGrant?.until>Date.now();
    if(st==='locked'&&!grant){picked.gatt.disconnect();throw Object.assign(Error('โมดูลนี้ยังไม่เปิดโหมดจับคู่ · บนจอโมดูล: ตั้งค่า › เชื่อมต่อ Cloud › เริ่มจับคู่บลูทูธ (หรือปิด-เปิดโมดูลใหม่ถ้าเป็นโมดูลใหม่)'),{soft:true});}
-   prStep(0,'done','เชื่อมกับ '+(picked.name||'VOLTOL Setup')+' แล้ว');prStep(1,'active','แตะเลือก Wi-Fi แล้วใส่รหัสผ่าน');prStage('wifi');
+   prStep(0,'done','เชื่อมกับ '+(picked.name||'VOTOL Setup')+' แล้ว');prStep(1,'active','แตะเลือก Wi-Fi แล้วใส่รหัสผ่าน');prStage('wifi');
    try{
      const list=await svc.getCharacteristic(bleService.slice(0,-1)+'5');
      const writer=await svc.getCharacteristic(bleService.slice(0,-1)+'2');
@@ -1562,7 +1562,7 @@ $('findBle').onclick=async ()=>{
      }
    }catch{}
    prNets([]);
- }catch(e){out.textContent=e.soft?e.message:e.name==='NotFoundError'?'ยังไม่ได้เลือกโมดูล · กดค้นหาอีกครั้งแล้วเลือก VOLTOL Setup':'เชื่อมบลูทูธไม่สำเร็จ · ให้มือถืออยู่ใกล้โมดูล แล้วลองอีกครั้ง';
+ }catch(e){out.textContent=e.soft?e.message:e.name==='NotFoundError'?'ยังไม่ได้เลือกโมดูล · กดค้นหาอีกครั้งแล้วเลือก VOTOL Setup':'เชื่อมบลูทูธไม่สำเร็จ · ให้มือถืออยู่ใกล้โมดูล แล้วลองอีกครั้ง';
    prStep(0,'active',e.soft?'โมดูลยังไม่เปิดโหมดจับคู่':'ลองค้นหาอีกครั้ง');}
  finally{button.disabled=false;button.textContent='ค้นหาโมดูล Bluetooth';}
 };
@@ -1576,7 +1576,7 @@ async function prFollow(run,status){
    if(bleOk){try{v=new TextDecoder().decode(await status.readValue());}catch{bleOk=false;}}
    let up=false;
    if(PR.cloudId&&(!v||v==='accepted'||v==='online'||v==='joining')&&(++tick%4===0)){
-     try{const rows=await api('/rest/v1/voltol_telemetry?select=received_at&device_id=eq.'+PR.cloudId+'&order=received_at.desc&limit=1');up=!!rows[0]&&Date.parse(rows[0].received_at)>PR.since-5000;}catch{}
+     try{const rows=await api('/rest/v1/votol_telemetry?select=received_at&device_id=eq.'+PR.cloudId+'&order=received_at.desc&limit=1');up=!!rows[0]&&Date.parse(rows[0].received_at)>PR.since-5000;}catch{}
    }
    if(up||v==='cloud-ok')return 'ok';
    if(v==='wifi-fail'||v==='cloud-fail')return v;
@@ -1618,11 +1618,11 @@ $('bleForm').onsubmit=async e=>{
      raw=new Uint8Array(await crypto.subtle.deriveBits({name:'ECDH',public:peer},keys.privateKey,256)).slice(0,16);
    }else raw=Uint8Array.from(grant.match(/../g),x=>parseInt(x,16));
    if(generation!==accountGeneration)throw Error('กรุณาเข้าสู่ระบบใหม่');
-   const label=String(fields.get('label')||'').trim()||'VOLTOL '+device.id.slice(-6).toUpperCase();
+   const label=String(fields.get('label')||'').trim()||'VOTOL '+device.id.slice(-6).toUpperCase();
    const existing=existingDeviceByLabel(label);
    if(existing&&!(bleDraft&&bleDraft.deviceId===device.id&&bleDraft.label===label)&&!confirm('โมดูลชื่อ '+(existing.display_name||existing.label)+' มีอยู่แล้ว · เชื่อมเป็นโมดูลเดิม (รหัสเก่าจะหยุดใช้)?'))throw Error('ยกเลิกแล้ว · ตั้งชื่อโมดูลใหม่ในหัวข้อ “ตั้งชื่อโมดูล”');
    if(!bleDraft||bleDraft.deviceId!==device.id||bleDraft.label!==label){
-     const registration=await api('/functions/v1/voltol-device/register',{body:{label,reconnect:!!existing}});
+     const registration=await api('/functions/v1/votol-device/register',{body:{label,reconnect:!!existing}});
      if(generation!==accountGeneration)throw Error('กรุณาเข้าสู่ระบบใหม่');
      bleDraft={deviceId:device.id,label,token:registration.device_token,cloudId:registration.device_id};
    }
@@ -1664,7 +1664,7 @@ $('bleForm').onsubmit=async e=>{
 };
 $('register').onsubmit=e=>{e.preventDefault();run(async()=>{
   const generation=accountGeneration, form=e.currentTarget, button=form.querySelector('button');button.disabled=true;
-  try{const data=await api('/functions/v1/voltol-device/register',{body:Object.fromEntries(new FormData(form))});
+  try{const data=await api('/functions/v1/votol-device/register',{body:Object.fromEntries(new FormData(form))});
   if(generation!==accountGeneration)return;
   pairingToken=data.device_token;$('pairStatus').textContent='สร้างรหัสแล้ว ส่งคำสั่งผ่าน USB Serial Monitor ที่ 115200 พร้อม newline';$('token').textContent='CLOUD_TOKEN '+data.device_token;$('token').hidden=false;form.reset();await loadDevices();}catch(error){$('pairStatus').textContent=error.code==='device_already_exists'||error.code==='label_exists'?'ชื่อโมดูลนี้มีอยู่แล้วในระบบ · เลือกโมดูลเดิมจากรายการด้านบน':error.message||'สร้างรหัสไม่สำเร็จ';}finally{button.disabled=false;}
 });};
@@ -1711,10 +1711,10 @@ function rnRender(){
   }else if(scanOk)$('rnScanMsg').textContent='';
 }
 async function rnCmds(){const id=$('devices').value;if(!id||$('cloud-link').hidden)return;
-  try{const rows=await api('/rest/v1/voltol_commands?select=cmd,args,status,result,created_at&device_id=eq.'+id+'&order=created_at.desc&limit=6');
+  try{const rows=await api('/rest/v1/votol_commands?select=cmd,args,status,result,created_at&device_id=eq.'+id+'&order=created_at.desc&limit=6');
     const ol=$('rnCmds');ol.replaceChildren(...rows.map(r=>{const li=document.createElement('li');const b=document.createElement('b');b.textContent=RN_CMD[r.cmd]||r.cmd;li.append(b,' '+(r.args?.ssid?r.args.ssid+' · ':'')+new Date(r.created_at).toLocaleTimeString('th-TH')+' · ');const st=document.createElement('span');st.className=r.status==='done'?'ok':(r.status==='failed'||r.status==='expired')?'bad':'';st.textContent=(RN_ST[r.status]||r.status)+(r.result?' ('+r.result+')':'');li.append(st);return li;}));}catch{}}
 async function rnSend(cmd,args,ask){const id=$('devices').value;if(!id||rnBusy)return;if(ask&&!confirm(ask))return;rnBusy=true;rnRender();
-  try{await api('/rest/v1/rpc/voltol_send_command',{body:{p_device:id,p_cmd:cmd,p_args:args}});message('ส่งคำสั่งแล้ว · โมดูลจะทำในรอบส่งข้อมูลถัดไป');}catch(e){message(e.message||'ส่งคำสั่งไม่สำเร็จ');}
+  try{await api('/rest/v1/rpc/votol_send_command',{body:{p_device:id,p_cmd:cmd,p_args:args}});message('ส่งคำสั่งแล้ว · โมดูลจะทำในรอบส่งข้อมูลถัดไป');}catch(e){message(e.message||'ส่งคำสั่งไม่สำเร็จ');}
   finally{rnBusy=false;rnRender();rnCmds();}}
 $('rnAdd').onsubmit=e=>{e.preventDefault();const f=e.currentTarget,ssid=f.elements.ssid.value.trim(),pass=f.elements.pass.value;if(!ssid)return;rnSend('wifi_add',{ssid,pass}).then(()=>{f.elements.pass.value='';f.elements.ssid.value='';});};
 $('rnOta').onclick=()=>rnSend('ota_install',{},'อัปเดตเฟิร์มแวร์ของโมดูลเป็นเวอร์ชันล่าสุด? จอดรถให้นิ่ง โมดูลจะรีสตาร์ตเอง');
@@ -1734,7 +1734,7 @@ function ctVal(i){return CT.edits.has(i)?CT.edits.get(i):ctOrig(i);}
 function ctSet(i,r){const d=CT.snap.defs[i];r=ctClamp(d,r);if(r===ctOrig(i))CT.edits.delete(i);else CT.edits.set(i,r);ctRender();}
 async function ctLoad(){const id=$('devices').value;if(!id)return;
   if(id!==CT.dev){CT.dev=id;CT.snap=null;CT.edits.clear();ctRender();}
-  try{const rows=await api('/rest/v1/voltol_events?select=received_at,detail&device_id=eq.'+id+'&code=eq.params&order=received_at.desc&limit=1');
+  try{const rows=await api('/rest/v1/votol_events?select=received_at,detail&device_id=eq.'+id+'&code=eq.params&order=received_at.desc&limit=1');
     const r=rows[0];if(!r||id!==CT.dev)return;const t=Date.parse(r.received_at);if(t===CT.at)return;
     const old=CT.snap;CT.snap=r.detail;CT.at=t;
     if(!old||old.sum!==CT.snap.sum)CT.edits.clear();
@@ -1742,11 +1742,11 @@ async function ctLoad(){const id=$('devices').value;if(!id)return;
     for(const f of CT.snap.fields||[])if(f[1]!==f[2])CT.edits.set(f[0],f[1]);
     ctRender();}catch{}}
 async function ctCmds(){const id=$('devices').value;if(!id||$('cloud-tune').hidden)return;
-  try{const rows=await api('/rest/v1/voltol_commands?select=cmd,status,result,created_at&device_id=eq.'+id+'&cmd=like.params_*&order=created_at.desc&limit=4');
+  try{const rows=await api('/rest/v1/votol_commands?select=cmd,status,result,created_at&device_id=eq.'+id+'&cmd=like.params_*&order=created_at.desc&limit=4');
     const N={params_read:'อ่านค่า',params_get:'โหลดค่า',params_write:'เขียนค่า',params_restore:'โหลดค่าสำรอง'};
     $('ctCmds').replaceChildren(...rows.map(r=>{const li=document.createElement('li');const b=document.createElement('b');b.textContent=N[r.cmd]||r.cmd;li.append(b,' '+new Date(r.created_at).toLocaleTimeString('th-TH')+' · ');const st=document.createElement('span');st.className=r.status==='done'?'ok':(r.status==='failed'||r.status==='expired')?'bad':'';st.textContent=(RN_ST[r.status]||r.status)+(r.result?' ('+r.result+')':'');li.append(st);return li;}));}catch{}}
 async function ctSend(cmd,args){const id=$('devices').value;if(!id||CT.busy)return false;CT.busy=true;ctRender();
-  try{await api('/rest/v1/rpc/voltol_send_command',{body:{p_device:id,p_cmd:cmd,p_args:args}});$('ctMsg').textContent='ส่งคำสั่งแล้ว · โมดูลจะทำภายในไม่กี่วินาที';return true;}
+  try{await api('/rest/v1/rpc/votol_send_command',{body:{p_device:id,p_cmd:cmd,p_args:args}});$('ctMsg').textContent='ส่งคำสั่งแล้ว · โมดูลจะทำภายในไม่กี่วินาที';return true;}
   catch(e){$('ctMsg').textContent=e.message||'ส่งคำสั่งไม่สำเร็จ';return false;}
   finally{CT.busy=false;ctRender();ctCmds();}}
 function ctRender(){const s=CT.snap,online=receivedAgo(lastReading)<6000;

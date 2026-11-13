@@ -1,5 +1,5 @@
 {
-  "name": "VOLTOL Monitor (ESP32-S3 4.0\")",
+  "name": "VOTOL Monitor (ESP32-S3 4.0\")",
   "version": "1.8.5",
   "new_install_prompt_erase": true,
   "builds": [
@@ -7,7 +7,7 @@
       "chipFamily": "ESP32-S3",
       "parts": [
         {
-          "path": "VOLTOL_S3_40_INSTALL.bin",
+          "path": "VOTOL_S3_40_INSTALL.bin",
           "offset": 0
         }
       ]

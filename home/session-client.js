@@ -1,7 +1,7 @@
 /* BATTLAB shared login (v2) — one account, one session for every *.battlab.net app.
  *
  * The Supabase session is kept in cookies scoped to ".battlab.net", so
- * battlab.net, www.battlab.net, batterycloud.battlab.net and voltol.battlab.net
+ * battlab.net, www.battlab.net, batterycloud.battlab.net and votol.battlab.net
  * all read the same session directly (no iframe, works on iOS Safari too).
  *
  * Pages use it exactly like before:

@@ -148,7 +148,7 @@ const dt = ts => ts ? new Date(ts).toLocaleString('th-TH',{day:'numeric',month:'
 const ERR = {'admin only':'บัญชีนี้ไม่ใช่แอดมิน','super admin only':'ต้องเป็น Super admin','cannot suspend yourself':'ระงับบัญชีตัวเองไม่ได้','cannot delete yourself':'ลบบัญชีตัวเองไม่ได้',
   'remove super admin role first':'ถอดสิทธิ์ Super admin ก่อน','type the e-mail to confirm':'พิมพ์อีเมลให้ตรงเพื่อยืนยัน','no account with that e-mail':'ไม่พบบัญชีอีเมลนี้',
   'no account with that email':'ไม่พบบัญชีอีเมลนี้','type the module name to confirm':'พิมพ์ชื่อโมดูลให้ตรงเพื่อยืนยัน','type the device name to confirm':'พิมพ์ชื่ออุปกรณ์ให้ตรงเพื่อยืนยัน',
-  "move this account's VOLTOL modules first":'ย้ายโมดูล VOLTOL ของบัญชีนี้ไปบัญชีอื่นก่อน','password must be 8-72 characters':'รหัสผ่าน 8–72 ตัวอักษร','cannot remove yourself':'ถอดสิทธิ์ตัวเองไม่ได้','cannot demote yourself':'ลดสิทธิ์ตัวเองไม่ได้'};
+  "move this account's VOTOL modules first":'ย้ายโมดูล VOTOL ของบัญชีนี้ไปบัญชีอื่นก่อน','password must be 8-72 characters':'รหัสผ่าน 8–72 ตัวอักษร','cannot remove yourself':'ถอดสิทธิ์ตัวเองไม่ได้','cannot demote yourself':'ลดสิทธิ์ตัวเองไม่ได้'};
 const thErr = e => { const m = e?.message || String(e); for (const k in ERR) if (m.includes(k)) return ERR[k]; return m; };
 function toast(msg, err) { const t = document.createElement('div'); t.className = 'toast' + (err ? ' err' : ''); t.setAttribute('role','status'); t.textContent = msg; document.body.append(t); setTimeout(() => t.remove(), 3200); }
 async function rpc(fn, args) { const { data, error } = await sb.rpc(fn, args || {}); if (error) throw error; return data; }
@@ -157,7 +157,7 @@ const KIND = {
   board:   {n:'บอร์ด BATTLAB', c:'#ffcf22', p:'M7 2v4M17 2v4M7 18v4M17 18v4M2 7h4M2 17h4M18 7h4M18 17h4M6 6h12v12H6zM10 10h4v4h-4z'},
   inverter:{n:'อินเวอร์เตอร์', c:'#59c3ff', p:'M4 4h16v16H4zM8 12h8M12 8v8'},
   screen:  {n:'จอ Cloud Screen', c:'#b98cff', p:'M3 5h18v11H3zM8 20h8M12 16v4'},
-  voltol:  {n:'โมดูล VOLTOL', c:'#3ddc84', p:'M13 2 4 14h7l-1 8 9-12h-7z'}
+  votol:  {n:'โมดูล VOTOL', c:'#3ddc84', p:'M13 2 4 14h7l-1 8 9-12h-7z'}
 };
 const icon = k => `<span class="ic" style="color:${KIND[k]?.c||'#fff'}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${KIND[k]?.p||''}"></path></svg></span>`;
 
@@ -201,7 +201,7 @@ async function render() {
     v.innerHTML = skel(2);
     try { const o = await rpc('admin_overview'); const t = (l, val, s) => `<div class="card tile"><div class="l">${l}</div><div class="v">${val}</div><div class="s">${s||''}</div></div>`;
       v.innerHTML = '<div class="tiles">' + t('สมาชิก', o.users, 'ใช้งานใน 7 วัน ' + o.users_7d) + t('บอร์ด BATTLAB ออนไลน์', o.boards_online + ' / ' + o.boards, o.boards_unpaired ? 'ยังไม่จับคู่ ' + o.boards_unpaired : 'จับคู่ครบ') +
-        t('โมดูล VOLTOL ออนไลน์', (o.voltol_online||0) + ' / ' + (o.voltol||0), 'ข้อมูล 24 ชม. ' + (o.voltol_rows_24h||0) + ' แถว') + t('จอ Cloud Screen', o.screens_online + ' / ' + o.screens, 'ออนไลน์ / ทั้งหมด') +
+        t('โมดูล VOTOL ออนไลน์', (o.votol_online||0) + ' / ' + (o.votol||0), 'ข้อมูล 24 ชม. ' + (o.votol_rows_24h||0) + ' แถว') + t('จอ Cloud Screen', o.screens_online + ' / ' + o.screens, 'ออนไลน์ / ทั้งหมด') +
         t('อินเวอร์เตอร์', o.inverters, 'บัญชี LuxPower ' + o.lux_accounts) + t('คำสั่ง 24 ชม.', o.cmds_24h) + t('ข้อมูลแบต 24 ชม.', o.readings_24h) + t('ฐานข้อมูล', o.db_mb + ' MB', 'จาก 500 MB') + '</div>' +
         '<div class="card" style="margin-top:12px"><h3 style="margin:0 0 8px;font-size:14px;color:var(--muted)">เฟิร์มแวร์บอร์ด BATTLAB</h3><div class="act">' + Object.entries(o.fw || {}).sort().map(([k, n]) => `<span class="chip num" style="cursor:default">${esc(k)} · ${n}</span>`).join('') + '</div></div>';
     } catch (e) { v.innerHTML = `<div class="card empty">${esc(thErr(e))}</div>`; }
@@ -210,8 +210,8 @@ async function render() {
     const F = [['all','ทั้งหมด'],['admin','แอดมิน'],['ban','ถูกระงับ'],['unc','ยังไม่ยืนยันอีเมล'],['dev','มีอุปกรณ์']];
     v.innerHTML = `<div class="bar"><input type="search" id="q" placeholder="ค้นหาอีเมล" aria-label="ค้นหาสมาชิก" value="${esc(S.q)}">${F.map(([k,n]) => `<button type="button" class="chip" data-f="${k}" aria-pressed="${S.memFilter===k}">${n}</button>`).join('')}</div><div class="list" id="list"></div>`;
     const paint = () => { const q = S.q.toLowerCase(); const rows = S.members.filter(m => (!q || (m.email||'').toLowerCase().includes(q)) &&
-        (S.memFilter === 'all' || (S.memFilter === 'admin' && m.role) || (S.memFilter === 'ban' && m.banned) || (S.memFilter === 'unc' && !m.confirmed) || (S.memFilter === 'dev' && (m.boards + m.inverters + m.screens + m.voltol) > 0)));
-      $('#list').innerHTML = rows.length ? rows.map(m => `<button type="button" class="row" data-u="${m.id}"><span class="ic" style="color:var(--y);font:700 16px 'Chakra Petch'">${esc((m.email||'?')[0].toUpperCase())}</span><span class="main"><span class="t">${esc(m.email)}${m.role ? `<span class="badge b-${m.role}">${m.role === 'super' ? 'Super' : 'Support'}</span>` : ''}${m.banned ? '<span class="badge b-ban">ระงับ</span>' : ''}${m.confirmed ? '' : '<span class="badge b-unc">ยังไม่ยืนยัน</span>'}</span><span class="m">BATTLAB ${m.boards} · อินเวอร์เตอร์ ${m.inverters} · จอ ${m.screens} · VOLTOL ${m.voltol}${m.online ? ' · <span class="dot on"></span>ออนไลน์ ' + m.online : ''}</span></span><span class="r">สมัคร ${dt(m.created)}<br>เข้าล่าสุด ${ago(m.last_login)}</span></button>`).join('') : '<div class="card empty">ไม่พบสมาชิก</div>';
+        (S.memFilter === 'all' || (S.memFilter === 'admin' && m.role) || (S.memFilter === 'ban' && m.banned) || (S.memFilter === 'unc' && !m.confirmed) || (S.memFilter === 'dev' && (m.boards + m.inverters + m.screens + m.votol) > 0)));
+      $('#list').innerHTML = rows.length ? rows.map(m => `<button type="button" class="row" data-u="${m.id}"><span class="ic" style="color:var(--y);font:700 16px 'Chakra Petch'">${esc((m.email||'?')[0].toUpperCase())}</span><span class="main"><span class="t">${esc(m.email)}${m.role ? `<span class="badge b-${m.role}">${m.role === 'super' ? 'Super' : 'Support'}</span>` : ''}${m.banned ? '<span class="badge b-ban">ระงับ</span>' : ''}${m.confirmed ? '' : '<span class="badge b-unc">ยังไม่ยืนยัน</span>'}</span><span class="m">BATTLAB ${m.boards} · อินเวอร์เตอร์ ${m.inverters} · จอ ${m.screens} · VOTOL ${m.votol}${m.online ? ' · <span class="dot on"></span>ออนไลน์ ' + m.online : ''}</span></span><span class="r">สมัคร ${dt(m.created)}<br>เข้าล่าสุด ${ago(m.last_login)}</span></button>`).join('') : '<div class="card empty">ไม่พบสมาชิก</div>';
       document.querySelectorAll('[data-u]').forEach(r => r.onclick = () => openMember(r.dataset.u)); };
     $('#q').oninput = e => { S.q = e.target.value; paint(); };
     document.querySelectorAll('[data-f]').forEach(b => b.onclick = () => { S.memFilter = b.dataset.f; document.querySelectorAll('[data-f]').forEach(x => x.setAttribute('aria-pressed', x === b)); paint(); });
@@ -220,7 +220,7 @@ async function render() {
     if (!S.esp) { v.innerHTML = skel(6); try { S.esp = await rpc('admin_esp32'); $('#cEsp').textContent = S.esp.length; } catch (e) { v.innerHTML = `<div class="card empty">${esc(thErr(e))}</div>`; return; } }
     const cnt = k => S.esp.filter(d => k === 'all' || d.kind === k).length;
     v.innerHTML = `<div class="bar"><input type="search" id="q" placeholder="ค้นหา ชื่อ / อีเมล / รหัสจับคู่ / เฟิร์มแวร์ / IP" aria-label="ค้นหาอุปกรณ์" value="${esc(S.q)}">` +
-      [['all','ทั้งหมด'],['board','BATTLAB'],['voltol','VOLTOL'],['screen','Cloud Screen'],['inverter','อินเวอร์เตอร์']].map(([k,n]) => `<button type="button" class="chip" data-k="${k}" aria-pressed="${S.espKind===k}">${n} <span class="num">${cnt(k)}</span></button>`).join('') +
+      [['all','ทั้งหมด'],['board','BATTLAB'],['votol','VOTOL'],['screen','Cloud Screen'],['inverter','อินเวอร์เตอร์']].map(([k,n]) => `<button type="button" class="chip" data-k="${k}" aria-pressed="${S.espKind===k}">${n} <span class="num">${cnt(k)}</span></button>`).join('') +
       `<button type="button" class="chip" id="onl" aria-pressed="${S.espOnline}"><span class="dot on"></span>ออนไลน์เท่านั้น</button></div><div class="list" id="list"></div>`;
     const paint = () => { const q = S.q.toLowerCase(); const rows = S.esp.filter(d => (S.espKind === 'all' || d.kind === S.espKind) && (!S.espOnline || d.online) &&
         (!q || [d.name, d.email, d.pair, d.fw, d.ip, d.label].some(x => String(x || '').toLowerCase().includes(q))));
@@ -236,15 +236,15 @@ async function render() {
     renderWeb(v);
   } else {
     v.innerHTML = skel(6);
-    const A = {site_setting:'เปลี่ยนเทมเพลตเว็บ VOLTOL',update_device:'แก้ไขอุปกรณ์',transfer_device:'ย้ายเจ้าของบอร์ด',release_device:'ปลดบอร์ดจากบัญชี',command:'ส่งคำสั่ง',update_screen:'แก้ไขจอ',release_screen:'ปลดจอ',transfer_screen:'ย้ายเจ้าของจอ',set_role:'ตั้งสิทธิ์',set_password:'ตั้งรหัสผ่านใหม่',confirm_email:'ยืนยันอีเมล',suspend_user:'ระงับบัญชี',restore_user:'เปิดบัญชีคืน',delete_user:'ลบบัญชี',voltol_set_owner:'ย้ายเจ้าของ VOLTOL',voltol_rename:'เปลี่ยนชื่อ VOLTOL',voltol_delete:'ลบโมดูล VOLTOL',delete_device:'ลบอุปกรณ์',bulk_ota:'สั่งอัปเดตเฟิร์มแวร์หลายเครื่อง'};
+    const A = {site_setting:'เปลี่ยนเทมเพลตเว็บ VOTOL',update_device:'แก้ไขอุปกรณ์',transfer_device:'ย้ายเจ้าของบอร์ด',release_device:'ปลดบอร์ดจากบัญชี',command:'ส่งคำสั่ง',update_screen:'แก้ไขจอ',release_screen:'ปลดจอ',transfer_screen:'ย้ายเจ้าของจอ',set_role:'ตั้งสิทธิ์',set_password:'ตั้งรหัสผ่านใหม่',confirm_email:'ยืนยันอีเมล',suspend_user:'ระงับบัญชี',restore_user:'เปิดบัญชีคืน',delete_user:'ลบบัญชี',votol_set_owner:'ย้ายเจ้าของ VOTOL',votol_rename:'เปลี่ยนชื่อ VOTOL',votol_delete:'ลบโมดูล VOTOL',delete_device:'ลบอุปกรณ์',bulk_ota:'สั่งอัปเดตเฟิร์มแวร์หลายเครื่อง'};
     try { const L = await rpc('admin_log_list', {p_limit: 200});
       v.innerHTML = '<div class="list log">' + (L.length ? L.map(g => `<div class="row"><span class="main"><span class="t">${esc(A[g.action] || g.action)}</span><span class="m">${dt(g.at)} · ${esc(g.by || '')} · ${esc(JSON.stringify(g.detail || {}).slice(0, 160))}</span></span></div>`).join('') : '<div class="card empty">ยังไม่มีบันทึก</div>') + '</div>';
     } catch (e) { v.innerHTML = `<div class="card empty">${esc(thErr(e))}</div>`; }
   }
 }
 
-// ---------- VOLTOL web template (voltol.battlab.net): A Carbon Pro (main) / B Pit Wall (backup)
-// Stored in site_settings.voltol_template; admin_set_site_setting checks super admin on the server.
+// ---------- VOTOL web template (votol.battlab.net): A Carbon Pro (main) / B Pit Wall (backup)
+// Stored in site_settings.votol_template; admin_set_site_setting checks super admin on the server.
 const TPL = [
   {k:'carbon', n:'A · Carbon Pro', d:'พื้นคาร์บอน สีเหลือง BATTLAB เกจมีเข็ม กราฟเล็กในการ์ด เมนูแคปซูลลอย', bg:'#07090c', ac:'#ffcf22', rx:10},
   {k:'pitwall', n:'B · Pit Wall', d:'สไตล์ทีมแข่ง ตารางกริด สีส้ม-ฟ้า ตัวเลขโมโน เมนูด้านซ้ายบนคอมพ์', bg:'#0c0e10', ac:'#ff6a1a', rx:2}];
@@ -259,19 +259,19 @@ function tplThumb(t) {
 async function renderWeb(v) {
   v.innerHTML = skel(2);
   let cur = 'carbon';
-  try { const { data } = await sb.from('site_settings').select('value').eq('key', 'voltol_template').maybeSingle(); cur = data?.value?.active || 'carbon'; } catch (e) {}
+  try { const { data } = await sb.from('site_settings').select('value').eq('key', 'votol_template').maybeSingle(); cur = data?.value?.active || 'carbon'; } catch (e) {}
   const sup = isSuper();
-  v.innerHTML = `<div class="card"><h2 style="margin:0 0 4px;font:700 20px 'Chakra Petch'">เทมเพลตหน้าเว็บ VOLTOL</h2>
-    <p style="margin:0 0 14px;color:var(--muted)">หน้าที่ลูกค้าเห็นที่ <a href="https://voltol.battlab.net/" target="_blank" rel="noopener">voltol.battlab.net</a> · เปลี่ยนแล้วมีผลกับทุกคนทันที ไม่ต้องอัปไฟล์ใหม่${sup ? '' : ' · <b>เฉพาะ Super admin เปลี่ยนได้</b>'}</p>
+  v.innerHTML = `<div class="card"><h2 style="margin:0 0 4px;font:700 20px 'Chakra Petch'">เทมเพลตหน้าเว็บ VOTOL</h2>
+    <p style="margin:0 0 14px;color:var(--muted)">หน้าที่ลูกค้าเห็นที่ <a href="https://votol.battlab.net/" target="_blank" rel="noopener">votol.battlab.net</a> · เปลี่ยนแล้วมีผลกับทุกคนทันที ไม่ต้องอัปไฟล์ใหม่${sup ? '' : ' · <b>เฉพาะ Super admin เปลี่ยนได้</b>'}</p>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px">` +
     TPL.map(t => { const on = t.k === cur; return `<div class="card" style="background:var(--card2);border-color:${on ? t.ac : 'var(--line)'}">${tplThumb(t)}
       <div style="display:flex;align-items:center;gap:8px;margin-top:10px"><b style="font:700 16px 'Chakra Petch'">${t.n}</b>${on ? `<span class="role" style="background:${t.ac};color:#111">ใช้งานอยู่</span>` : '<span style="color:var(--dim);font-size:13px">สำรอง</span>'}</div>
       <p style="margin:6px 0 12px;color:var(--muted);font-size:14px">${t.d}</p>
-      <div style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn" href="https://voltol.battlab.net/?tpl=${t.k}" target="_blank" rel="noopener" style="text-decoration:none">ดูตัวอย่าง</a>${sup && !on ? `<button type="button" class="btn y" data-tpl="${t.k}">ตั้งเป็นหน้าหลัก</button>` : ''}</div></div>`; }).join('') + '</div></div>';
+      <div style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn" href="https://votol.battlab.net/?tpl=${t.k}" target="_blank" rel="noopener" style="text-decoration:none">ดูตัวอย่าง</a>${sup && !on ? `<button type="button" class="btn y" data-tpl="${t.k}">ตั้งเป็นหน้าหลัก</button>` : ''}</div></div>`; }).join('') + '</div></div>';
   v.querySelectorAll('[data-tpl]').forEach(b => b.onclick = async () => {
-    const t = TPL.find(x => x.k === b.dataset.tpl); if (!t || !confirm('เปลี่ยนหน้าเว็บ VOLTOL ของลูกค้าทุกคนเป็น ' + t.n + ' ?')) return;
+    const t = TPL.find(x => x.k === b.dataset.tpl); if (!t || !confirm('เปลี่ยนหน้าเว็บ VOTOL ของลูกค้าทุกคนเป็น ' + t.n + ' ?')) return;
     b.disabled = true;
-    try { await rpc('admin_set_site_setting', {p_key: 'voltol_template', p_value: {active: t.k}}); toast('เปลี่ยนเป็น ' + t.n + ' แล้ว'); renderWeb(v); }
+    try { await rpc('admin_set_site_setting', {p_key: 'votol_template', p_value: {active: t.k}}); toast('เปลี่ยนเป็น ' + t.n + ' แล้ว'); renderWeb(v); }
     catch (e) { toast(thErr(e), 1); b.disabled = false; }
   });
 }
@@ -299,7 +299,7 @@ async function renderOta(v) {
       <div class="card"><div class="note" style="font-size:13px">3. เลือกเครื่อง แล้วกดอัปเดต</div><div class="act" style="margin-top:8px"><button class="btn" type="button" id="otaAllOn">เลือกที่ออนไลน์ทั้งหมด</button><button class="btn" type="button" id="otaNone">ล้าง</button></div></div></div>
     <div class="list" id="otaList">${devs.length ? devs.map(d => { const same = verNum(d.fw) === verNum(target?.ver);
       return `<div class="otaRow"><input type="checkbox" id="o_${d.id}" data-o="${d.id}" data-k="${d.kind}" data-on="${d.online ? 1 : 0}"${same ? ' data-same="1"' : ''}><label for="o_${d.id}">${icon(d.kind)}<span class="main" style="flex:1;min-width:0"><span class="t" style="display:block;font-weight:600">${esc(d.name || '(ไม่มีชื่อ)')}</span><span class="m" style="display:block;font-size:12px;color:var(--muted)"><span class="dot ${d.online ? 'on' : ''}"></span>${d.online ? 'ออนไลน์' : 'ออฟไลน์ · ' + ago(d.last)} · ${esc(d.email || 'ยังไม่จับคู่')}</span></span></label><span class="num" style="font-size:13px">${esc(d.fw || '?')}</span><span class="st" id="s_${d.id}">${same ? 'เวอร์ชันนี้อยู่แล้ว' : 'พร้อม'}</span></div>`; }).join('') : '<div class="card empty">ไม่มีเครื่องประเภทนี้</div>'}</div>
-    <div class="card" style="margin-top:12px;display:flex;flex-wrap:wrap;gap:12px;align-items:center"><span class="note" style="flex:1 1 260px;font-size:13px">บอร์ดจะดาวน์โหลดเฟิร์มแวร์เองแล้วรีสตาร์ต (ประมาณ 1–2 นาที) · เครื่องที่ออฟไลน์จะอัปเดตเมื่อกลับมาออนไลน์ภายใน 3 นาทีถัดไปเท่านั้น · ค่าที่ตั้งไว้ในบอร์ดไม่หาย · <b>โมดูล VOLTOL</b> ยังสั่งอัปเดตจากคลาวด์ไม่ได้ ใช้หน้าเฟิร์มแวร์บนโมดูลแทน</span><button class="btn y" type="button" id="otaGo" disabled>อัปเดต 0 เครื่อง</button></div>`;
+    <div class="card" style="margin-top:12px;display:flex;flex-wrap:wrap;gap:12px;align-items:center"><span class="note" style="flex:1 1 260px;font-size:13px">บอร์ดจะดาวน์โหลดเฟิร์มแวร์เองแล้วรีสตาร์ต (ประมาณ 1–2 นาที) · เครื่องที่ออฟไลน์จะอัปเดตเมื่อกลับมาออนไลน์ภายใน 3 นาทีถัดไปเท่านั้น · ค่าที่ตั้งไว้ในบอร์ดไม่หาย · <b>โมดูล VOTOL</b> ยังสั่งอัปเดตจากคลาวด์ไม่ได้ ใช้หน้าเฟิร์มแวร์บนโมดูลแทน</span><button class="btn y" type="button" id="otaGo" disabled>อัปเดต 0 เครื่อง</button></div>`;
   const boxes = () => [...document.querySelectorAll('[data-o]')], picked = () => boxes().filter(b => b.checked);
   const sync = () => { const n = picked().length; $('#otaGo').disabled = !n; $('#otaGo').textContent = `อัปเดต ${n} เครื่อง เป็น ${target?.ver || ''}`; };
   boxes().forEach(b => b.onchange = sync);
@@ -362,7 +362,7 @@ async function openMember(id) {
       ${m.confirmed ? '' : '<div class="act" style="margin-top:8px"><button class="btn" type="button" id="conf">ยืนยันอีเมลให้</button></div>'}<p class="note">ตั้งรหัสแล้วแจ้งลูกค้าทางช่องทางอื่น ระบบไม่ส่งอีเมลให้</p></div>
     ${sup ? `<div class="sec"><h3>สิทธิ์หลังบ้าน</h3><div class="act"><label class="field">สิทธิ์<select id="role"><option value="">สมาชิกทั่วไป</option><option value="support"${m.role === 'support' ? ' selected' : ''}>Support (ดู/แก้ข้อมูลลูกค้า)</option><option value="super"${m.role === 'super' ? ' selected' : ''}>Super admin (ทำได้ทุกอย่าง)</option></select></label><button class="btn y" type="button" id="roleSet"${self ? ' disabled' : ''}>บันทึกสิทธิ์</button></div></div>
     <div class="sec"><h3>การเข้าใช้งาน</h3><div class="act"><button class="btn ${m.banned ? 'y' : 'red'}" type="button" id="ban"${self ? ' disabled' : ''}>${m.banned ? 'เปิดบัญชีคืน' : 'ระงับบัญชี (ล็อกอินไม่ได้)'}</button></div><p class="note">ระงับแล้วจะออกจากระบบทุกเครื่องทันที อุปกรณ์ยังส่งข้อมูลเข้าบัญชีตามปกติ</p></div>
-    <div class="sec"><h3 style="color:var(--bad)">ลบบัญชี</h3><p class="note">บอร์ด BATTLAB และจอจะถูกปลดออก (ข้อมูลยังอยู่ จับคู่ใหม่ได้) · ถ้ามีโมดูล VOLTOL ต้องย้ายไปบัญชีอื่นก่อน · ย้อนกลับไม่ได้</p><div class="act"><label class="field">พิมพ์อีเมลนี้เพื่อยืนยัน<input id="delConf" type="text" autocomplete="off"></label><button class="btn red" type="button" id="del"${self ? ' disabled' : ''}>ลบบัญชีถาวร</button></div></div>` : '<p class="note sec">การตั้งสิทธิ์ ระงับ และลบบัญชี ทำได้เฉพาะ Super admin</p>'}`);
+    <div class="sec"><h3 style="color:var(--bad)">ลบบัญชี</h3><p class="note">บอร์ด BATTLAB และจอจะถูกปลดออก (ข้อมูลยังอยู่ จับคู่ใหม่ได้) · ถ้ามีโมดูล VOTOL ต้องย้ายไปบัญชีอื่นก่อน · ย้อนกลับไม่ได้</p><div class="act"><label class="field">พิมพ์อีเมลนี้เพื่อยืนยัน<input id="delConf" type="text" autocomplete="off"></label><button class="btn red" type="button" id="del"${self ? ' disabled' : ''}>ลบบัญชีถาวร</button></div></div>` : '<p class="note sec">การตั้งสิทธิ์ ระงับ และลบบัญชี ทำได้เฉพาะ Super admin</p>'}`);
   document.querySelectorAll('#panel [data-d]').forEach(r => r.onclick = () => openDevice(r.dataset.d));
   $('#pwGen').onclick = () => { const a = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789'; const r = crypto.getRandomValues(new Uint32Array(12)); $('#pw').value = [...r].map(x => a[x % a.length]).join(''); };
   $('#pwSet').onclick = e => act(e.target, () => rpc('admin_set_password', {p_user: id, p_password: $('#pw').value}), 'ตั้งรหัสผ่านใหม่แล้ว');
@@ -385,17 +385,17 @@ async function openDevice(id) {
   openDrawer(`<div style="display:flex;gap:12px;align-items:center">${icon(k)}<h2 id="dTitle">${esc(d.name || '(ไม่มีชื่อ)')}</h2></div>
     <dl class="kv">${rows.map(([a, b]) => `<dt>${a}</dt><dd>${b}</dd>`).join('')}</dl>
     <div class="sec"><h3>ชื่อที่แสดง</h3><div class="act"><label class="field">ชื่อ<input id="nm" value="${esc(d.name || '')}" maxlength="60"></label><button class="btn y" type="button" id="nmSet">บันทึกชื่อ</button></div></div>
-    <div class="sec"><h3>ย้ายไปบัญชีอื่น</h3><div class="act"><label class="field">อีเมลเจ้าของใหม่<input id="ow" type="email" list="mails" autocomplete="off"></label><datalist id="mails">${(S.members || []).map(m => `<option value="${esc(m.email)}">`).join('')}</datalist><button class="btn y" type="button" id="owSet">ย้าย</button>${canRelease && d.owner ? '<button class="btn" type="button" id="rel">ปลดออกจากบัญชี</button>' : ''}</div><p class="note">${k === 'board' ? 'ย้าย/ปลดแล้วลิงก์แชร์ของบอร์ดนี้จะถูกลบ' : k === 'voltol' ? 'โมดูลยังส่งข้อมูลต่อตามปกติ แค่ไปแสดงในบัญชีใหม่' : 'จอจะแสดงแบตของบัญชีใหม่'}</p></div>
+    <div class="sec"><h3>ย้ายไปบัญชีอื่น</h3><div class="act"><label class="field">อีเมลเจ้าของใหม่<input id="ow" type="email" list="mails" autocomplete="off"></label><datalist id="mails">${(S.members || []).map(m => `<option value="${esc(m.email)}">`).join('')}</datalist><button class="btn y" type="button" id="owSet">ย้าย</button>${canRelease && d.owner ? '<button class="btn" type="button" id="rel">ปลดออกจากบัญชี</button>' : ''}</div><p class="note">${k === 'board' ? 'ย้าย/ปลดแล้วลิงก์แชร์ของบอร์ดนี้จะถูกลบ' : k === 'votol' ? 'โมดูลยังส่งข้อมูลต่อตามปกติ แค่ไปแสดงในบัญชีใหม่' : 'จอจะแสดงแบตของบัญชีใหม่'}</p></div>
     ${k === 'board' ? `<div class="sec"><h3>สั่งงานบอร์ด</h3><div class="act"><button class="btn" type="button" data-cmd="ping">ทดสอบการเชื่อมต่อ</button><button class="btn" type="button" data-cmd="bms_read">อ่านค่า BMS ใหม่</button><button class="btn red" type="button" data-cmd="restart">รีสตาร์ตบอร์ด</button></div><p class="note">บอร์ดรับคำสั่งในรอบส่งข้อมูลถัดไป (ไม่กี่วินาที)</p></div>` : ''}
     ${k === 'board' || k === 'inverter' ? '<div class="sec"><a class="btn" style="display:inline-flex;align-items:center;text-decoration:none" href="https://batterycloud.battlab.net/#admin/dev" target="_blank" rel="noopener">เปิดรายละเอียดเต็มใน Battery Cloud ↗</a></div>' : ''}
-    ${sup && k !== 'screen' ? `<div class="sec"><h3 style="color:var(--bad)">ลบอุปกรณ์</h3><p class="note">${k === 'voltol' ? 'ลบโมดูลและข้อมูลวิ่งทั้งหมด บอร์ดจะส่งข้อมูลไม่ได้จนกว่าจะลงทะเบียนใหม่' : 'ลบอุปกรณ์และประวัติทั้งหมด บอร์ดที่ยังออนไลน์จะลงทะเบียนตัวเองใหม่เป็นอุปกรณ์ที่ยังไม่จับคู่'} · ย้อนกลับไม่ได้</p><div class="act"><label class="field">พิมพ์ชื่ออุปกรณ์เพื่อยืนยัน<input id="delConf" autocomplete="off"></label><button class="btn red" type="button" id="del">ลบถาวร</button></div></div>` : ''}`);
+    ${sup && k !== 'screen' ? `<div class="sec"><h3 style="color:var(--bad)">ลบอุปกรณ์</h3><p class="note">${k === 'votol' ? 'ลบโมดูลและข้อมูลวิ่งทั้งหมด บอร์ดจะส่งข้อมูลไม่ได้จนกว่าจะลงทะเบียนใหม่' : 'ลบอุปกรณ์และประวัติทั้งหมด บอร์ดที่ยังออนไลน์จะลงทะเบียนตัวเองใหม่เป็นอุปกรณ์ที่ยังไม่จับคู่'} · ย้อนกลับไม่ได้</p><div class="act"><label class="field">พิมพ์ชื่ออุปกรณ์เพื่อยืนยัน<input id="delConf" autocomplete="off"></label><button class="btn red" type="button" id="del">ลบถาวร</button></div></div>` : ''}`);
   const back = () => refresh().then(() => openDevice(id));
-  $('#nmSet').onclick = e => act(e.target, () => k === 'voltol' ? rpc('admin_voltol_rename', {p_id: id, p_name: $('#nm').value}) : k === 'screen' ? rpc('admin_set_viewer', {p_id: id, p_name: $('#nm').value, p_eco: d.eco ?? -1, p_release: false}) : rpc('admin_update_device', {p_id: id, p_name: $('#nm').value, p_settings: null}), 'บันทึกชื่อแล้ว', back);
+  $('#nmSet').onclick = e => act(e.target, () => k === 'votol' ? rpc('admin_votol_rename', {p_id: id, p_name: $('#nm').value}) : k === 'screen' ? rpc('admin_set_viewer', {p_id: id, p_name: $('#nm').value, p_eco: d.eco ?? -1, p_release: false}) : rpc('admin_update_device', {p_id: id, p_name: $('#nm').value, p_settings: null}), 'บันทึกชื่อแล้ว', back);
   $('#owSet').onclick = e => { const em = $('#ow').value.trim(); if (!em) return toast('กรอกอีเมลเจ้าของใหม่', 1);
-    act(e.target, () => k === 'voltol' ? rpc('admin_voltol_set_owner', {p_id: id, p_email: em}) : k === 'screen' ? rpc('admin_viewer_set_owner', {p_id: id, p_email: em}) : rpc('admin_set_owner', {p_id: id, p_email: em}), 'ย้ายเจ้าของแล้ว', back); };
+    act(e.target, () => k === 'votol' ? rpc('admin_votol_set_owner', {p_id: id, p_email: em}) : k === 'screen' ? rpc('admin_viewer_set_owner', {p_id: id, p_email: em}) : rpc('admin_set_owner', {p_id: id, p_email: em}), 'ย้ายเจ้าของแล้ว', back); };
   if ($('#rel')) $('#rel').onclick = e => act(e.target, () => k === 'screen' ? rpc('admin_viewer_set_owner', {p_id: id, p_email: null}) : rpc('admin_set_owner', {p_id: id, p_email: null}), 'ปลดออกจากบัญชีแล้ว', back);
   document.querySelectorAll('#panel [data-cmd]').forEach(b => b.onclick = () => act(b, () => rpc('admin_send_command', {p_device: id, p_cmd: b.dataset.cmd, p_args: {}}), 'ส่งคำสั่งแล้ว'));
-  if ($('#del')) $('#del').onclick = e => act(e.target, () => k === 'voltol' ? rpc('admin_voltol_delete', {p_id: id, p_confirm_name: $('#delConf').value}) : rpc('admin_device_delete', {p_id: id, p_confirm_name: $('#delConf').value}), 'ลบแล้ว', () => { closeDrawer(); refresh(); });
+  if ($('#del')) $('#del').onclick = e => act(e.target, () => k === 'votol' ? rpc('admin_votol_delete', {p_id: id, p_confirm_name: $('#delConf').value}) : rpc('admin_device_delete', {p_id: id, p_confirm_name: $('#delConf').value}), 'ลบแล้ว', () => { closeDrawer(); refresh(); });
 }
 boot().catch(failGate);
 </script>

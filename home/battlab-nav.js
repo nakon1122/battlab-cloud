@@ -1,16 +1,16 @@
 /* BATTLAB app bar — the same top bar on every BATTLAB web app.
- * Shows: BATTLAB Home · Battery Cloud · VOLTOL Monitor, the signed-in email and a sign-out button.
+ * Shows: BATTLAB Home · Battery Cloud · VOTOL Monitor, the signed-in email and a sign-out button.
  * Load after session-client.js:  <script src="https://www.battlab.net/battlab-nav.js" defer></script>
  */
 (() => {
   'use strict';
   if (document.getElementById('bl-appbar')) return;
   const host = location.hostname;
-  const here = host.startsWith('batterycloud.') ? 'battery' : host.startsWith('voltol.') ? 'voltol' : location.pathname.endsWith('/admin.html') ? 'admin' : 'home';
+  const here = host.startsWith('batterycloud.') ? 'battery' : host.startsWith('votol.') ? 'votol' : location.pathname.endsWith('/admin.html') ? 'admin' : 'home';
   const apps = [
     { id: 'home', href: 'https://www.battlab.net/', icon: '⌂', label: 'หน้าหลัก' },
     { id: 'battery', href: 'https://batterycloud.battlab.net/', icon: '🔋', label: 'Battery Cloud' },
-    { id: 'voltol', href: 'https://voltol.battlab.net/', icon: '⚡', label: 'VOLTOL' }
+    { id: 'votol', href: 'https://votol.battlab.net/', icon: '⚡', label: 'VOTOL' }
   ];
   const css = `
 #bl-appbar{all:initial;display:block;position:relative;padding-top:env(safe-area-inset-top);z-index:2147483000;background:#070c11;border-bottom:1px solid #26323c;font:600 14px/1.2 system-ui,-apple-system,"Segoe UI",sans-serif;color:#e8eef3}
@@ -71,7 +71,7 @@
         if (!r.ok || (await r.json()) !== true) return;
         const a = document.createElement('a');
         a.href = 'https://www.battlab.net/admin.html';
-        if (location.pathname.endsWith('/admin.html') && host.endsWith('battlab.net') && !host.startsWith('batterycloud.') && !host.startsWith('voltol.')) a.setAttribute('aria-current', 'page');
+        if (location.pathname.endsWith('/admin.html') && host.endsWith('battlab.net') && !host.startsWith('batterycloud.') && !host.startsWith('votol.')) a.setAttribute('aria-current', 'page');
         a.innerHTML = '<span aria-hidden="true">🛡</span><span class="bl-l">หลังบ้าน</span>';
         bar.querySelector('nav').appendChild(a);
       } catch {}
