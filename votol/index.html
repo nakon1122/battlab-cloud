@@ -137,7 +137,7 @@ main{max-width:1000px;padding:18px clamp(12px,3vw,24px) calc(116px + env(safe-ar
 .dashIntro{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}.dashIntro h1{font-size:clamp(22px,4.5vw,32px);margin:2px 0;line-height:1.1}.dashIntro .l{color:var(--y)}
 </style>
 <style id="race-flash-layout">
-.cloud-dock{grid-template-columns:repeat(6,minmax(0,1fr))}
+.cloud-dock{grid-template-columns:repeat(7,minmax(0,1fr))}
 .race-target{border:1px solid #1e2e42;border-radius:14px;padding:9px 12px;background:#0b121d;display:flex;flex-wrap:wrap;gap:8px}.race-target legend{font-size:.8rem;color:#a5b6ce}.race-target label{cursor:pointer;display:flex;gap:6px;align-items:center;padding:6px 9px;border-radius:8px}.race-target label:has(:checked){background:#ffd52e;color:#06090f;font-weight:800}.race-target input{accent-color:#ffd52e}
 .race-clock{display:flex;justify-content:space-between;align-items:end;gap:12px;margin:14px 0}.race-clock>strong{font-size:clamp(36px,10vw,76px);line-height:1;color:#ffd52e;font-variant-numeric:tabular-nums}.race-clock div{text-align:right}.race-clock small{display:block}
 .race-splits{width:100%;border-collapse:collapse;margin:14px 0;font-variant-numeric:tabular-nums}.race-splits th,.race-splits td{text-align:left;border-bottom:1px solid #1e2e42;padding:8px 4px;font-size:clamp(10px,2.3vw,14px)}.race-splits [data-target=true]{background:#ffd52e16}
@@ -258,6 +258,43 @@ body .track-cockpit::before{background:linear-gradient(105deg,transparent 42%,rg
 .ct-dlg{max-width:520px;width:calc(100% - 32px);background:var(--cp-card);color:var(--cp-text);border:1px solid var(--cp-line);border-radius:18px}
 .ct-dlg ul{list-style:none;padding:0;margin:8px 0 14px;display:grid;gap:4px;max-height:50vh;overflow:auto;font-size:14px}.ct-dlg li b{color:var(--cp-y)}
 @media(max-width:520px){.ct-row{grid-template-columns:1fr}.ct-ed{justify-content:flex-end}}
+.bm{background:var(--cp-card);border:1px solid var(--cp-line);border-radius:20px;padding:18px;margin-bottom:14px}
+.bm-top{display:grid;grid-template-columns:170px minmax(0,1fr);gap:16px;align-items:center;margin-top:12px}
+.bm-ring{position:relative;width:170px;height:170px}.bm-ring svg{width:100%;height:100%;transform:rotate(135deg)}
+.bm-ring circle{fill:none;stroke-width:12;stroke-linecap:round}.bm-ring .tr{stroke:#1d252e}.bm-ring .fg{transition:stroke-dasharray .6s ease}
+.bm-ring div{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
+.bm-ring>div{bottom:14px}.bm-ah{position:absolute;left:-20px;right:-20px;bottom:-6px;margin:0;text-align:center;font-size:12px;color:var(--cp-muted)}
+.bm-ring b{font:700 46px/1 "Chakra Petch",sans-serif;font-variant-numeric:tabular-nums}.bm-ring b small{font-size:16px;color:var(--cp-muted)}
+.bm-ring em{font-style:normal;font-size:12px;margin-top:4px}
+.bm-tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.bm-t{background:#0c1015;border:1px solid var(--cp-line);border-radius:14px;padding:10px 12px;min-width:0}
+.bm-t small{display:block;color:var(--cp-muted);font-size:12px}.bm-t b{font:700 22px "Chakra Petch",sans-serif;font-variant-numeric:tabular-nums}.bm-t i{font-style:normal;color:var(--cp-muted);font-size:12px;margin-left:3px}
+.bm-mos{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 0}.bm-mos span{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:99px;background:#ffffff0d;color:var(--cp-muted);font:600 12px "Chakra Petch",sans-serif}
+.bm-mos span::before{content:"";width:7px;height:7px;border-radius:50%;background:#55606b}.bm-mos span.on{background:#3ddc841a;color:#b9f5d2}.bm-mos span.on::before{background:var(--cp-ok)}
+.bm-alarm{margin-top:10px;padding:10px 12px;border-radius:12px;background:#ff3b301a;border:1px solid #ff3b3055;color:#ffb4ae;font-weight:600}
+.bm-cells{display:grid;grid-template-columns:repeat(auto-fill,minmax(74px,1fr));gap:6px;margin-top:10px}
+.bm-c{position:relative;background:#0c1015;border:1px solid var(--cp-line);border-radius:10px;padding:6px 8px 9px}
+.bm-c small{color:var(--cp-muted);font-size:11px}.bm-c b{display:block;text-align:right;font:600 16px "Chakra Petch",sans-serif;font-variant-numeric:tabular-nums}
+.bm-c i{position:absolute;left:8px;right:8px;bottom:4px;height:2px;background:#1d252e;border-radius:2px;overflow:hidden}.bm-c i::after{content:"";position:absolute;inset:0;width:var(--f);background:var(--cp-ok)}
+.bm-c.lo{border-color:#4fc3ff88;background:#0d2030}.bm-c.lo b,.bm-c.lo small{color:#7fd4ff}.bm-c.lo i::after{background:#4fc3ff}
+.bm-c.hi{border-color:#ff3b3088;background:#2a1414}.bm-c.hi b,.bm-c.hi small{color:#ff8a80}.bm-c.hi i::after{background:#ff3b30}
+.bm-c.bal::before{content:"";position:absolute;top:7px;right:8px;width:7px;height:7px;border-radius:50%;background:var(--cp-y)}
+.bm-sum{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:8px;font:600 13px "Chakra Petch",sans-serif;color:var(--cp-muted)}.bm-sum .lo{color:#7fd4ff}.bm-sum .hi{color:#ff8a80}
+#cloud-bms .bm-t b,#cloud-bms .bm-ring b,#cloud-bms .bm-c b{color:var(--cp-text)}#cloud-bms .bm-range button[aria-pressed=false]{background:#1a222b;color:var(--cp-muted)}
+.bm-loghead{flex-wrap:wrap}.bm-loghead>div:first-child{flex:1 1 220px}
+.bm-range{display:flex;gap:6px;flex-wrap:wrap}.bm-range button{min-height:36px;padding:0 12px;font-size:13px}.bm-range button[aria-pressed=true]{background:var(--cp-y);color:#151000}
+.bm-chart{width:100%;height:auto;margin-top:8px;background:#0c1015;border:1px solid var(--cp-line);border-radius:14px}
+.bm-chart text{font:11px "Chakra Petch",sans-serif;fill:#7f8c99}.bm-chart .g{stroke:#1d252e}.bm-chart polyline{fill:none;stroke-width:1.8;vector-effect:non-scaling-stroke;stroke-linejoin:round}
+.bm-leg{display:flex;flex-wrap:wrap;gap:12px;margin-top:6px;font-size:12px;color:var(--cp-muted)}.bm-leg span::before{content:"";display:inline-block;width:14px;height:3px;border-radius:2px;margin-right:5px;vertical-align:middle;background:var(--c)}
+.bm-sw{display:inline-flex;border:1px solid #2a3a4a;border-radius:10px;overflow:hidden}.bm-sw button{min-height:40px;width:58px;padding:0;border-radius:0;background:#0b1118;color:var(--cp-muted);font-size:13px}
+.bm-sw button[aria-pressed=true].on{background:#3ddc8433;color:#b9f5d2}.bm-sw button[aria-pressed=true].off{background:#ff3b3033;color:#ffb4ae}
+.ct-row.bad{background:#ff3b3012}.ct-row.bad .nm small{color:#ff8a80}
+.bm-hist{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:6px}.bm-hist li{padding:9px 12px;border-radius:12px;background:#0c1015;border:1px solid var(--cp-line);font-size:13px}
+.bm-hist li b{color:var(--cp-text)}.bm-hist li small{display:block;color:var(--cp-muted)}.bm-hist .ok{color:#b9f5d2}.bm-hist .bad{color:#ffb4ae}
+.bm-steps{display:flex;gap:6px;margin:0 0 10px}.bm-steps span{flex:1;height:4px;border-radius:4px;background:#1d252e}.bm-steps span.on{background:var(--cp-y)}
+.bm-warn{padding:10px 12px;border-radius:12px;background:#ff3b301a;border:1px solid #ff3b3055;color:#ffd1cc;font-size:13px;margin:8px 0}
+.bm-ack{display:flex;gap:8px;align-items:flex-start;font-size:14px;margin:10px 0}.bm-ack input{width:20px;height:20px;margin-top:2px;flex:none}
+@media(max-width:620px){.bm-top{grid-template-columns:1fr;justify-items:center}.bm-tiles{grid-template-columns:repeat(2,minmax(0,1fr));width:100%}}
 .pr-steps{list-style:none;margin:6px 0 14px;padding:0;display:grid;gap:0}
 .pr-steps li{display:flex;gap:12px;align-items:flex-start;position:relative;padding:6px 0 10px}
 .pr-steps li:not(:last-child)::after{content:"";position:absolute;left:15px;top:38px;bottom:-2px;width:2px;background:#2a3a4a}
@@ -358,7 +395,7 @@ body .track-cockpit::before{background:linear-gradient(105deg,transparent 42%,rg
     });
     // dock icons
     const IC = { overview: 'M12 21a9 9 0 1 1 9-9M12 12l4-4', drag: 'M10 2h4M12 14l3-3M12 22a8 8 0 1 0 0-16 8 8 0 0 0 0 16z', history: 'M3 3v18h18M7 15l4-4 3 3 5-6',
-      link: 'M5 12.5a7 7 0 0 1 14 0M8.5 16a3.5 3.5 0 0 1 7 0M12 20h.01', tune: 'M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6', firmware: 'M12 3v12M7 10l5 5 5-5M5 21h14' };
+      link: 'M5 12.5a7 7 0 0 1 14 0M8.5 16a3.5 3.5 0 0 1 7 0M12 20h.01', tune: 'M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6', bms: 'M3 7h15a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H3zM22 10v4M7 10v4M11 10v4', firmware: 'M12 3v12M7 10l5 5 5-5M5 21h14' };
     document.querySelectorAll('.cloud-dock button[data-cloud]').forEach(b => {
       const d = IC[b.dataset.cloud]; if (!d || b.querySelector('svg')) return;
       b.classList.add('cp-ic');
@@ -655,7 +692,35 @@ html[data-tpl="pitwall"] body .cloud-dock button[aria-pressed=true]{background:r
 <div id="ctBar" class="ct-bar" hidden><span id="ctCount"></span><button id="ctUndo" type="button" class="secondary">ยกเลิกการแก้</button><button id="ctWrite" type="button">เขียนลงคอนโทรลเลอร์</button></div>
 </section>
 <dialog id="ctDlg" class="ct-dlg"><form method="dialog"><h3>ยืนยันการเขียนค่า</h3><p class="rn-note">จอดรถให้นิ่ง (0 RPM) · โมดูลสำรองค่าเดิมก่อนเขียน · คำสั่งหมดอายุใน 2 นาที</p><ul id="ctDiff"></ul><div class="rn-actions"><button value="cancel" class="secondary">ยกเลิก</button><button id="ctGo" value="ok">เขียนเลย</button></div></form></dialog></div>
-<nav class="cloud-dock" aria-label="เมนู Cloud"><button data-cloud="overview" data-icon="◴" aria-pressed="true">หน้าปัด</button><button data-cloud="drag" data-icon="⚑" aria-pressed="false">จับเวลา</button><button data-cloud="history" data-icon="≋" aria-pressed="false">ประวัติ</button><button data-cloud="link" data-icon="⇄" aria-pressed="false">การเชื่อมต่อ</button><button data-cloud="tune" data-icon="≛" aria-pressed="false">จูน</button><button data-cloud="firmware" data-icon="⚙" aria-pressed="false">เฟิร์มแวร์</button></nav>
+<div id="cloud-bms" class="cloud-view" hidden>
+<section class="bm" aria-labelledby="bmTitle">
+<div class="rn-head"><div><small>VOTOL / BMS</small><h2 id="bmTitle">แบตเตอรี่ BMS</h2></div><span id="bmPill" class="rn-pill">รอข้อมูล</span></div>
+<p id="bmInfo" class="rn-now">รอข้อมูลจากโมดูล</p>
+<div id="bmLive" hidden>
+<div class="bm-top"><div class="bm-ring"><svg viewBox="0 0 100 100" aria-hidden="true"><circle class="tr" cx="50" cy="50" r="42" stroke-dasharray="197.9 263.9"/><circle id="bmArc" class="fg" cx="50" cy="50" r="42" stroke-dasharray="0 263.9"/></svg><div><b id="bmSoc">--<small>%</small></b><em id="bmState">-</em></div><p id="bmAh" class="bm-ah"></p></div>
+<div id="bmTiles" class="bm-tiles"></div></div>
+<div id="bmMos" class="bm-mos"></div><div id="bmAlarm" class="bm-alarm" hidden></div>
+</div></section>
+<section class="bm" id="bmCellBox" hidden><div class="rn-head"><div><small>CELLS</small><h2>แรงดันแต่ละเซลล์</h2></div><span id="bmCellPill" class="rn-pill"></span></div>
+<div id="bmCells" class="bm-cells"></div><div id="bmSum" class="bm-sum"></div></section>
+<section class="bm"><div class="rn-head bm-loghead"><div><small>LOG · ทุก 0.3 วินาที</small><h2>บันทึกย้อนหลัง</h2></div><div class="bm-range" id="bmRange"><button type="button" data-m="5" aria-pressed="true">5 นาที</button><button type="button" data-m="60" aria-pressed="false">1 ชม.</button><button type="button" data-m="1440" aria-pressed="false">24 ชม.</button><button type="button" data-m="10080" aria-pressed="false">7 วัน</button></div></div>
+<svg id="bmChart" class="bm-chart" viewBox="0 0 600 220" role="img" aria-label="กราฟแรงดัน กระแส และ SOC ย้อนหลัง"></svg>
+<div class="bm-leg"><span style="--c:#4fc3ff">แรงดันแพ็ก (V)</span><span style="--c:#ffcf22">กระแส (A)</span><span style="--c:#3ddc84">SOC (%)</span><span style="--c:#ff8a80">เซลล์ต่างกัน (mV)</span></div>
+<p id="bmLogInfo" class="rn-note"></p><div class="rn-actions"><button id="bmCsv" type="button" class="secondary">ดาวน์โหลด CSV</button></div></section>
+<section class="bm ct" aria-labelledby="bmSetTitle"><div class="rn-head"><div><small>SETTINGS</small><h2 id="bmSetTitle">ตั้งค่า BMS ผ่าน Cloud</h2></div><span id="bmSetPill" class="rn-pill">-</span></div>
+<p id="bmSetInfo" class="rn-now">กด “อ่านค่าจาก BMS” เพื่อให้โมดูลอ่านค่าตั้ง</p>
+<div class="rn-actions"><button id="bmRead" type="button">อ่านค่าจาก BMS</button></div><p id="bmSetMsg" class="rn-note" role="status"></p>
+<div id="bmGroups" class="ct-groups"></div>
+<details class="ct-bk" open><summary>ประวัติการเปลี่ยนค่า</summary><ul id="bmHist" class="bm-hist"></ul></details>
+<div id="bmBar" class="ct-bar" hidden><span id="bmCount"></span><button id="bmUndo" type="button" class="secondary">ยกเลิกการแก้</button><button id="bmWrite" type="button">เขียนลง BMS</button></div>
+</section>
+<dialog id="bmDlg" class="ct-dlg"><form method="dialog"><div class="bm-steps"><span id="bmS1" class="on"></span><span id="bmS2"></span></div>
+<div id="bmP1"><h3>ขั้นที่ 1 · ตรวจค่าที่จะเขียน</h3><ul id="bmDiff"></ul><label class="bm-ack"><input id="bmAck" type="checkbox"> รถจอดนิ่ง ไม่มีใครขี่อยู่ และฉันตรวจค่าข้างบนแล้ว</label>
+<div class="rn-actions"><button value="cancel" class="secondary">ยกเลิก</button><button id="bmNext" type="button" disabled>ถัดไป</button></div></div>
+<div id="bmP2" hidden><h3>ขั้นที่ 2 · ยืนยันครั้งสุดท้าย</h3><div id="bmWarn" class="bm-warn"></div><p class="rn-note">โมดูลจะเก็บค่าเดิมไว้ เขียนทีละค่า แล้วอ่านกลับมาตรวจ · คำสั่งหมดอายุใน 2 นาที</p>
+<div class="rn-actions"><button id="bmBack" type="button" class="secondary">ย้อนกลับ</button><button id="bmGo" value="ok">เขียนลง BMS เลย</button></div></div></form></dialog>
+</div>
+<nav class="cloud-dock" aria-label="เมนู Cloud"><button data-cloud="overview" data-icon="◴" aria-pressed="true">หน้าปัด</button><button data-cloud="drag" data-icon="⚑" aria-pressed="false">จับเวลา</button><button data-cloud="history" data-icon="≋" aria-pressed="false">ประวัติ</button><button data-cloud="link" data-icon="⇄" aria-pressed="false">การเชื่อมต่อ</button><button data-cloud="tune" data-icon="≛" aria-pressed="false">จูน</button><button data-cloud="bms" data-icon="▮" aria-pressed="false">BMS</button><button data-cloud="firmware" data-icon="⚙" aria-pressed="false">เฟิร์มแวร์</button></nav>
 </div>
 <dialog class="pair-sheet" id="pairSheet" aria-labelledby="pairTitle">
 <div class="row pair-head"><h2 id="pairTitle">เพิ่มโมดูลผ่าน Bluetooth</h2><button type="button" class="secondary" id="closePair" aria-label="ปิด">✕</button></div>
@@ -1791,4 +1856,116 @@ $('ctDlg').onclose=async()=>{if($('ctDlg').returnValue!=='ok'||!CT.snap)return;c
 setInterval(()=>{if(!$('cloud-tune').hidden){ctLoad();ctRender();}},2500);
 setInterval(()=>ctCmds(),4000);
 document.querySelector('[data-cloud="tune"]')?.addEventListener('click',()=>{ctLoad();ctCmds();ctRender();});
+// ---- smart BMS over Bluetooth (firmware 1.9.0+) ----
+// live: telemetry payload.bms · log: votol_bms_log (3 s batches of 0.3 s samples), votol_bms_min (1-min summary)
+// settings: votol_events code bms_params · history: votol_events code bms_change · commands: bms_read / bms_write
+const BM={dev:null,snap:null,at:0,edits:new Map(),busy:false,range:5,log:null,hist:[],step:1};
+const BM_ST={online:'BMS ออนไลน์',scan:'กำลังค้นหา BMS',connect:'กำลังเชื่อม BMS',lost:'ขาดสัญญาณ BMS',off:'ยังไม่ได้เชื่อม BMS',noble:'บอร์ดไม่มีบลูทูธ'};
+const BM_AL=['เซลล์แรงดันเกิน','เซลล์แรงดันต่ำ','แพ็กแรงดันเกิน','แพ็กแรงดันต่ำ','กระแสชาร์จเกิน','กระแสจ่ายเกิน','ลัดวงจร','ร้อนเกินขณะชาร์จ','ร้อนเกินขณะจ่ายไฟ','MOS ร้อนเกิน','อุณหภูมิต่ำเกิน','เซลล์ต่างกันมาก'];
+const bmFix=(d,v)=>d[7]?(v>.5?'เปิด':'ปิด'):Number(v).toFixed(d[6]);
+function bmEl(tag,cls,txt){const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e;}
+function bmLive(){const p=lastReading?.payload?.bms;return p&&typeof p==='object'?p:null;}
+function bmRender(){const b=bmLive(),online=receivedAgo(lastReading)<6000;
+  const pill=$('bmPill');const st=b?.st||'off';pill.className='rn-pill'+(online&&st==='online'?' ok':'');pill.textContent=online?(BM_ST[st]||st):'โมดูลออฟไลน์';
+  const live=!!(b&&b.cells&&b.cells.length);$('bmLive').hidden=!live;$('bmCellBox').hidden=!live;
+  if(!b){$('bmInfo').textContent=online?'โมดูลยังไม่ได้ส่งข้อมูล BMS · เลือก BMS ที่หน้าจอ: เมนู BMS › ค้นหา BMS (เฟิร์มแวร์ 1.9.0 ขึ้นไป)':'รอให้โมดูลออนไลน์';return;}
+  const info=$('bmInfo');info.replaceChildren();const nb=bmEl('b',null,(b.br||'')+' · '+(b.nm||'-'));info.append(nb,' · สัญญาณ '+(b.rssi??'-')+' dBm · อัปเดต '+new Date(Date.parse(lastReading.received_at)).toLocaleTimeString('th-TH'));
+  if(!live)return;
+  const soc=Math.max(0,Math.min(100,b.soc||0)),col=soc<20?'#ff3b30':soc<40?'#ffcf22':'#3ddc84';
+  $('bmArc').setAttribute('stroke-dasharray',(197.9*soc/100).toFixed(1)+' 263.9');$('bmArc').style.stroke=st==='online'?col:'#7f8c99';
+  $('bmSoc').firstChild.nodeValue=Math.round(soc);
+  const chg=b.a>0.3,dsg=b.a<-0.3;$('bmState').textContent=chg?'กำลังชาร์จ':dsg?'กำลังใช้ไฟ':'พักอยู่';$('bmState').style.color=chg?'#3ddc84':dsg?'#ffcf22':'#a3afba';
+  $('bmAh').textContent=(b.rem??0).toFixed(1)+' / '+(b.full??0).toFixed(0)+' Ah · ชาร์จแล้ว '+(b.cyc??0)+' รอบ';
+  const cells=b.cells.map(x=>x/1000),mn=Math.min(...cells),mx=Math.max(...cells),dmv=Math.round((mx-mn)*1000),tmax=Math.max(b.mos??-99,...(b.t||[]));
+  const tiles=[['แรงดันแพ็ก',b.v.toFixed(1),'V'],['กระแส',(b.a>0?'+':'')+b.a.toFixed(1),'A',chg?'#3ddc84':''],['กำลัง',Math.abs(b.v*b.a/1000).toFixed(2),'kW'],
+    ['เซลล์ต่างกัน',dmv,'mV',dmv<20?'#3ddc84':dmv<50?'#ffcf22':'#ff8a80'],['ร้อนสุด',Math.round(tmax),'°C',tmax>=50?'#ff8a80':tmax>=40?'#ffcf22':''],['อุณหภูมิ',(b.t||[]).map(Math.round).join(' / ')+' · MOS '+Math.round(b.mos??0),'°C']];
+  $('bmTiles').replaceChildren(...tiles.map(([k,v,u,c],i)=>{const t=bmEl('div','bm-t');const vb=bmEl('b',null,String(v));if(c)vb.style.color=c;if(i===5)vb.style.fontSize='15px';t.append(bmEl('small',null,k),vb,bmEl('i',null,u));return t;}));
+  $('bmMos').replaceChildren(...[['ชาร์จเข้า',b.chg],['จ่ายไฟออก',b.dsg],['บาลานซ์',b.bal]].map(([k,on])=>bmEl('span',on?'on':'',k+' '+(on?'เปิด':'ปิด'))));
+  const al=BM_AL.filter((_,i)=>(b.al>>>i)&1);$('bmAlarm').hidden=!al.length&&st!=='lost';
+  $('bmAlarm').textContent=st==='lost'?'ขาดสัญญาณจาก BMS · โมดูลกำลังเชื่อมใหม่ (ค่าที่เห็นเป็นค่าล่าสุด)':'⚠ แจ้งเตือนจาก BMS: '+al.join(' · ');
+  const lo=cells.indexOf(mn),hi=cells.indexOf(mx),span=mx-mn||1;
+  $('bmCellPill').textContent=cells.length+'S · ต่างกัน '+dmv+' mV';$('bmCellPill').className='rn-pill'+(dmv<20?' ok':'');
+  $('bmCells').replaceChildren(...cells.map((v,i)=>{const c=bmEl('div','bm-c'+(i===lo?' lo':i===hi?' hi':'')+(((b.balm>>>i)&1)?' bal':''));c.style.setProperty('--f',(10+90*(v-mn)/span).toFixed(0)+'%');c.append(bmEl('small',null,'#'+(i+1)),bmEl('b',null,v.toFixed(3)),bmEl('i'));return c;}));
+  const avg=cells.reduce((a,b)=>a+b,0)/cells.length;
+  $('bmSum').replaceChildren(bmEl('span','lo','ต่ำสุด '+mn.toFixed(3)+' V #'+(lo+1)),bmEl('span','hi','สูงสุด '+mx.toFixed(3)+' V #'+(hi+1)),bmEl('span',null,'เฉลี่ย '+avg.toFixed(3)+' V'),b.balm?bmEl('span',null,'● กำลังบาลานซ์ '+cells.filter((_,i)=>(b.balm>>>i)&1).length+' เซลล์'):'');}
+// log chart: rows = [{t, v, a, soc, d}] sorted by time
+function bmChart(rows){const svg=$('bmChart');svg.replaceChildren();const W=600,H=220,L=36,R=36,T=12,B=26;const NS='http://www.w3.org/2000/svg';
+  const mk=(t,a)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);svg.append(e);return e;};
+  if(!rows||rows.length<2){mk('text',{x:W/2,y:H/2,'text-anchor':'middle'}).textContent='ยังไม่มีบันทึกในช่วงนี้';return;}
+  const t0=rows[0].t,t1=rows[rows.length-1].t,X=t=>L+(W-L-R)*(t-t0)/Math.max(1,t1-t0);
+  for(let k=0;k<=4;k++){const y=T+(H-T-B)*k/4;mk('line',{x1:L,x2:W-R,y1:y,y2:y,class:'g'});}
+  const ser=[['v','#4fc3ff'],['a','#ffcf22'],['soc','#3ddc84',0,100],['d','#ff8a80',0]];
+  for(const [k,c,fmn,fmx] of ser){const vals=rows.map(r=>r[k]);let mn=fmn??Math.min(...vals),mx=fmx??Math.max(...vals);if(mx-mn<1e-6){mx+=1;mn-=1;}
+    const pts=rows.map(r=>X(r.t).toFixed(1)+','+(T+(H-T-B)*(1-(r[k]-mn)/(mx-mn))).toFixed(1)).join(' ');mk('polyline',{points:pts,stroke:c});
+    if(k==='v'){mk('text',{x:L-4,y:T+9,'text-anchor':'end',fill:c}).textContent=mx.toFixed(0);mk('text',{x:L-4,y:H-B,'text-anchor':'end'}).textContent=mn.toFixed(0);}
+    if(k==='a'){mk('text',{x:W-R+4,y:T+9}).textContent=mx.toFixed(0)+'A';mk('text',{x:W-R+4,y:H-B}).textContent=mn.toFixed(0)+'A';}}
+  const tf=t=>new Date(t).toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit',...(BM.range<=5?{second:'2-digit'}:{})});
+  mk('text',{x:L,y:H-8}).textContent=tf(t0);mk('text',{x:W-R,y:H-8,'text-anchor':'end'}).textContent=tf(t1);}
+async function bmLoadLog(){const id=$('devices').value;if(!id||$('cloud-bms').hidden)return;
+  const since=new Date(Date.now()-BM.range*60000).toISOString();
+  try{let rows=[];
+    if(BM.range<=60){const raw=await api('/rest/v1/votol_bms_log?select=t0,dt,v,a,soc,d&device_id=eq.'+id+'&t0=gte.'+since+'&order=t0.asc&limit=1200');
+      for(const r of raw){const t=Date.parse(r.t0);(r.v||[]).forEach((_,k)=>rows.push({t:t+k*(r.dt||300),v:r.v[k],a:r.a[k],soc:r.soc[k],d:r.d[k]}));}}
+    else{const mn=await api('/rest/v1/votol_bms_min?select=t,v,a,soc,d&device_id=eq.'+id+'&t=gte.'+since+'&order=t.asc&limit=10080');rows=mn.map(r=>({t:Date.parse(r.t),v:r.v,a:r.a,soc:r.soc,d:r.d}));}
+    BM.log=rows;bmChart(rows);bmLogInfo();}catch{}}
+function bmLogInfo(){const r=BM.log||[];$('bmLogInfo').textContent=r.length?r.length.toLocaleString('th-TH')+' จุด · '+(BM.range<=60?'ละเอียดทุก 0.3 วินาที (เก็บ 7 วัน)':'สรุปทุก 1 นาที (เก็บ 1 ปี)'):'';}
+$('bmRange').onclick=e=>{const b=e.target.closest('button');if(!b)return;BM.range=+b.dataset.m;for(const x of $('bmRange').children)x.setAttribute('aria-pressed',String(x===b));bmLoadLog();};
+$('bmCsv').onclick=()=>{const r=BM.log||[];if(!r.length)return;const csv='time,pack_v,current_a,soc,cell_diff_mv\n'+r.map(x=>new Date(x.t).toISOString()+','+x.v+','+x.a+','+x.soc+','+x.d).join('\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='bms_'+new Date().toISOString().slice(0,16).replace(/[:T]/g,'-')+'.csv';a.click();};
+// settings: snap = {have,when,busy,msg,kind,brand,defs:[[i,name,unit,min,max,step,dec,sw,below,above]],v:[...]}
+function bmOrig(i){return BM.snap?.v?.[i];}
+function bmVal(i){return BM.edits.has(i)?BM.edits.get(i):bmOrig(i);}
+function bmCheck(i,v){const d=BM.snap.defs[i];if(v<d[3]-d[5]/2||v>d[4]+d[5]/2)return'เกินช่วงที่ปลอดภัย '+bmFix(d,d[3])+'–'+bmFix(d,d[4]);
+  if(d[8]>=0&&v>=bmVal(d[8]))return'ต้องต่ำกว่า '+BM.snap.defs[d[8]][1]+' ('+bmFix(BM.snap.defs[d[8]],bmVal(d[8]))+')';
+  if(d[9]>=0&&v<=bmVal(d[9]))return'ต้องสูงกว่า '+BM.snap.defs[d[9]][1]+' ('+bmFix(BM.snap.defs[d[9]],bmVal(d[9]))+')';
+  for(const o of BM.snap.defs){if(o[8]===i&&v<=bmVal(o[0]))return'ต้องสูงกว่า '+o[1];if(o[9]===i&&v>=bmVal(o[0]))return'ต้องต่ำกว่า '+o[1];}return null;}
+function bmSet(i,v){const d=BM.snap.defs[i];v=Math.round(v/d[5])*d[5];v=+v.toFixed(d[6]);if(Math.abs(v-bmOrig(i))<1e-6)BM.edits.delete(i);else BM.edits.set(i,v);bmRenderSet();}
+function bmRenderSet(){const s=BM.snap,online=receivedAgo(lastReading)<6000,b=bmLive();
+  const pill=$('bmSetPill');pill.className='rn-pill'+(online&&b?.st==='online'?' ok':'');pill.textContent=online&&b?.st==='online'?'เขียนได้':online?'BMS ไม่ออนไลน์':'โมดูลออฟไลน์';
+  $('bmRead').disabled=!online||BM.busy||b?.st!=='online';
+  if(!s){$('bmSetInfo').textContent='ยังไม่มีค่าตั้ง BMS บน Cloud · กด “อ่านค่าจาก BMS”';$('bmGroups').replaceChildren();$('bmBar').hidden=true;return;}
+  const info=$('bmSetInfo');info.replaceChildren(bmEl('b',null,'อ่านค่าเมื่อ '+(s.when||'-')),' · '+(s.brand||'')+' · '+s.defs.length+' ค่า');
+  if(s.msg)$('bmSetMsg').textContent='โมดูล: '+s.msg;
+  const groups=[['สวิตช์ MOS',s.defs.filter(d=>d[7])],['ค่าป้องกันแรงดัน',s.defs.filter(d=>!d[7]&&d[2]==='V')],['กระแส อุณหภูมิ และอื่น ๆ',s.defs.filter(d=>!d[7]&&d[2]!=='V')]].filter(g=>g[1].length);
+  const focus=document.activeElement?.dataset?.bi;
+  $('bmGroups').replaceChildren(...groups.map(([g,list],gi)=>{const det=bmEl('details','ct-g');det.open=gi<2||list.some(d=>BM.edits.has(d[0]));const ch=list.filter(d=>BM.edits.has(d[0])).length;
+    const sm=bmEl('summary');const sl=bmEl('small',ch?'ch':null,list.length+' ค่า'+(ch?' · แก้ '+ch:''));sm.append(g,sl);det.append(sm);
+    for(const d of list){const i=d[0],v=bmVal(i),o=bmOrig(i),bad=BM.edits.has(i)?bmCheck(i,v):null,row=bmEl('div','ct-row'+(BM.edits.has(i)?' ch':'')+(bad?' bad':''));
+      const nm=bmEl('div','nm');nm.append(bmEl('b',null,d[1]),bmEl('small',null,bad||(BM.edits.has(i)?'เดิม '+bmFix(d,o)+(d[7]?'':' '+d[2])+' → ใหม่':d[7]?'':'ช่วง '+bmFix(d,d[3])+' – '+bmFix(d,d[4]))));
+      const ed=bmEl('div','ct-ed');
+      if(d[7]){const sw=bmEl('div','bm-sw');for(const [k,val,c] of [['ปิด',0,'off'],['เปิด',1,'on']]){const bt=bmEl('button',c,k);bt.type='button';bt.setAttribute('aria-pressed',String((v>.5?1:0)===val));bt.disabled=!s.have;bt.onclick=()=>bmSet(i,val);sw.append(bt);}ed.append(sw);}
+      else{const mi=bmEl('button','secondary','−');mi.type='button';mi.onclick=()=>bmSet(i,v-d[5]);const inp=bmEl('input');inp.inputMode='decimal';inp.value=bmFix(d,v);inp.dataset.bi=i;
+        inp.onchange=()=>{const x=parseFloat(inp.value);if(Number.isFinite(x))bmSet(i,x);else bmRenderSet();};const pl=bmEl('button','secondary','+');pl.type='button';pl.onclick=()=>bmSet(i,v+d[5]);
+        mi.disabled=pl.disabled=inp.disabled=!s.have;ed.append(mi,inp,pl,bmEl('span','u',d[2]));}
+      row.append(nm,ed);det.append(row);}return det;}));
+  if(focus!=null)$('bmGroups').querySelector('input[data-bi="'+focus+'"]')?.focus();
+  const n=BM.edits.size,bad=[...BM.edits].some(([i,v])=>bmCheck(i,v));$('bmBar').hidden=!n;$('bmCount').textContent=bad?'มีค่าที่เขียนไม่ได้':'แก้ไข '+n+' ค่า';
+  $('bmWrite').disabled=bad||!online||BM.busy||!s.have||b?.st!=='online';
+  $('bmHist').replaceChildren(...(BM.hist.length?BM.hist:[]).map(h=>{const li=bmEl('li');const who=h.by==='cloud'?'Cloud'+(h.who?' ('+h.who+')':''):'หน้าจอบนรถ';
+    li.append(bmEl('b',null,new Date(h.at).toLocaleString('th-TH',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})+' · '+who+' · '),bmEl('span',h.ok?'ok':'bad',h.ok?'สำเร็จ ✓':'ไม่สำเร็จ'+(h.msg?' ('+h.msg+')':'')));
+    for(const [nm,u,a,z] of h.set||[])li.append(bmEl('small',null,nm+': '+a+' → '+z+(u&&u!=='sw'?' '+u:'')));return li;}));
+  if(!BM.hist.length)$('bmHist').append(bmEl('li',null,'ยังไม่มีการเปลี่ยนค่า'));}
+async function bmLoad(){const id=$('devices').value;if(!id)return;if(id!==BM.dev){BM.dev=id;BM.snap=null;BM.edits.clear();BM.hist=[];}
+  try{const [p,h]=await Promise.all([api('/rest/v1/votol_events?select=received_at,detail&device_id=eq.'+id+'&code=eq.bms_params&order=received_at.desc&limit=1'),
+      api('/rest/v1/votol_events?select=received_at,detail&device_id=eq.'+id+'&code=eq.bms_change&order=received_at.desc&limit=10')]);
+    if(id!==BM.dev)return;BM.hist=h.map(r=>({at:Date.parse(r.received_at),...r.detail}));
+    const r=p[0];if(r){const t=Date.parse(r.received_at);if(t!==BM.at){const old=BM.snap;BM.snap=r.detail;BM.at=t;if(!old||JSON.stringify(old.v)!==JSON.stringify(BM.snap.v))BM.edits.clear();}}
+    bmRenderSet();}catch{}}
+async function bmSend(cmd,args){const id=$('devices').value;if(!id||BM.busy)return false;BM.busy=true;bmRenderSet();
+  try{await api('/rest/v1/rpc/votol_send_command',{body:{p_device:id,p_cmd:cmd,p_args:args}});$('bmSetMsg').textContent='ส่งคำสั่งแล้ว · โมดูลจะทำภายในไม่กี่วินาที';return true;}
+  catch(e){$('bmSetMsg').textContent=e.message||'ส่งคำสั่งไม่สำเร็จ';return false;}finally{BM.busy=false;bmRenderSet();}}
+function bmDlgStep(k){$('bmP1').hidden=k!==1;$('bmP2').hidden=k!==2;$('bmS2').className=k===2?'on':'';}
+$('bmRead').onclick=()=>bmSend('bms_read',{});
+$('bmUndo').onclick=()=>{BM.edits.clear();bmRenderSet();};
+$('bmWrite').onclick=()=>{const s=BM.snap;if(!s)return;let dsgOff=false,prot=false;
+  $('bmDiff').replaceChildren(...[...BM.edits].map(([i,v])=>{const d=s.defs[i];if(d[7]&&/discharge|จ่าย/i.test(d[1])&&v<.5)dsgOff=true;if(!d[7])prot=true;const li=bmEl('li');li.append(d[1]+': '+bmFix(d,bmOrig(i))+' → ',bmEl('b',null,bmFix(d,v)+(d[7]?'':' '+d[2])));return li;}));
+  $('bmWarn').textContent=(dsgOff?'ปิด “จ่ายไฟออก” = ตัดไฟไปมอเตอร์ทันที รถจะวิ่งไม่ได้จนกว่าจะเปิดกลับ · ':'')+(prot?'ค่าป้องกันที่ผิดอาจทำให้แบตเตอรี่เสียหายหรือไม่ตัดไฟเมื่อควรตัด':'สวิตช์ MOS จะเปลี่ยนทันทีที่เขียน');
+  $('bmAck').checked=false;$('bmNext').disabled=true;bmDlgStep(1);$('bmDlg').showModal();};
+$('bmAck').onchange=()=>{$('bmNext').disabled=!$('bmAck').checked;};
+$('bmNext').onclick=()=>bmDlgStep(2);$('bmBack').onclick=()=>bmDlgStep(1);
+$('bmDlg').onclose=async()=>{if($('bmDlg').returnValue!=='ok'||!BM.snap||!$('bmAck').checked)return;const set=[...BM.edits];
+  if(await bmSend('bms_write',{set}))$('bmSetMsg').textContent='ส่งคำสั่งเขียนแล้ว · รอโมดูลเขียนและอ่านกลับเพื่อตรวจสอบ';};
+setInterval(()=>{if(!$('cloud-bms').hidden){bmRender();bmRenderSet();}},1000);
+setInterval(()=>{if(!$('cloud-bms').hidden){bmLoad();if(BM.range<=5)bmLoadLog();}},3000);
+document.querySelector('[data-cloud="bms"]')?.addEventListener('click',()=>{bmRender();bmLoad();bmLoadLog();});
 </script></html>
