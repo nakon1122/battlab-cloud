@@ -1,6 +1,6 @@
 {
   "name": "VOTOL Monitor (ESP32-S3 4.0\")",
-  "version": "1.8.5",
+  "version": "1.8.6",
   "new_install_prompt_erase": true,
   "builds": [
     {
