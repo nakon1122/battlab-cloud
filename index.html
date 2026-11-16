@@ -523,6 +523,14 @@ html,body{font-family:"IBM Plex Sans Thai","Noto Sans Thai",system-ui,-apple-sys
 :root[data-theme=light] .fh-sun .v{color:#9a6a00}:root[data-theme=light] .fh-bat .v{color:#0a7f99}:root[data-theme=light] .fh-home .v{color:#6b4fd8}:root[data-theme=light] .fh-bat .fh-c{color:#0a7f99}
 @media (min-width:900px){.fh{display:grid;grid-template-columns:1fr 360px;grid-template-rows:auto 1fr;column-gap:24px}.fh-top{grid-column:1}.fh-map{grid-column:2;grid-row:1/3}.fh-today{grid-column:1;align-self:end;grid-template-columns:1fr}}
 @media (prefers-reduced-motion:reduce){.fh-flow,.fh-bat .fh-c,.sring.chg .sarc{animation:none}}
+.en-bar{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin:2px 0 8px;font-size:13px}.en-sp{flex:1}
+.en-chip{border:1px solid var(--line);background:var(--card2);color:var(--text);border-radius:999px;padding:5px 12px;font:inherit;font-size:12.5px;cursor:pointer}.en-chip.on{background:var(--accent);border-color:var(--accent);color:var(--on-accent);font-weight:700}.en-chip:disabled{opacity:.4;cursor:default}.en-chip.sm{padding:2px 9px;font-size:11px}.en-go{margin-left:auto}
+.en-sum{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:6px 0 10px}.en-sum div{background:var(--card2);border:1px solid var(--line);border-radius:14px;padding:8px 10px}.en-sum span{display:block;font-size:11.5px;color:var(--muted)}.en-sum b{font-size:19px}.en-sum small{font-size:12px;color:var(--muted);font-weight:600;margin-left:3px}
+.en-leg{align-items:center;flex-wrap:wrap}.en-pan{display:inline-flex;gap:6px;align-items:center;white-space:nowrap;color:var(--text)}
+.en-g{position:relative;overflow:hidden;touch-action:pan-y;user-select:none;-webkit-user-select:none}.en-g svg{display:block}.en-g text{fill:var(--muted);font-size:11px}.en-g .en-v{font-size:10.5px;font-weight:700}.en-g .en-v.i{fill:var(--s1)}.en-g .en-v.o{fill:var(--s2)}.en-g .en-on{fill:var(--text);font-weight:700}.en-d{cursor:pointer}.en-hit{fill:transparent}.en-d.on .en-hit{fill:var(--grid)}
+.en-info{display:flex;gap:14px;flex-wrap:wrap;align-items:center;font-size:13px;background:var(--card2);border:1px solid var(--line);border-radius:14px;padding:9px 12px;margin-top:8px}.en-info b{font-size:15px}.en-dd{font-weight:700}
+.en-unit{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}.en-unit button{border:0;background:none;color:var(--muted);font:inherit;font-size:12px;padding:4px 10px;cursor:pointer}.en-unit button.on{background:var(--accent);color:var(--on-accent);font-weight:700}
+.en-t{width:100%;border-collapse:collapse;font-size:13px;margin-top:6px}.en-t th,.en-t td{padding:7px 6px;border-bottom:1px solid var(--line);text-align:right}.en-t th:first-child,.en-t td:first-child{text-align:left}.en-t th{color:var(--muted);font-weight:600;font-size:12px}.en-t td.i{color:var(--s1);font-weight:700}.en-t td.o{color:var(--s2);font-weight:700}.en-t td.pos{color:var(--good)}.en-t td.neg{color:var(--warn)}.en-t tr{cursor:pointer}.en-t tr.on td{background:var(--grid)}
 </style></head>
 <body>
 <header>
@@ -833,16 +841,15 @@ function renderGroup(){if(!grpView)return;const g=grpView.g,dO=P.dOrder||[],ds=d
   const line=P.map((r,i)=>(i?'L':'M')+X(r.t).toFixed(1)+' '+Y(r.p).toFixed(1)).join(' ');
   const area=line?line+' L'+X(P[P.length-1].t).toFixed(1)+' '+HH/2+' L'+X(P[0].t).toFixed(1)+' '+HH/2+' Z':'';
   h+='<div class="card gChart"><h3>กำลังไฟรวมของกรุ๊ป · 24 ชม.</h3><div class="tiny muted">+'+(mx/1000).toFixed(1)+' kW ชาร์จ</div><svg viewBox="0 0 '+W+' '+HH+'" preserveAspectRatio="none"><defs><linearGradient id="gAr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#40c878" stop-opacity=".35"/><stop offset=".5" stop-color="#40c878" stop-opacity="0"/><stop offset=".5" stop-color="#e8a040" stop-opacity="0"/><stop offset="1" stop-color="#e8a040" stop-opacity=".35"/></linearGradient></defs><line x1="0" x2="'+W+'" y1="'+HH/2+'" y2="'+HH/2+'" stroke="var(--line)" vector-effect="non-scaling-stroke"/>'+(area?'<path class="gAreaP" d="'+area+'" fill="url(#gAr)"/><path class="gLineP" d="'+line+'" fill="none" stroke="var(--accent)" stroke-width="2.2" vector-effect="non-scaling-stroke" pathLength="1000"/>':'')+'</svg><div class="tiny muted">−'+(mx/1000).toFixed(1)+' kW จ่าย</div></div>';
-  const days={};H.forEach(r=>{const k=new Date(r.t).toLocaleDateString('th-TH',{day:'numeric',month:'short'});const e=days[k]||(days[k]={i:0,o:0});const wh=r.p*(r.n||1)/60;if(wh>0)e.i+=wh/1000;else e.o-=wh/1000});
-  const D=Object.entries(days).slice(-7),dm=Math.max(.1,...D.map(([k,e])=>Math.max(e.i,e.o)));
-  h+='<div class="card"><h3>พลังงานรายวันของกรุ๊ป (kWh)</h3><div class="leg"><span><i style="background:var(--good)"></i>ชาร์จเข้า</span><span><i style="background:var(--warn)"></i>จ่ายออก</span></div><div class="gBars">'+D.map(([k,e],n)=>'<div class="gB"><div class="gBb"><i style="height:'+(e.i/dm*100)+'%;background:var(--good);animation-delay:'+(n*70)+'ms" title="+'+e.i.toFixed(2)+'"></i><i style="height:'+(e.o/dm*100)+'%;background:var(--warn);animation-delay:'+(n*70+35)+'ms" title="−'+e.o.toFixed(2)+'"></i></div><span class="tiny muted">'+k+'</span><span class="tiny gBv">+'+e.i.toFixed(1)+'<br>−'+e.o.toFixed(1)+'</span></div>').join('')+'</div></div>'}
+}
+ h+='<div class="card" id="gEnergy" data-keep></div>';
  if(!share&&!demo)h+='<div class="card"><h3>แชร์ทั้งกรุ๊ปแบบดูอย่างเดียว</h3><div class="small muted">คนที่มีลิงก์จะเห็นยอดรวมและแบตทุกลูกในกรุ๊ปนี้ ไม่ต้องมีบัญชี ควบคุมอะไรไม่ได้</div><div id="gShareBox" data-keep style="margin-top:8px"></div></div>';
  h+='<div class="card"><h3>แบตในกรุ๊ป</h3><div class="gMem">'+ds.map((d,n)=>{const l=latest[d.id],x=l&&l.data||{},[st,txt]=statusOf(l),live=st==='on',sc=live&&num(x.soc)?Math.round(x.soc):0,c2=2*Math.PI*20,o=twOld(K+'m'+d.id,sc),p=live&&num(x.p)?x.p:0,md=p>30?'chg':p<-30?'dsg':'idle';
   return '<div class="gM '+md+'" data-gd="'+esc(d.id)+'" style="animation-delay:'+(n*60)+'ms"><svg viewBox="0 0 50 50"><circle cx="25" cy="25" r="20" fill="none" stroke="var(--line)" stroke-width="5"/><circle cx="25" cy="25" r="20" fill="none" stroke="'+socColor(sc)+'" stroke-width="5" stroke-linecap="round" transform="rotate(-90 25 25)" stroke-dasharray="'+(c2*(o??0)/100).toFixed(1)+' 999" data-dash="'+(c2*sc/100).toFixed(1)+' 999" style="transition:stroke-dasharray 1.1s cubic-bezier(.2,.8,.2,1)"/><text x="25" y="29" text-anchor="middle" font-size="12" font-weight="700" fill="currentColor">'+(live?sc:'--')+'</text></svg>'+
    '<div class="gMt"><b>'+esc(dset(d).icon)+' '+esc(d.name)+'</b><span class="tiny muted"><span class="dot '+st+'"></span> '+esc(txt)+(num(x.ein)?' · วันนี้ +'+(+x.ein).toFixed(2)+' / −'+(+x.eout).toFixed(2)+' kWh':'')+'</span></div>'+
    '<div class="gMp"><div><b>'+(live?kw(p):'--')+'</b>'+(live?'<span class="tiny muted gVA">'+fmt(x.v,1)+' V · '+fmt(x.i,1)+' A</span>':'')+'</div><span class="gDot"></span></div></div>'}).join('')+'</div></div>';
  // patch in place (no rebuild): entry animations play once, numbers update without the page blinking
- const gv=$('vGrp');if(gv.dataset.g!==g){gv.innerHTML='';gv.dataset.g=g}morph(gv,h);enterAnim('vGrp');runTweens(gv);{const sbx=$('gShareBox');if(sbx&&!sbx.dataset.f){sbx.dataset.f=1;shareCard(sbx,{group:g})}}shareBanner();$('vGrp').querySelectorAll('[data-gd]').forEach(e=>e.onclick=()=>go('d/'+e.dataset.gd+'/ov'))}
+ const gv=$('vGrp');if(gv.dataset.g!==g){gv.innerHTML='';gv.dataset.g=g}morph(gv,h);{const ek='g:'+g+':'+ds.map(d=>d.id).join(','),ge=$('gEnergy');if(ge&&(!ge.firstChild||!EN.gEnergy||EN.gEnergy.key!==ek||Date.now()-EN.gEnergy.at>300e3))enLoad('gEnergy',ds,ek)}enterAnim('vGrp');runTweens(gv);{const sbx=$('gShareBox');if(sbx&&!sbx.dataset.f){sbx.dataset.f=1;shareCard(sbx,{group:g})}}shareBanner();$('vGrp').querySelectorAll('[data-gd]').forEach(e=>e.onclick=()=>go('d/'+e.dataset.gd+'/ov'))}
 // ---------- list
 let viewers=[];
 async function loadDevices(){if(demo){devs=[demoDev()];return}sb.from('viewers').select('id,name,pair_code,last_seen,fw,eco,mb_today').order('created_at').then(({data})=>{viewers=data||[];renderViewers()});const {data,error}=await sb.from('devices').select('id,name,pair_code,settings,created_at,last_seen,kind,ext_id,latest(ts,data)').order('created_at');if(error){toast('โหลดอุปกรณ์ไม่สำเร็จ: '+error.message);devs=[];return}fetchOkAt=Date.now();
@@ -1260,15 +1267,82 @@ function drawCharts(){destroyCharts();const box=$('charts');
    series:[{},...ys.map((y,j)=>({label:labels[j],stroke:cols[j],width:2,spanGaps:false,points:{show:false},fill:ys.length===1&&k!=='i'&&k!=='p'?cols[j]+'22':undefined}))],plugins:[tip(cols,unit,m.dec)]};
   charts.push(new uPlot(opts,[ts,...ys],el))}}
 let rzT;window.addEventListener('resize',()=>{clearTimeout(rzT);rzT=setTimeout(()=>charts.forEach(u=>{const el=u.root.parentNode;u.setSize({width:el.clientWidth,height:170})}),150)});
-function renderEnergy(){const days={};for(const r of hist){if(!num(r.power))continue;const k=new Date(r.t).toLocaleDateString('th-TH',{day:'numeric',month:'short'});const e=days[k]||(days[k]={i:0,o:0});const wh=r.power*(r.n||1)/60;if(wh>0)e.i+=wh/1000;else e.o-=wh/1000}
- const ks=Object.keys(days),tot=ks.reduce((a,k)=>({i:a.i+days[k].i,o:a.o+days[k].o}),{i:0,o:0});
- if(!ks.length){$('energyCard').innerHTML='<h3>พลังงาน</h3><div class="small muted">ยังไม่มีข้อมูล</div>';return}
- const mx=Math.max(0.01,...ks.map(k=>Math.max(days[k].i,days[k].o))),H=150,W=Math.max(300,ks.length*56),bw=Math.min(18,(W/ks.length-10)/2);
- let g='<svg viewBox="0 0 '+W+' '+(H+20)+'" width="100%" height="'+(H+20)+'" class="dev" role="img" aria-label="พลังงานชาร์จเข้าและจ่ายออกรายวัน">';
- ks.forEach((k,j)=>{const cx=(j+.5)*W/ks.length,hi=days[k].i/mx*(H-16),ho=days[k].o/mx*(H-16);
-  g+='<rect x="'+(cx-bw-1)+'" y="'+(H-hi)+'" width="'+bw+'" height="'+Math.max(1,hi)+'" rx="3" fill="var(--s1)"><title>'+k+' ชาร์จเข้า '+days[k].i.toFixed(2)+' kWh</title></rect><rect x="'+(cx+1)+'" y="'+(H-ho)+'" width="'+bw+'" height="'+Math.max(1,ho)+'" rx="3" fill="var(--s2)"><title>'+k+' จ่ายออก '+days[k].o.toFixed(2)+' kWh</title></rect><text x="'+cx+'" y="'+(H+14)+'" text-anchor="middle">'+k+'</text>'});
- g+='<line x1="0" x2="'+W+'" y1="'+H+'" y2="'+H+'" stroke="var(--neu)"/></svg>';
- $('energyCard').innerHTML='<div class="chhead"><h3 style="margin:0">พลังงานรายวัน</h3><span class="st">รวมช่วงนี้: ชาร์จเข้า <b>'+tot.i.toFixed(2)+'</b> kWh · จ่ายออก <b>'+tot.o.toFixed(2)+'</b> kWh</span></div><div class="leg"><span><i style="background:var(--s1)"></i>ชาร์จเข้า</span><span><i style="background:var(--s2)"></i>จ่ายออก</span></div>'+g}
+// ---------- energy: hourly kWh in / out kept 90 days on the cloud (table energy_hourly)
+const EN={};const EN_DAYS=90,EN_ZOOM=[7,14,30,60,90];
+async function enFetch(ds){const to=Date.now(),from=to-EN_DAYS*86400e3,F=new Date(from).toISOString(),T=new Date(to).toISOString(),sum={};
+ const parts=await Promise.all(ds.map(async d=>{
+  if(d.demo){const rows=demoHist(from,to,3600);return rows.map(r=>({hour:r.t,e_in:Math.max(0,(r.power||0)/1000),e_out:Math.max(0,-(r.power||0)/1000)}))}
+  const q=d.shared?sb.rpc('share_energy',{p_token:share.token,p_device:d.id,p_from:F,p_to:T}):sb.rpc('energy_hours',{p_device:d.id,p_from:F,p_to:T});
+  const {data,error}=await q;if(error)throw error;return data||[]}));
+ parts.forEach(rows=>rows.forEach(r=>{const k=new Date(r.hour).getTime(),e=sum[k]||(sum[k]={i:0,o:0});e.i+=+r.e_in||0;e.o+=+r.e_out||0}));return sum}
+function enDays(sum){const ks=Object.keys(sum).map(Number);if(!ks.length)return [];const first=new Date(Math.min(...ks));first.setHours(0,0,0,0);
+ const today=new Date();today.setHours(0,0,0,0);const out=[];
+ for(let d=new Date(Math.max(first,today-(EN_DAYS-1)*86400e3));d<=today;d.setDate(d.getDate()+1)){const day=new Date(d),h=[];for(let x=0;x<24;x++){const t=new Date(day);t.setHours(x);h.push(sum[t.getTime()]||{i:0,o:0})}
+  out.push({d:day,h,i:h.reduce((a,b)=>a+b.i,0),o:h.reduce((a,b)=>a+b.o,0)})}
+ return out}
+async function enLoad(id,ds,key){const s=EN[id]||(EN[id]={unitWh:!!P.enWh,nv:7,mode:'days',selH:null});
+ if(s.key!==key||Date.now()-(s.at||0)>300e3){s.key=key;s.at=Date.now();s.err=null;
+  try{s.D=enDays(await enFetch(ds));s.end=s.D.length-1;if(s.sel==null||s.sel>=s.D.length)s.sel=s.D.length-1}catch(e){s.err=e.message;s.D=s.D||[]}}
+ enRender(id)}
+function enRender(id){const c=$(id),s=EN[id];if(!c||!s)return;const D=s.D;
+ if(!D){c.innerHTML='<h3>พลังงานรายวัน</h3><i class="sk"></i><i class="sk" style="width:70%"></i>';return}
+ if(s.err&&!D.length){c.innerHTML='<h3>พลังงานรายวัน</h3><div class="small muted">โหลดไม่สำเร็จ: '+esc(s.err)+'</div>';return}
+ if(!D.length){c.innerHTML='<h3>พลังงานรายวัน</h3><div class="small muted">ยังไม่มีข้อมูล ระบบเริ่มเก็บหน่วยไฟเมื่อบอร์ดส่งค่ากำลังไฟขึ้น cloud (เก็บย้อนหลัง 90 วัน)</div>';return}
+ const N=D.length,U=s.unitWh?'Wh':'kWh',f=(v,dec)=>s.unitWh?Math.round(v*1000).toLocaleString('th-TH'):v.toFixed(dec==null?2:dec);
+ const dl=d=>d.toLocaleDateString('th-TH',{day:'numeric',month:'short'}),rng=(a,b)=>a.getMonth()===b.getMonth()?a.getDate()+'–'+dl(b):dl(a)+' – '+dl(b);
+ const nice=mx=>{const raw=mx/4,p=Math.pow(10,Math.floor(Math.log10(raw))),q=raw/p;return (q<=1?1:q<=2?2:q<=2.5?2.5:q<=5?5:10)*p};
+ const bars=(items,selI,every,vals)=>{const W=Math.max(280,(c.clientWidth||360)-34),L=40,T=18,H=170,pw=W-L,n=items.length,cw=pw/n,bw=Math.max(1.5,Math.min(24,(cw-(n>40?2:n>20?3:10))/2));
+  const mx=Math.max(0.01,...items.map(e=>Math.max(e.i,e.o))),st=nice(mx),top=Math.ceil(mx/st)*st,Y=v=>T+H-v/top*H;
+  let g='<svg viewBox="0 0 '+W+' '+(T+H+26)+'" width="'+W+'" height="'+(T+H+26)+'" role="img" aria-label="หน่วยไฟฟ้าชาร์จเข้าและจ่ายออก">';
+  for(let v=0;v<=top+1e-9;v+=st){const y=Y(v);g+='<line x1="'+L+'" x2="'+W+'" y1="'+y+'" y2="'+y+'" stroke="var(--grid)"/><text x="'+(L-6)+'" y="'+(y+4)+'" text-anchor="end">'+(s.unitWh?Math.round(v*1000):+v.toFixed(2))+'</text>'}
+  g+='<text x="2" y="11" style="font-weight:700">'+U+'</text>';
+  items.forEach((e,j)=>{const cx=L+(j+.5)*cw,yi=Y(e.i),yo=Y(e.o),on=j===selI,r=Math.min(3,bw/3);
+   g+='<g class="en-d'+(on?' on':'')+'" data-j="'+j+'"><rect class="en-hit" x="'+(cx-cw/2+1)+'" y="'+T+'" width="'+Math.max(1,cw-2)+'" height="'+(H+24)+'" rx="'+Math.min(8,cw/3)+'"/><rect x="'+(cx-bw-.5)+'" y="'+yi+'" width="'+bw+'" height="'+Math.max(1,T+H-yi)+'" rx="'+r+'" fill="var(--s1)"/><rect x="'+(cx+.5)+'" y="'+yo+'" width="'+bw+'" height="'+Math.max(1,T+H-yo)+'" rx="'+r+'" fill="var(--s2)"/>';
+   if(vals||on){const edge=cx>W-22,an=edge?'end':'middle';g+='<text class="en-v i" x="'+(edge?W-2:cx-bw/2)+'" y="'+(edge?Math.min(yi,yo)-16:yi-4)+'" text-anchor="'+an+'">'+f(e.i,1)+'</text><text class="en-v o" x="'+(edge?W-2:cx+bw/2)+'" y="'+(edge?Math.min(yi,yo)-4:yo-4-(Math.abs(yo-yi)<12?11:0))+'" text-anchor="'+an+'">'+f(e.o,1)+'</text>'}
+   if(j%every===0||on)g+='<text x="'+cx+'" y="'+(T+H+16)+'" text-anchor="middle"'+(on?' class="en-on"':'')+'>'+e.lab+'</text>';g+='</g>'});
+  return g+'<line x1="'+L+'" x2="'+W+'" y1="'+(T+H)+'" y2="'+(T+H)+'" stroke="var(--neu)"/></svg>'};
+ const sums=(a,b,x)=>'<div class="en-sum"><div><span>'+a[0]+'</span><b style="color:var(--s1)">'+a[1]+'</b><small>'+U+'</small></div><div><span>'+b[0]+'</span><b style="color:var(--s2)">'+b[1]+'</b><small>'+U+'</small></div><div><span>'+x[0]+'</span><b>'+x[1]+'</b><small>'+U+'</small></div></div>';
+ const net=e=>{const n=e.i-e.o;return '<b style="color:'+(n>=0?'var(--good)':'var(--warn)')+'">'+(n>=0?'+':'−')+f(Math.abs(n))+'</b>'};
+ const info=(lab,e,extra)=>'<div class="en-info"><span class="en-dd">'+lab+'</span><span>ชาร์จเข้า <b style="color:var(--s1)">'+f(e.i)+'</b> '+U+'</span><span>จ่ายออก <b style="color:var(--s2)">'+f(e.o)+'</b> '+U+'</span><span>สุทธิ '+net(e)+' '+U+'</span>'+(extra||'')+'</div>';
+ const row=(lab,e,on,j)=>{const n=e.i-e.o;return '<tr class="'+(on?'on':'')+'" data-j="'+j+'"><td>'+lab+'</td><td class="i">'+f(e.i)+'</td><td class="o">'+f(e.o)+'</td><td class="'+(n>=0?'pos':'neg')+'">'+(n>=0?'+':'−')+f(Math.abs(n))+'</td></tr>'};
+ const unitSw='<span class="en-unit"><button class="'+(s.unitWh?'':'on')+'" data-u="0">หน่วย (kWh)</button><button class="'+(s.unitWh?'on':'')+'" data-u="1">Wh</button></span>';
+ const nv=Math.min(s.nv,N);s.end=Math.min(N-1,Math.max(nv-1,s.end??N-1));if(s.sel==null||s.sel>=N)s.sel=N-1;let h;
+ if(s.mode==='days'){const st=s.end-nv+1,vis=D.slice(st,s.end+1);if(s.sel<st||s.sel>s.end)s.sel=s.end;const tot=vis.reduce((a,e)=>({i:a.i+e.i,o:a.o+e.o}),{i:0,o:0});
+  h='<div class="chhead"><h3 style="margin:0">พลังงานรายวัน</h3>'+unitSw+'</div><div class="en-bar">'+[7,30,90].map(z=>'<button class="en-chip'+(s.nv===z?' on':'')+'" data-z="'+z+'">'+z+' วัน</button>').join('')+
+   '<span class="en-sp"></span><button class="en-chip" data-zz="1" '+(s.nv>=90?'disabled':'')+' aria-label="ซูมออก">−</button><button class="en-chip" data-zz="-1" aria-label="ซูมเข้า">+</button></div>'+
+   sums(['ชาร์จเข้ารวม',f(tot.i)],['จ่ายออกรวม',f(tot.o)],['เฉลี่ยใช้/วัน',f(tot.o/vis.length)])+
+   '<div class="leg en-leg"><span><i style="background:var(--s1)"></i>ชาร์จเข้า</span><span><i style="background:var(--s2)"></i>จ่ายออก</span><span class="en-sp"></span><span class="en-pan"><button class="en-chip sm" data-p="-1" '+(st<=0?'disabled':'')+'>◀</button><b>'+rng(D[st].d,D[s.end].d)+'</b><button class="en-chip sm" data-p="1" '+(s.end>=N-1?'disabled':'')+'>▶</button></span></div>'+
+   '<div class="en-g">'+bars(vis.map(e=>({lab:dl(e.d),i:e.i,o:e.o})),s.sel-st,nv<=7?1:nv<=14?2:nv<=30?5:nv<=60?10:15,nv<=14)+'</div>'+
+   info(dl(D[s.sel].d),D[s.sel],'<button class="en-chip en-go" data-hr="1">ดูรายชั่วโมง ›</button>')+'<div class="tiny muted" style="margin-top:4px">แตะแท่ง = ดูตัวเลข · แตะซ้ำ = รายชั่วโมง · − + / ถ่างสองนิ้ว = ซูม · ลากซ้ายขวา = เลื่อนวัน · เก็บย้อนหลัง 90 วัน</div>'+
+   '<table class="en-t"><thead><tr><th>วันที่</th><th>ชาร์จเข้า ('+U+')</th><th>จ่ายออก ('+U+')</th><th>สุทธิ</th></tr></thead><tbody>'+vis.map((e,j)=>row(dl(e.d),e,st+j===s.sel,st+j)).reverse().join('')+'</tbody></table>'}
+ else{const d=D[s.sel],hh=x=>String(x).padStart(2,'0');
+  h='<div class="chhead"><h3 style="margin:0">พลังงานรายชั่วโมง</h3>'+unitSw+'</div><div class="en-bar"><button class="en-chip" data-back="1">‹ กลับรายวัน</button><button class="en-chip" data-dd="-1" '+(s.sel<=0?'disabled':'')+'>◀</button><b>'+d.d.toLocaleDateString('th-TH',{weekday:'short',day:'numeric',month:'short',year:'numeric'})+'</b><button class="en-chip" data-dd="1" '+(s.sel>=N-1?'disabled':'')+'>▶</button></div>'+
+   sums(['ชาร์จเข้าทั้งวัน',f(d.i)],['จ่ายออกทั้งวัน',f(d.o)],['สุทธิ',(d.i-d.o>=0?'+':'−')+f(Math.abs(d.i-d.o))])+
+   '<div class="leg"><span><i style="background:var(--s1)"></i>ชาร์จเข้า</span><span><i style="background:var(--s2)"></i>จ่ายออก</span><span>แกนล่าง = ชั่วโมง</span></div>'+
+   '<div class="en-g">'+bars(d.h.map((e,x)=>({lab:hh(x),i:e.i,o:e.o})),s.selH==null?-1:s.selH,3,false)+'</div>'+
+   (s.selH==null?'<div class="tiny muted" style="margin-top:4px">แตะแท่งเพื่อดูตัวเลขของชั่วโมงนั้น · − / หุบสองนิ้ว = กลับรายวัน</div>':info(hh(s.selH)+':00–'+hh(s.selH+1)+':00',d.h[s.selH]))+
+   '<table class="en-t"><thead><tr><th>ชั่วโมง</th><th>ชาร์จเข้า ('+U+')</th><th>จ่ายออก ('+U+')</th><th>สุทธิ</th></tr></thead><tbody>'+d.h.map((e,x)=>row(hh(x)+':00',e,x===s.selH,x)).join('')+'</tbody></table>'}
+ c.innerHTML=h;
+ const zoom=dir=>{if(s.mode==='hours'){if(dir>0){s.mode='days';enRender(id)}return}const k=EN_ZOOM.indexOf(s.nv),nk=Math.max(0,Math.min(EN_ZOOM.length-1,(k<0?0:k)+dir));
+  if(nk===k&&dir<0){s.mode='hours';s.selH=null}else{s.nv=EN_ZOOM[nk];s.end=Math.max(s.end,Math.min(N-1,s.sel))}enRender(id)};
+ const pick=(j,tbl)=>{if(s.mode==='days'){const st=s.end-Math.min(s.nv,N)+1,ix=tbl?j:st+j;if(ix===s.sel&&!tbl){s.mode='hours';s.selH=null}else s.sel=ix}else s.selH=s.selH===j&&!tbl?null:j;enRender(id)};
+ c.querySelectorAll('[data-u]').forEach(b=>b.onclick=()=>{s.unitWh=b.dataset.u==='1';P.enWh=s.unitWh;try{ls.set('bl_prefs',P)}catch(e){}enRender(id)});
+ c.querySelectorAll('[data-z]').forEach(b=>b.onclick=()=>{s.nv=+b.dataset.z;enRender(id)});
+ c.querySelectorAll('[data-zz]').forEach(b=>b.onclick=()=>zoom(+b.dataset.zz));
+ c.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{s.end=Math.min(N-1,Math.max(nv-1,s.end+ +b.dataset.p*Math.max(1,Math.round(nv/2))));enRender(id)});
+ c.querySelectorAll('[data-hr]').forEach(b=>b.onclick=()=>{s.mode='hours';s.selH=null;enRender(id)});
+ c.querySelectorAll('[data-back]').forEach(b=>b.onclick=()=>{s.mode='days';enRender(id)});
+ c.querySelectorAll('[data-dd]').forEach(b=>b.onclick=()=>{s.sel=Math.max(0,Math.min(N-1,s.sel+ +b.dataset.dd));s.selH=null;if(s.sel>s.end)s.end=s.sel;if(s.sel<s.end-nv+1)s.end=s.sel+nv-1;enRender(id)});
+ c.querySelectorAll('tbody tr').forEach(r=>r.onclick=()=>pick(+r.dataset.j,true));
+ const eg=c.querySelector('.en-g');if(!eg)return;let x0=null,y0=0,moved=false,se=s.end,pd=null,cw=1;
+ eg.onwheel=e=>{e.preventDefault();zoom(e.deltaY>0?1:-1)};
+ eg.addEventListener('touchstart',e=>{if(e.touches.length===2)pd=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY)},{passive:true});
+ eg.addEventListener('touchmove',e=>{if(e.touches.length===2&&pd){const d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);if(d/pd>1.35){pd=null;zoom(-1)}else if(d/pd<.74){pd=null;zoom(1)}}},{passive:true});
+ eg.onpointerdown=e=>{x0=e.clientX;y0=e.clientY;moved=false;se=s.end;cw=(eg.clientWidth-40)/(s.mode==='days'?nv:24)};
+ eg.onpointermove=e=>{if(x0==null||s.mode!=='days')return;const dx=e.clientX-x0;if(Math.abs(dx)>10&&Math.abs(dx)>Math.abs(e.clientY-y0)){moved=true;const ne=Math.min(N-1,Math.max(nv-1,se-Math.round(dx/cw)));if(ne!==s.end){s.end=ne;enRender(id)}}};
+ eg.onpointerup=e=>{const was=moved;x0=null;if(was)return;const g=e.target.closest('[data-j]');if(g)pick(+g.dataset.j,false)};
+ if(!s.ro&&window.ResizeObserver){let lw=0;s.ro=new ResizeObserver(()=>{const w=c.clientWidth;if(w&&Math.abs(w-lw)>8){lw=w;if(document.body.contains(c))enRender(id)}});s.ro.observe(c)}}
+function renderEnergy(){if(!cur)return;enLoad('energyCard',[cur],cur.id)}
 function rowsOut(){return hist.map(r=>[new Date(r.t).toLocaleString('th-TH'),r.soc,r.voltage,r.current,r.power,tC(r.temp),tC(r.mos),r.cell_min,r.cell_max])}
 const HEAD=['เวลา','SOC %','V','A','W','Temp','MOS','Cell min','Cell max'];
 $('btnCsv').onclick=()=>{if(!hist.length){toast('ยังไม่มีข้อมูล');return}const f=v=>v==null?'':typeof v==='number'?+v.toFixed(3):'"'+v+'"';const csv='﻿'+HEAD.join(',')+'\n'+rowsOut().map(r=>r.map(f).join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='battlab_'+(cur.name||'data').replace(/\W+/g,'_')+'_'+P.range+'h.csv';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),5000)};
