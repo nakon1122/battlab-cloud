@@ -525,7 +525,7 @@ html,body{font-family:"IBM Plex Sans Thai","Noto Sans Thai",system-ui,-apple-sys
 @media (prefers-reduced-motion:reduce){.fh-flow,.fh-bat .fh-c,.sring.chg .sarc{animation:none}}
 .en-bar{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin:2px 0 8px;font-size:13px}.en-sp{flex:1}
 .en-chip{border:1px solid var(--line)!important;background:var(--card2)!important;color:var(--text)!important;box-shadow:none!important;border-radius:999px;padding:5px 12px;font:inherit;font-size:12.5px;font-weight:600;cursor:pointer}.en-chip.on{background:var(--accent)!important;border-color:var(--accent)!important;color:var(--on-accent)!important;font-weight:700}.en-chip:disabled{opacity:.4;cursor:default}.en-chip.sm{padding:2px 9px;font-size:11px}.en-go{margin-left:auto}
-.en-sum{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:6px 0 10px}.en-sum div{background:var(--card2);border:1px solid var(--line);border-radius:14px;padding:8px 10px}.en-sum span{display:block;font-size:11.5px;color:var(--muted)}.en-sum b{font-size:19px}.en-sum small{font-size:12px;color:var(--muted);font-weight:600;margin-left:3px}
+.en-sum{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:6px 0 10px}.en-sum.pv4{grid-template-columns:repeat(4,1fr)}@media(max-width:520px){.en-sum.pv4{grid-template-columns:repeat(2,1fr)}}.pvg{cursor:crosshair}.en-sum div{background:var(--card2);border:1px solid var(--line);border-radius:14px;padding:8px 10px}.en-sum span{display:block;font-size:11.5px;color:var(--muted)}.en-sum b{font-size:19px}.en-sum small{font-size:12px;color:var(--muted);font-weight:600;margin-left:3px}
 .en-leg{align-items:center;flex-wrap:wrap}.en-pan{display:inline-flex;gap:6px;align-items:center;white-space:nowrap;color:var(--text)}
 .en-g{position:relative;overflow:hidden;touch-action:pan-y;user-select:none;-webkit-user-select:none}.en-g svg{display:block}.en-g text{fill:var(--muted);font-size:11px}.en-g .en-v{font-size:10.5px;font-weight:700}.en-g .en-v.i{fill:var(--s1)}.en-g .en-v.o{fill:var(--s2)}.en-g .en-on{fill:var(--text);font-weight:700}.en-d{cursor:pointer}.en-hit{fill:transparent}.en-d.on .en-hit{fill:var(--grid)}
 .en-info{display:flex;gap:14px;flex-wrap:wrap;align-items:center;font-size:13px;background:var(--card2);border:1px solid var(--line);border-radius:14px;padding:9px 12px;margin-top:8px}.en-info b{font-size:15px}.en-dd{font-weight:700}
@@ -1196,7 +1196,7 @@ function renderOv(){const l=latest[cur.id],s=dset(cur),d=l&&l.data||{},x=derive(
  if(x.live){const soc=num(d.soc)?Math.max(0,Math.min(100,d.soc)):0,L=2*Math.PI*80*0.75,ev=isEvP(s),rk=evRange(d,s);
   const st=ev?(x.mode==='chg'?'ชาร์จ / ชาร์จคืน':x.mode==='dsg'?'กำลังขับขี่':'จอด'):x.mode==='chg'?'กำลังชาร์จ':x.mode==='dsg'?'กำลังจ่ายไฟ':'พัก';
   const oSoc=twOld('soc:'+cur.id,soc),oRk=rk!=null?twOld('rk:'+cur.id,rk):null,frac=ev&&rk!=null?soc:soc;
-  if(d.inv){h+=invHero(d,x,soc)}else{const DS=dstyle(cur.id);h+=styleSeg(DS);
+  if(d.inv){h+=invHero(d,x,soc)+'<div class="card" id="pvCard" data-k="pv:'+esc(cur.id)+'"></div>'}else{const DS=dstyle(cur.id);h+=styleSeg(DS);
   if(DS==='O'){
   h+='<div class="card hero" style="--socc:'+socColor(soc)+'"><div class="ring"><svg viewBox="0 0 190 190" width="190" height="190"><g transform="rotate(135 95 95)"><circle cx="95" cy="95" r="80" fill="none" stroke="var(--line)" stroke-width="16" stroke-dasharray="'+L+' 999" stroke-linecap="round"/><circle class="arc" cx="95" cy="95" r="80" fill="none" stroke="'+socColor(soc)+'" stroke-width="16" stroke-dasharray="'+(L*(oSoc??0)/100)+' 999" data-dash="'+(L*frac/100)+' 999" stroke-linecap="round" style="filter:drop-shadow(0 0 7px '+socColor(soc)+')"/></g></svg>'+
    (ev&&rk!=null?'<div class="v"><b data-count="'+Math.round(rk)+'" data-from="'+Math.round(oRk??0)+'">'+Math.round(oRk??0)+'</b><span class="muted small">กม. · SOC '+Math.round(soc)+'%</span></div>':'<div class="v"><b data-count="'+Math.round(soc)+'" data-from="'+Math.round(oSoc??0)+'" data-suf="%">'+Math.round(oSoc??0)+'%</b><span class="muted small">SOC'+(ev?' · ใส่ Wh/กม. เพื่อดูระยะทาง':'')+'</span></div>')+'</div>'+
@@ -1211,8 +1211,9 @@ function renderOv(){const l=latest[cur.id],s=dset(cur),d=l&&l.data||{},x=derive(
   h+='<div class="card"><div class="row"><h3 style="margin:0">ค่าทั้งหมด</h3>'+(d.inv?'':'<button class="ghost nf" style="padding:6px 12px;font-size:13px" onclick="go(\'d/'+esc(cur.id)+'/set\')">ปรับแต่ง</button>')+'</div><div class="tiles" style="margin-top:10px">'+tiles+'</div></div>';
   if(x.cells)h+='<div class="card" style="cursor:pointer" onclick="go(\'d/'+esc(cur.id)+'/cells\')"><div class="row"><h3 style="margin:0">เซลล์ '+x.cells.length+' ก้อน</h3><span class="nf small muted">ดูทั้งหมด ›</span></div>'+cellDevSvg(x,120)+'<div class="small muted">ต่ำสุด '+x.cmin.toFixed(3)+' V (#'+x.imin+') · สูงสุด '+x.cmax.toFixed(3)+' V (#'+x.imax+') · Δ '+x.delta+' mV · '+balanceTxt(x.delta)+'</div></div>'}
  if(x.live)h+=bankHtml(d,l);
- h+=infoHtml(d,l);const keepFlow=$('flowBox');$('tab_ov').innerHTML=h;
+ h+=infoHtml(d,l);const keepFlow=$('flowBox'),keepPv=$('pvCard');$('tab_ov').innerHTML=h;
  {const nf=$('flowBox');if(keepFlow&&nf&&keepFlow.dataset.k===nf.dataset.k)nf.replaceWith(keepFlow)}
+ {const np=$('pvCard');if(np){if(keepPv&&keepPv.dataset.k===np.dataset.k&&keepPv.firstChild)np.replaceWith(keepPv);else pvLoad(cur)}}
  enterAnim('tab_ov');runTweens($('tab_ov'));$('tab_ov').querySelectorAll('[data-ds]').forEach(b=>b.onclick=()=>{ls.set('bl_dstyle_'+cur.id,b.dataset.ds);renderOv()});$('tab_ov').querySelectorAll('[data-pk]').forEach(e=>e.onclick=()=>{packSel=+e.dataset.pk;go('d/'+cur.id+'/cells')})}
 const IC_SUN='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg>',IC_BAT='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="17" height="10" rx="2"/><path d="M22 11v2"/></svg>',IC_LOAD='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z"/></svg>';
 function flowHtml(mode,d){const w=num(d.p)?Math.abs(d.p).toFixed(0)+' W':'';return mode==='chg'?'<div class="pflow chg">'+IC_BAT+'<i></i>'+IC_SUN+'<span>ชาร์จเข้า '+w+'</span></div>':mode==='dsg'?'<div class="pflow dsg">'+IC_BAT+'<i></i>'+IC_LOAD+'<span>จ่ายออก '+w+'</span></div>':'<div class="pflow idle">'+IC_BAT+'<i></i><span>พัก</span></div>'}
@@ -1342,6 +1343,79 @@ function enRender(id){const c=$(id),s=EN[id];if(!c||!s)return;const D=s.D;
  eg.onpointermove=e=>{if(x0==null||s.mode!=='days')return;const dx=e.clientX-x0;if(Math.abs(dx)>10&&Math.abs(dx)>Math.abs(e.clientY-y0)){moved=true;const ne=Math.min(N-1,Math.max(nv-1,se-Math.round(dx/cw)));if(ne!==s.end){s.end=ne;enRender(id)}}};
  eg.onpointerup=e=>{const was=moved;x0=null;if(was)return;const g=e.target.closest('[data-j]');if(g)pick(+g.dataset.j,false)};
  if(!s.ro&&window.ResizeObserver){let lw=0;s.ro=new ResizeObserver(()=>{const w=c.clientWidth;if(w&&Math.abs(w-lw)>8){lw=w;if(document.body.contains(c))enRender(id)}});s.ro.observe(c)}}
+// ---------- solar production (inverters): day power curve + daily kWh, 90 days (energy_hourly / inv_curve)
+const PV={};
+function pvDayStart(off){const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-off);return d}
+async function pvLoadDays(dev,s){const to=Date.now(),from=to-90*86400e3;let rows;
+ if(dev.demo){rows=[];for(let t=Math.ceil(from/3600e3)*3600e3;t<to;t+=3600e3){const h=new Date(t).getHours(),day=Math.floor(t/86400e3),k=.6+.4*Math.abs(Math.sin(day*1.7)),pv=h>=6&&h<=18?Math.sin((h-6)/12*Math.PI)*4.2*k:0,ld=h>=18||h<6?.9:.7;rows.push({hour:new Date(t).toISOString(),e_pv:pv,e_load:ld,e_grid_in:Math.max(0,ld-pv)*.4,e_grid_out:Math.max(0,pv-ld)*.2,pv_peak:pv*1100})}}
+ else{const F=new Date(from).toISOString(),T=new Date(to).toISOString();const r=await (dev.shared?sb.rpc('share_energy',{p_token:share.token,p_device:dev.id,p_from:F,p_to:T}):sb.rpc('energy_hours',{p_device:dev.id,p_from:F,p_to:T}));if(r.error)throw r.error;rows=r.data||[]}
+ const by={};rows.forEach(r=>{const t=new Date(r.hour),k=new Date(t.getFullYear(),t.getMonth(),t.getDate()).getTime(),e=by[k]||(by[k]={pv:0,ld:0,gi:0,go:0,pk:0,h:Array.from({length:24},()=>0)});e.pv+=+r.e_pv||0;e.ld+=+r.e_load||0;e.gi+=+r.e_grid_in||0;e.go+=+r.e_grid_out||0;e.pk=Math.max(e.pk,+r.pv_peak||0);e.h[t.getHours()]+=+r.e_pv||0});
+ const ks=Object.keys(by).map(Number).filter(k=>by[k].pv>0||by[k].ld>0);if(!ks.length){s.D=[];return}
+ const out=[];for(let d=new Date(Math.min(...ks));d<=pvDayStart(0);d.setDate(d.getDate()+1)){const k=d.getTime();out.push(Object.assign({d:new Date(d)},by[k]||{pv:0,ld:0,gi:0,go:0,pk:0,h:Array(24).fill(0)}))}s.D=out}
+async function pvLoadCurve(dev,s,off){const k=pvDayStart(off).getTime();if(s.C[k])return;const f=new Date(k),t=new Date(k+86400e3);
+ if(dev.demo){const pts=[];for(let x=0;x<288;x++){const h=x/12,pv=h>=6&&h<=18?Math.sin((h-6)/12*Math.PI)*4200*(.85+.15*Math.sin(x/7)):0,ld=600+400*Math.sin(x/9)**2+(h>18?600:0);pts.push({t:k+x*300e3,pv,ld,gr:Math.max(0,ld-pv)*.5,bt:pv-ld,soc:60+30*Math.sin((h-9)/12*Math.PI)})}s.C[k]=pts;return}
+ const r=await (dev.shared?sb.rpc('share_inv_curve',{p_token:share.token,p_device:dev.id,p_from:f.toISOString(),p_to:t.toISOString(),p_bucket:300}):sb.rpc('inv_curve',{p_device:dev.id,p_from:f.toISOString(),p_to:t.toISOString(),p_bucket:300}));if(r.error)throw r.error;
+ s.C[k]=(r.data||[]).map(p=>({t:new Date(p.t).getTime(),pv:p.ppv,ld:p.pload,gr:p.pgrid,bt:p.pbat,soc:p.soc}))}
+async function pvLoad(dev){const id=dev.id,s=PV[id]||(PV[id]={mode:'day',off:0,nv:7,sel:null,C:{},show:{pv:1,ld:1,gr:1,bt:0},hx:null});
+ if(!s.D||Date.now()-(s.at||0)>300e3){s.at=Date.now();s.C={};try{await pvLoadDays(dev,s);s.err=null}catch(e){s.err=e.message;s.D=s.D||[]}}
+ if(s.mode==='day')try{await pvLoadCurve(dev,s,s.off)}catch(e){s.err=e.message}
+ pvRender(dev)}
+function pvRender(dev){const c=$('pvCard'),s=PV[dev.id];if(!c||!s||c.dataset.k!=='pv:'+dev.id)return;const W=Math.max(280,(c.clientWidth||360)-34);
+ const kw=v=>Math.abs(v)>=1000?(v/1000).toFixed(2)+' kW':Math.round(v)+' W',kwh=v=>v.toFixed(v>=100?0:v>=10?1:2),dl=d=>d.toLocaleDateString('th-TH',{day:'numeric',month:'short'});
+ const tabs='<span class="en-unit"><button class="'+(s.mode==='day'?'on':'')+'" data-pm="day">กราฟรายวัน</button><button class="'+(s.mode==='days'?'on':'')+'" data-pm="days">ผลิตต่อวัน</button></span>';
+ let h='<div class="chhead"><h3 style="margin:0">☀️ การผลิตไฟโซลาร์</h3>'+tabs+'</div>';
+ const D=s.D;if(!D){c.innerHTML=h+'<i class="sk"></i><i class="sk" style="width:70%"></i>';return}
+ if(!D.length){c.innerHTML=h+'<div class="small muted">ยังไม่มีข้อมูลโซลาร์ ระบบเริ่มเก็บเมื่ออินเวอร์เตอร์ส่งค่ากำลังไฟขึ้น cloud (เก็บย้อนหลัง 90 วัน)</div>';pvBind(dev);return}
+ const N=D.length;
+ if(s.mode==='day'){const day=pvDayStart(s.off),k=day.getTime(),E=D.find(e=>e.d.getTime()===k)||{pv:0,ld:0,gi:0,go:0,pk:0,h:Array(24).fill(0)},P=s.C[k];
+  const self=E.pv>0?Math.max(0,Math.min(100,(E.pv-E.go)/E.pv*100)):0;
+  h+='<div class="en-bar"><button class="en-chip" data-po="1" '+(s.off>=N-1?'disabled':'')+'>◀</button><b>'+(s.off===0?'วันนี้ · ':s.off===1?'เมื่อวาน · ':'')+day.toLocaleDateString('th-TH',{weekday:'short',day:'numeric',month:'short'})+'</b><button class="en-chip" data-po="-1" '+(s.off<=0?'disabled':'')+'>▶</button><span class="en-sp"></span>'+
+   [['pv','โซลาร์','#f2c14e'],['ld','บ้าน','#36c4a8'],['gr','การไฟฟ้า','#3d8fe8'],['bt','แบต','#a07cf0']].map(([q,n,col])=>'<button class="en-chip sm'+(s.show[q]?' on':'')+'" data-ps="'+q+'" style="'+(s.show[q]?'background:'+col+'!important;border-color:'+col+'!important;color:#0b1117!important':'')+'">'+n+'</button>').join('')+'</div>'+
+   '<div class="en-sum pv4"><div><span>☀️ ผลิตได้</span><b style="color:#f2c14e">'+kwh(E.pv)+'</b><small>kWh</small></div><div><span>🏠 บ้านใช้</span><b style="color:#36c4a8">'+kwh(E.ld)+'</b><small>kWh</small></div><div><span>🔌 ซื้อ / ขาย</span><b style="color:#3d8fe8">'+kwh(E.gi)+'</b><small>/ '+kwh(E.go)+' kWh</small></div><div><span>⚡ สูงสุด</span><b>'+(E.pk>=1000?(E.pk/1000).toFixed(2):Math.round(E.pk))+'</b><small>'+(E.pk>=1000?'kW':'W')+'</small></div></div>';
+  if(!P){h+='<i class="sk" style="height:180px"></i>'}
+  else if(!P.length){// raw minutes gone (older than 30 days): hourly kWh bars instead
+   const mx=Math.max(.01,...E.h),L=36,T=14,H=150,cw=(W-L)/24;let g='<svg viewBox="0 0 '+W+' '+(T+H+24)+'" width="'+W+'" height="'+(T+H+24)+'">';
+   for(let i=0;i<=2;i++){const y=T+H-H*i/2;g+='<line x1="'+L+'" x2="'+W+'" y1="'+y+'" y2="'+y+'" stroke="var(--grid)"/><text x="'+(L-5)+'" y="'+(y+4)+'" text-anchor="end">'+(mx*i/2).toFixed(1)+'</text>'}
+   E.h.forEach((v,x)=>{const bh=v/mx*H;g+='<rect x="'+(L+x*cw+1)+'" y="'+(T+H-bh)+'" width="'+(cw-2)+'" height="'+bh+'" rx="2" fill="#f2c14e"/>';if(x%3===0)g+='<text x="'+(L+x*cw+cw/2)+'" y="'+(T+H+16)+'" text-anchor="middle">'+String(x).padStart(2,'0')+'</text>'});
+   h+='<div class="tiny muted">วันนี้เก่ากว่า 30 วัน แสดงเป็นหน่วย kWh รายชั่วโมง</div><div class="en-g">'+g+'<text x="2" y="10">kWh</text></svg></div>'}
+  else{const L=40,T=14,H=180,pw=W-L,X=t=>L+(t-k)/86400e3*pw,keys=['pv','ld','gr','bt'].filter(q=>s.show[q]);
+   let mx=10,mn=0;P.forEach(p=>keys.forEach(q=>{const v=p[q];if(num(v)){mx=Math.max(mx,v);mn=Math.min(mn,v)}}));
+   const step=(()=>{const raw=(mx-mn)/4,p=Math.pow(10,Math.floor(Math.log10(raw))),f=raw/p;return (f<=1?1:f<=2?2:f<=5?5:10)*p})(),top=Math.ceil(mx/step)*step,bot=Math.floor(mn/step)*step,Y=v=>T+H-(v-bot)/(top-bot)*H;
+   let g='<svg viewBox="0 0 '+W+' '+(T+H+24)+'" width="'+W+'" height="'+(T+H+24)+'" class="pvsvg">';
+   for(let v=bot;v<=top+1e-9;v+=step){const y=Y(v);g+='<line x1="'+L+'" x2="'+W+'" y1="'+y+'" y2="'+y+'" stroke="'+(v===0?'var(--neu)':'var(--grid)')+'"/><text x="'+(L-5)+'" y="'+(y+4)+'" text-anchor="end">'+(Math.abs(top)>=1000?(v/1000).toFixed(step>=1000?0:1):Math.round(v))+'</text>'}
+   g+='<text x="2" y="10" style="font-weight:700">'+(Math.abs(top)>=1000?'kW':'W')+'</text>';
+   for(let x=0;x<=24;x+=3)g+='<text x="'+X(k+x*3600e3)+'" y="'+(T+H+16)+'" text-anchor="'+(x===24?'end':'middle')+'">'+String(x).padStart(2,'0')+'</text>';
+   const line=(q,col,area,dash)=>{let d='',seg=[];P.forEach((p,i)=>{const v=p[q];if(!num(v)){seg.length&&(d+=seg.join(' '));seg=[];return}seg.push((seg.length?'L':'M')+X(p.t).toFixed(1)+' '+Y(v).toFixed(1))});d+=seg.join(' ');
+    let o='';if(area){const pts=P.filter(p=>num(p[q]));if(pts.length)o+='<path d="M'+X(pts[0].t)+' '+Y(0)+' '+pts.map(p=>'L'+X(p.t).toFixed(1)+' '+Y(p[q]).toFixed(1)).join(' ')+' L'+X(pts[pts.length-1].t)+' '+Y(0)+'Z" fill="'+col+'" opacity=".22"/>'}
+    return o+'<path d="'+d+'" fill="none" stroke="'+col+'" stroke-width="2"'+(dash?' stroke-dasharray="5 4"':'')+' stroke-linejoin="round"/>'};
+   if(s.show.gr)g+=line('gr','#3d8fe8',false,true);if(s.show.bt)g+=line('bt','#a07cf0',false,true);if(s.show.ld)g+=line('ld','#36c4a8',false);if(s.show.pv)g+=line('pv','#f2c14e',true);
+   if(s.off===0){const nx=X(Date.now());if(nx<W)g+='<line x1="'+nx+'" x2="'+nx+'" y1="'+T+'" y2="'+(T+H)+'" stroke="var(--muted)" stroke-dasharray="2 3"/>'}
+   let tip='';if(s.hx!=null&&P.length){const tt=k+(s.hx-L)/pw*86400e3;let b=P[0];P.forEach(p=>{if(Math.abs(p.t-tt)<Math.abs(b.t-tt))b=p});const x=X(b.t);
+    g+='<line x1="'+x+'" x2="'+x+'" y1="'+T+'" y2="'+(T+H)+'" stroke="var(--text)" stroke-width="1"/>'+keys.map(q=>num(b[q])?'<circle cx="'+x+'" cy="'+Y(b[q])+'" r="4" fill="'+({pv:'#f2c14e',ld:'#36c4a8',gr:'#3d8fe8',bt:'#a07cf0'})[q]+'"/>':'').join('');
+    const tm=new Date(b.t).toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'});
+    tip='<div class="en-info"><span class="en-dd">'+tm+'</span>'+(num(b.pv)?'<span>☀️ <b style="color:#f2c14e">'+kw(b.pv)+'</b></span>':'')+(num(b.ld)?'<span>🏠 <b style="color:#36c4a8">'+kw(b.ld)+'</b></span>':'')+(num(b.gr)?'<span>🔌 <b style="color:#3d8fe8">'+(b.gr<-10?'ขาย ':b.gr>10?'ซื้อ ':'')+kw(Math.abs(b.gr))+'</b></span>':'')+(num(b.bt)?'<span>🔋 <b style="color:#a07cf0">'+(b.bt>10?'ชาร์จ ':b.bt<-10?'จ่าย ':'')+kw(Math.abs(b.bt))+'</b></span>':'')+(num(b.soc)?'<span class="muted">SOC '+Math.round(b.soc)+'%</span>':'')+'</div>'}
+   h+='<div class="en-g pvg">'+g+'</svg></div>'+(tip||'<div class="tiny muted" style="margin-top:4px">แตะหรือลากบนกราฟเพื่อดูค่าแต่ละช่วงเวลา · ◀ ▶ เปลี่ยนวัน · ใช้ไฟจากโซลาร์เอง '+Math.round(self)+'%</div>')}
+ }else{const nv=Math.min(s.nv,N),st=N-nv,vis=D.slice(st);if(s.sel==null||s.sel<st)s.sel=N-1;const tot=vis.reduce((a,e)=>a+e.pv,0),best=vis.reduce((a,e)=>e.pv>a.pv?e:a,vis[0]);
+  h+='<div class="en-bar">'+[7,30,90].map(z=>'<button class="en-chip'+(s.nv===z?' on':'')+'" data-pz="'+z+'">'+z+' วัน</button>').join('')+'</div>'+
+   '<div class="en-sum"><div><span>ผลิตรวม '+nv+' วัน</span><b style="color:#f2c14e">'+kwh(tot)+'</b><small>kWh</small></div><div><span>เฉลี่ยต่อวัน</span><b>'+kwh(tot/vis.length)+'</b><small>kWh</small></div><div><span>วันที่ดีที่สุด</span><b>'+kwh(best.pv)+'</b><small>'+dl(best.d)+'</small></div></div>';
+  const L=40,T=18,H=170,pw=W-L,n=vis.length,cw=pw/n,bw=Math.max(2,Math.min(30,cw-(n>40?2:n>20?3:10))),mx=Math.max(.1,...vis.map(e=>e.pv)),step=(()=>{const raw=mx/4,p=Math.pow(10,Math.floor(Math.log10(raw))),f=raw/p;return (f<=1?1:f<=2?2:f<=2.5?2.5:f<=5?5:10)*p})(),top=Math.ceil(mx/step)*step,Y=v=>T+H-v/top*H,ev=nv<=7?1:nv<=30?5:15;
+  let g='<svg viewBox="0 0 '+W+' '+(T+H+26)+'" width="'+W+'" height="'+(T+H+26)+'">';
+  for(let v=0;v<=top+1e-9;v+=step){const y=Y(v);g+='<line x1="'+L+'" x2="'+W+'" y1="'+y+'" y2="'+y+'" stroke="var(--grid)"/><text x="'+(L-6)+'" y="'+(y+4)+'" text-anchor="end">'+(+v.toFixed(1))+'</text>'}
+  g+='<text x="2" y="11" style="font-weight:700">kWh</text>';
+  vis.forEach((e,j)=>{const cx=L+(j+.5)*cw,y=Y(e.pv),on=st+j===s.sel;g+='<g class="en-d'+(on?' on':'')+'" data-pj="'+(st+j)+'"><rect class="en-hit" x="'+(cx-cw/2+1)+'" y="'+T+'" width="'+Math.max(1,cw-2)+'" height="'+(H+24)+'" rx="'+Math.min(8,cw/3)+'"/><rect x="'+(cx-bw/2)+'" y="'+y+'" width="'+bw+'" height="'+Math.max(1,T+H-y)+'" rx="'+Math.min(4,bw/3)+'" fill="#f2c14e"/>'+
+   (nv<=14||on?'<text class="en-v" style="fill:#f2c14e" x="'+cx+'" y="'+(y-4)+'" text-anchor="middle">'+kwh(e.pv)+'</text>':'')+(j%ev===0||on?'<text x="'+cx+'" y="'+(T+H+16)+'" text-anchor="middle"'+(on?' class="en-on"':'')+'>'+dl(e.d)+'</text>':'')+'</g>'});
+  const E=D[s.sel];h+='<div class="en-g">'+g+'</svg></div><div class="en-info"><span class="en-dd">'+dl(E.d)+'</span><span>☀️ ผลิต <b style="color:#f2c14e">'+kwh(E.pv)+'</b> kWh</span><span>🏠 ใช้ <b style="color:#36c4a8">'+kwh(E.ld)+'</b> kWh</span><span>🔌 ซื้อ <b style="color:#3d8fe8">'+kwh(E.gi)+'</b> kWh</span><button class="en-chip en-go" data-pday="'+s.sel+'">ดูกราฟวันนี้ ›</button></div><div class="tiny muted" style="margin-top:4px">แตะแท่ง = ดูตัวเลข · แตะซ้ำ = ดูกราฟของวันนั้น · เก็บย้อนหลัง 90 วัน</div>'}
+ c.innerHTML=h;pvBind(dev)}
+function pvBind(dev){const c=$('pvCard'),s=PV[dev.id];if(!c||!s)return;const N=(s.D||[]).length,dayOf=j=>Math.round((pvDayStart(0)-s.D[j].d)/86400e3);
+ c.querySelectorAll('[data-pm]').forEach(b=>b.onclick=()=>{s.mode=b.dataset.pm;s.hx=null;pvLoad(dev)});
+ c.querySelectorAll('[data-po]').forEach(b=>b.onclick=()=>{s.off=Math.max(0,Math.min(N-1,s.off+ +b.dataset.po));s.hx=null;pvRender(dev);pvLoad(dev)});
+ c.querySelectorAll('[data-ps]').forEach(b=>b.onclick=()=>{s.show[b.dataset.ps]=s.show[b.dataset.ps]?0:1;pvRender(dev)});
+ c.querySelectorAll('[data-pz]').forEach(b=>b.onclick=()=>{s.nv=+b.dataset.pz;pvRender(dev)});
+ c.querySelectorAll('[data-pday]').forEach(b=>b.onclick=()=>{s.off=dayOf(+b.dataset.pday);s.mode='day';s.hx=null;pvRender(dev);pvLoad(dev)});
+ c.querySelectorAll('[data-pj]').forEach(g=>g.onclick=()=>{const j=+g.dataset.pj;if(j===s.sel){s.off=dayOf(j);s.mode='day';s.hx=null;pvRender(dev);pvLoad(dev)}else{s.sel=j;pvRender(dev)}});
+ const pg=c.querySelector('.pvg');if(pg){const at=e=>{const r=pg.getBoundingClientRect();s.hx=Math.max(40,Math.min(r.width,(e.clientX-r.left)*(pg.querySelector('svg').viewBox.baseVal.width/r.width)));pvRender(dev)};let down=false;
+  pg.onpointerdown=e=>{down=true;at(e)};pg.onpointermove=e=>{if(down||e.pointerType==='mouse')at(e)};pg.onpointerup=()=>{down=false};pg.onpointerleave=()=>{down=false}}
+ if(!s.ro&&window.ResizeObserver){let lw=0;s.ro=new ResizeObserver(()=>{const w=c.clientWidth;if(w&&Math.abs(w-lw)>8){lw=w;if(document.body.contains(c))pvRender(dev)}});s.ro.observe(c)}}
 function renderEnergy(){if(!cur)return;enLoad('energyCard',[cur],cur.id)}
 function rowsOut(){return hist.map(r=>[new Date(r.t).toLocaleString('th-TH'),r.soc,r.voltage,r.current,r.power,tC(r.temp),tC(r.mos),r.cell_min,r.cell_max])}
 const HEAD=['เวลา','SOC %','V','A','W','Temp','MOS','Cell min','Cell max'];
