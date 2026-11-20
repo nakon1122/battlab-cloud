@@ -1157,7 +1157,7 @@ function styleSeg(v){return '<div class="dseg" role="tablist">'+[['A','พลั
 // ---------- inverter (LuxPower) overview: animated power-flow diagram
 function invHero(d,x,soc){const P=v=>num(v)?Math.round(v):0,ppv=P(d.ppv),pl=P(d.pload),pg=P(d.pgrid),pb=P(d.p);
  const NU=w=>{const a=Math.abs(w);return a>=1000?[(a/1000).toFixed(2),'kW']:[String(a),'W']},W=w=>NU(w).join(' ');
- const on=w=>Math.abs(w)>10,dur=w=>Math.max(.4,1.9-Math.abs(w)/4000).toFixed(1)+'s',sg=n=>(n>0?'+':'')+(+n).toFixed(1);
+ const on=w=>Math.abs(w)>10,dur=w=>{const a=Math.abs(w);return a<1000?'1.8s':a<2500?'1.3s':a<4500?'0.95s':'0.65s'},sg=n=>(n>0?'+':'')+(+n).toFixed(1);
  const chg=pb>10,dsg=pb<-10,bc=chg?'#16a34a':dsg?'#f97316':'#94a3b8',bc2=chg?'#4ade80':dsg?'#fbbf24':'#cbd5e1';
  const S=num(d.soc)?Math.round(d.soc):num(soc)?Math.round(soc):null,self=pl>10?Math.round(Math.max(0,pl-Math.max(0,pg))/pl*100):null;
  const story=dsg?'แบตกำลังจ่ายไฟให้บ้าน':chg&&on(ppv)?'โซลาร์จ่ายบ้าน และชาร์จแบต':on(ppv)?'โซลาร์จ่ายไฟให้บ้าน':chg?'กำลังชาร์จแบต':on(pg)&&pg>0?'ใช้ไฟจากการไฟฟ้า':'ระบบพร้อมทำงาน';
